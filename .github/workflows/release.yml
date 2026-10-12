@@ -1,0 +1,216 @@
+name: Release plugin
+
+# Release one plugin: Actions → Release plugin → Run workflow, pick the plugin
+# and the version.
+#
+#   1. prepare   Work out the version (patch, minor, major, an exact one, or
+#                blank for the one already in the code), write it into the
+#                plugin, test it, and commit `release(<id>): v<version>` to main.
+#   2. build     Build and pack that one plugin: on Windows for a native plugin,
+#                on Linux otherwise.
+#   3. publish   Add the package to packages/, rebuild repository.min.json so it
+#                lists this version, commit to main, and cut the GitHub release
+#                `<id>-v<version>` with the package attached and the notes
+#                from the plugin's `feat`/`fix`/`perf`/`sec` lines.
+#
+# FlexDeck re-reads the index within six hours and offers the update. A
+# pre-release (1.2.0-rc.1) is released on GitHub only and stays out of the
+# index, so nobody is updated to it.
+#
+# If a step fails after `prepare` committed the version, run this again with
+# the version left blank: it releases what is in the code.
+on:
+  workflow_dispatch:
+    inputs:
+      plugin:
+        description: Plugin to release
+        type: choice
+        # Every id under plugins/ and recipes/; scripts/check.mjs keeps this list honest.
+        options:
+          - calendar
+          - crypto
+          - discord
+          - home-assistant
+          - obs
+          - soundboard
+          - spotify
+          - streamerbot
+          - weather
+      version:
+        description: "patch, minor, major, an exact version (1.2.0, 1.2.0-rc.1), or blank for the version already in the code"
+        type: string
+        default: patch
+
+permissions:
+  contents: read
+
+run-name: Release ${{ inputs.plugin }} (${{ inputs.version || 'as in the code' }})
+
+jobs:
+  prepare:
+    name: Prepare ${{ inputs.plugin }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.commit.outputs.sha }}
+      version: ${{ steps.plan.outputs.version }}
+      tag: ${{ steps.plan.outputs.tag }}
+      runtime: ${{ steps.plan.outputs.runtime }}
+      package: ${{ steps.plan.outputs.package }}
+      prerelease: ${{ steps.plan.outputs.prerelease }}
+      runner: ${{ steps.plan.outputs.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Inputs reach the shell as variables, never pasted into the script.
+      - name: Choose the version
+        id: plan
+        env:
+          PLUGIN: ${{ inputs.plugin }}
+          VERSION: ${{ inputs.version }}
+        run: node scripts/prepare-release.mjs "$PLUGIN" "$VERSION"
+
+      - name: Check
+        run: pnpm check
+
+      - name: Typecheck and test
+        if: steps.plan.outputs.runtime == 'node'
+        run: |
+          pnpm --filter "${{ steps.plan.outputs.package }}" run --if-present typecheck
+          pnpm --filter "${{ steps.plan.outputs.package }}" run test
+
+      - name: Commit the version
+        id: commit
+        run: |
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -am "release(${{ inputs.plugin }}): v${{ steps.plan.outputs.version }}"
+            git push origin HEAD:main
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build ${{ inputs.plugin }} ${{ needs.prepare.outputs.version }}
+    needs: prepare
+    runs-on: ${{ needs.prepare.outputs.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+
+      - if: needs.prepare.outputs.runtime == 'native'
+        uses: dtolnay/rust-toolchain@stable
+
+      - if: needs.prepare.outputs.runtime == 'native'
+        uses: Swatinem/rust-cache@v2
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Test
+        if: needs.prepare.outputs.runtime == 'native'
+        run: pnpm --filter "${{ needs.prepare.outputs.package }}" test
+
+      - name: Build and pack
+        run: node scripts/build.mjs --only "${{ inputs.plugin }}" --no-index
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: packages/**/${{ inputs.plugin }}-${{ needs.prepare.outputs.version }}.fdpkg
+          if-no-files-found: error
+
+  publish:
+    name: Publish ${{ needs.prepare.outputs.tag }}
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      FILE: ${{ inputs.plugin }}-${{ needs.prepare.outputs.version }}.fdpkg
+      DEST: ${{ needs.prepare.outputs.prerelease == 'true' && 'packages/pre' || 'packages' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: package
+          path: incoming
+
+      # Other plugins may be released at the same time. On a rejected push, start
+      # again from the new main: add this one package, rebuild the index, retry.
+      - name: Add the package, rebuild the index, commit
+        run: |
+          package=$(find incoming -name "$FILE" | head -1)
+          [ -n "$package" ] || { echo "::error::the build uploaded no $FILE"; exit 1; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch -q origin main
+            git reset -q --hard origin/main
+            if [ -e "$DEST/$FILE" ]; then
+              echo "::error::$DEST/$FILE is already published"
+              exit 1
+            fi
+            mkdir -p "$DEST"
+            cp "$package" "$DEST/$FILE"
+            node scripts/build.mjs --index-only
+            git add packages repository.json repository.min.json
+            git commit -qm "chore(repo): publish ${{ needs.prepare.outputs.tag }} [skip ci]"
+            if git push -q origin HEAD:main; then
+              echo "published $DEST/$FILE"
+              exit 0
+            fi
+            echo "main moved; trying again ($attempt)"
+            sleep $((attempt * 5))
+          done
+          echo "::error::could not push to main"
+          exit 1
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/release.mjs --only "${{ inputs.plugin }}"
+
+      - name: Summary
+        run: |
+          {
+            echo "### ${{ needs.prepare.outputs.tag }}"
+            echo
+            if [ "${{ needs.prepare.outputs.prerelease }}" = "true" ]; then
+              echo "Pre-release: on GitHub only, not in the index."
+            else
+              echo "In \`repository.min.json\` as the newest ${{ inputs.plugin }}; FlexDeck offers it within six hours."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

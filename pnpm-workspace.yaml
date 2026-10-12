@@ -1,0 +1,7 @@
+packages:
+  - "plugins/*"
+  - "examples/*"
+
+# esbuild (through @flexdeck/plugin-sdk) checks its native binary on install.
+onlyBuiltDependencies:
+  - esbuild

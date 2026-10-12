@@ -1,0 +1,15 @@
+node_modules/
+dist/
+target/
+*.tsbuildinfo
+
+# A plugin's own build output. Published packages live in packages/ only.
+plugins/*/*.fdpkg
+plugins/*/bin/
+examples/*/*.fdpkg
+
+# A local checkout of the SDKs, before they are published (see README).
+.cargo/config.toml
+
+.DS_Store
+Thumbs.db

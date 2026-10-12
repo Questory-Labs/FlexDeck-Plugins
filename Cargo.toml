@@ -1,0 +1,17 @@
+# The native plugins. Each is its own program, built against the published
+# flexdeck-plugin-sdk crate, so nothing here reaches into the app's repository.
+[workspace]
+resolver = "2"
+members = ["plugins/soundboard"]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+rust-version = "1.89"
+
+[workspace.dependencies]
+serde_json = "1"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

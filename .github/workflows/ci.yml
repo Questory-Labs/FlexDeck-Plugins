@@ -1,0 +1,60 @@
+name: CI
+
+# Every change: the rules in scripts/check.mjs, then each plugin's typecheck and
+# tests. The soundboard is a Windows program, so it is tested on Windows.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  node:
+    name: Check, typecheck and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # check.mjs compares each plugin with the commit that published it.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm check
+
+      - name: Script tests
+        run: node --test scripts/*.test.mjs
+
+      - name: Release notes preview
+        run: node scripts/release.mjs --dry-run
+
+      - name: Typecheck
+        run: pnpm -r --if-present --filter "!@flexdeck/plugin-soundboard" typecheck
+
+      - name: Tests
+        run: pnpm -r --if-present --filter "!@flexdeck/plugin-soundboard" test
+
+  native:
+    name: Soundboard (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - run: cargo test -p flexdeck-plugin-soundboard
