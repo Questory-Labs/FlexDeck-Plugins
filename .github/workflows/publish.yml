@@ -46,7 +46,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Test
-        run: pnpm -r --if-present --filter "!@flexdeck/plugin-soundboard" test
+        run: pnpm -r --if-present --filter "!flexdeck-plugins" --filter "!@flexdeck/plugin-soundboard" test
 
       - name: Pack what is new
         run: node scripts/build.mjs --runtime node,recipe --no-index

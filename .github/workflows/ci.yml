@@ -42,10 +42,10 @@ jobs:
         run: node scripts/release.mjs --dry-run
 
       - name: Typecheck
-        run: pnpm -r --if-present --filter "!@flexdeck/plugin-soundboard" typecheck
+        run: pnpm -r --if-present --filter "!flexdeck-plugins" --filter "!@flexdeck/plugin-soundboard" typecheck
 
       - name: Tests
-        run: pnpm -r --if-present --filter "!@flexdeck/plugin-soundboard" test
+        run: pnpm -r --if-present --filter "!flexdeck-plugins" --filter "!@flexdeck/plugin-soundboard" test
 
   native:
     name: Soundboard (Windows)
