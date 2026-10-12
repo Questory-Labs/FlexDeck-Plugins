@@ -13,6 +13,7 @@ A pull request needs:
 - tests that run without the real program (see how `plugins/obs/test` fakes OBS)
 - only the permissions the plugin needs (`network`, `notifications`, `processes`, `filesystem`)
 - `flexdeck verify-plugin` passing on the package (`npm run verify` in the plugin's folder)
+- a `README.md` in its folder shaped like the others: what it does, every setup step a person needs, its actions and values, and troubleshooting for the errors it can show. Add its strip of keys to `scripts/gen-art.mjs` and run `pnpm art`
 
 A pull request doesn't change versions: a maintainer releases each plugin when it's ready, with *Release plugin*.
 

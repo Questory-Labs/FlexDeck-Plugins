@@ -17,7 +17,8 @@
     "build": "node scripts/build.mjs",
     "index": "node scripts/build.mjs --index-only",
     "release": "node scripts/release.mjs",
-    "link-sdk": "node scripts/link-sdk.mjs"
+    "link-sdk": "node scripts/link-sdk.mjs",
+    "art": "node scripts/gen-art.mjs"
   },
   "dependencies": {
     "@flexdeck/plugin-sdk": "^0.1.0"
