@@ -57,6 +57,7 @@ test("connecting publishes OBS's state, including one variable per audio input",
     !plugin.variables().some((variable) => variable.name.includes("browser_source")),
     "a source without audio is not given a mute variable",
   );
+  await until(() => host.events().length > 0, "the connected event");
   assert.deepEqual(host.events().at(-1), { event: "connected", payload: {} });
 });
 
@@ -149,6 +150,36 @@ test("a source can be shown and hidden", async () => {
   await host.invoke("toggle_source", { scene: "Scene", source: "Webcam" });
   assert.equal(obs.sources.get("Scene/Webcam"), false);
   await assert.rejects(host.invoke("toggle_source", { scene: "Scene", source: "Nope" }), /No scene items/);
+});
+
+test("what a key toggles is published by the names the editor fills in, so the key can light", async () => {
+  const obs = new FakeObs({ inputs: { "Mic/Aux": false } });
+  const host = await connected(obs);
+  const active = Object.fromEntries(plugin.manifest().actions.map((action) => [action.action, action.active]));
+
+  await until(() => host.variable("obs.input.Mic/Aux.muted") === false, "the input by OBS's name");
+  assert.deepEqual(active.toggle_mute, { variable: "obs.input.{{input}}.muted" });
+  await host.invoke("toggle_mute", { input: "Mic/Aux" });
+  await until(() => host.variable("obs.input.Mic/Aux.muted") === true, "muted, by OBS's name");
+
+  await until(() => host.variable("obs.source.Scene.Webcam.visible") === true, "the source");
+  assert.deepEqual(active.toggle_source, { variable: "obs.source.{{scene}}.{{source}}.visible" });
+  await host.invoke("toggle_source", { scene: "Scene", source: "Webcam" });
+  assert.equal(host.variable("obs.source.Scene.Webcam.visible"), false, "at once");
+  obs.handle("SetSceneItemEnabled", { sceneName: "Scene", sceneItemId: 1, sceneItemEnabled: true });
+  await until(() => host.variable("obs.source.Scene.Webcam.visible") === true, "a change made in OBS");
+
+  assert.deepEqual(active.toggle_virtual_camera, { variable: "obs.virtualcam" });
+  await host.invoke("toggle_virtual_camera");
+  await until(() => host.variable("obs.virtualcam") === true, "the virtual camera");
+
+  assert.deepEqual(active.set_preview_scene, { variable: "obs.preview_scene", equals: "scene" });
+  await host.invoke("toggle_studio_mode");
+  await until(() => host.variable("obs.preview_scene") === "Scene", "the scene studio mode starts previewing");
+  await host.invoke("set_preview_scene", { scene: "BRB" });
+  await until(() => host.variable("obs.preview_scene") === "BRB", "the preview scene");
+  await host.invoke("toggle_studio_mode");
+  await until(() => host.variable("obs.preview_scene") === "", "no preview outside studio mode");
 });
 
 test("OBS's own refusal reaches the person", async () => {

@@ -32,6 +32,11 @@ interface State {
   reason: string;
   scenes: string[];
   inputs: Map<string, string>; // slug -> OBS name, audio inputs only
+  /** Each scene's items, by id: what `SceneItemEnableStateChanged` names. */
+  items: Map<string, Map<number, string>>;
+  /** The variables declared at run time, kept so one refresh does not drop the other's. */
+  inputVars: Record<string, VariableSpec>;
+  sourceVars: Record<string, VariableSpec>;
   retry: ReturnType<typeof setTimeout> | null;
   attempt: number;
   stopping: boolean;
@@ -42,6 +47,9 @@ const state: State = {
   reason: "not started",
   scenes: [],
   inputs: new Map(),
+  items: new Map(),
+  inputVars: {},
+  sourceVars: {},
   retry: null,
   attempt: 0,
   stopping: false,
@@ -82,6 +90,11 @@ async function refreshAll(ctx: Context): Promise<void> {
   const record = await request<{ outputActive: boolean; outputPaused: boolean; outputTimecode: string }>("GetRecordStatus");
   const stream = await request<{ outputActive: boolean; outputTimecode: string }>("GetStreamStatus");
   const studio = await request<{ studioModeEnabled: boolean }>("GetStudioModeEnabled");
+  const virtualcam = await request<{ outputActive: boolean }>("GetVirtualCamStatus").catch(() => ({ outputActive: false }));
+  // OBS refuses this outside studio mode, where there is no preview.
+  const preview = studio.studioModeEnabled
+    ? await request<{ currentPreviewSceneName: string }>("GetCurrentPreviewScene").catch(() => ({ currentPreviewSceneName: "" }))
+    : { currentPreviewSceneName: "" };
   ctx.vars.set({
     "obs.connected": true,
     "obs.scene": scenes.currentProgramSceneName,
@@ -91,8 +104,11 @@ async function refreshAll(ctx: Context): Promise<void> {
     "obs.streaming": stream.outputActive,
     "obs.stream_time": timecode(stream.outputTimecode),
     "obs.studio_mode": studio.studioModeEnabled,
+    "obs.preview_scene": preview.currentPreviewSceneName,
+    "obs.virtualcam": virtualcam.outputActive,
   });
   await refreshInputs(ctx);
+  await refreshSources(ctx);
 }
 
 /**
@@ -102,12 +118,22 @@ async function refreshAll(ctx: Context): Promise<void> {
  */
 export const volumeVariable = (name: string) => `obs.input.${name}.volume`;
 
+/** Whether an input is muted, by OBS's own name, for the same reason as its volume. */
+export const mutedVariable = (name: string) => `obs.input.${name}.muted`;
+
+/** Whether a source shows in a scene, by OBS's names: what a `toggle_source` key fills in. */
+export const visibleVariable = (scene: string, source: string) => `obs.source.${scene}.${source}.visible`;
+
+function redeclare(ctx: Context): void {
+  ctx.vars.declare({ ...state.inputVars, ...state.sourceVars }, { replace: true });
+}
+
 /** OBS's linear multiplier as the percentage a slider shows. */
 const percentOf = (multiplier: unknown) => Math.round(Math.max(0, Math.min(1, Number(multiplier) || 0)) * 100);
 
 /**
- * One `obs.input.<slug>.muted` and one `obs.input.<name>.volume` per audio
- * input, declared as OBS has them.
+ * `obs.input.<slug>.muted`, `obs.input.<name>.muted` and
+ * `obs.input.<name>.volume` per audio input, declared as OBS has them.
  */
 async function refreshInputs(ctx: Context): Promise<void> {
   const { inputs } = await request<{ inputs: { inputName: string }[] }>("GetInputList");
@@ -118,6 +144,7 @@ async function refreshInputs(ctx: Context): Promise<void> {
       const answer = await request<{ inputMuted: boolean }>("GetInputMute", { inputName: input.inputName });
       audio.set(slug(input.inputName), input.inputName);
       values[`obs.input.${slug(input.inputName)}.muted`] = answer.inputMuted;
+      values[mutedVariable(input.inputName)] = answer.inputMuted;
     } catch {
       // Not an audio input; OBS refuses GetInputMute for those.
       continue;
@@ -133,9 +160,38 @@ async function refreshInputs(ctx: Context): Promise<void> {
   const declared: Record<string, VariableSpec> = {};
   for (const [key, name] of audio) {
     declared[`obs.input.${key}.muted`] = { kind: "bool", description: `Whether "${name}" is muted` };
+    declared[mutedVariable(name)] = { kind: "bool", description: `Whether "${name}" is muted` };
     declared[volumeVariable(name)] = { kind: "number", unit: "%", description: `The volume of "${name}"` };
   }
-  ctx.vars.declare(declared, { replace: true });
+  state.inputVars = declared;
+  redeclare(ctx);
+  ctx.vars.set(values);
+}
+
+/** One `obs.source.<scene>.<source>.visible` per item in every scene. */
+async function refreshSources(ctx: Context): Promise<void> {
+  const items = new Map<string, Map<number, string>>();
+  const declared: Record<string, VariableSpec> = {};
+  const values: Record<string, boolean> = {};
+  for (const scene of state.scenes) {
+    let list: { sourceName: string; sceneItemId: number; sceneItemEnabled?: boolean }[];
+    try {
+      ({ sceneItems: list } = await request<{ sceneItems: typeof list }>("GetSceneItemList", { sceneName: scene }));
+    } catch {
+      continue;
+    }
+    const byId = new Map<number, string>();
+    for (const item of list) {
+      byId.set(item.sceneItemId, item.sourceName);
+      const name = visibleVariable(scene, item.sourceName);
+      declared[name] = { kind: "bool", description: `Whether "${item.sourceName}" shows in "${scene}"` };
+      values[name] = item.sceneItemEnabled !== false;
+    }
+    items.set(scene, byId);
+  }
+  state.items = items;
+  state.sourceVars = declared;
+  redeclare(ctx);
   ctx.vars.set(values);
 }
 
@@ -149,6 +205,24 @@ function onEvent(ctx: Context, type: string, data: Record<string, unknown>): voi
     }
     case "SceneListChanged":
       state.scenes = ((data.scenes as { sceneName: string }[]) ?? []).map((scene) => scene.sceneName).reverse();
+      void refreshSources(ctx).catch(() => {});
+      break;
+    case "CurrentPreviewSceneChanged":
+      ctx.vars.set({ "obs.preview_scene": String(data.sceneName) });
+      break;
+    case "VirtualcamStateChanged":
+      ctx.vars.set({ "obs.virtualcam": Boolean(data.outputActive) });
+      break;
+    case "SceneItemEnableStateChanged": {
+      const scene = String(data.sceneName);
+      const source = state.items.get(scene)?.get(Number(data.sceneItemId));
+      if (source) ctx.vars.set({ [visibleVariable(scene, source)]: Boolean(data.sceneItemEnabled) });
+      break;
+    }
+    case "SceneItemCreated":
+    case "SceneItemRemoved":
+    case "SceneNameChanged":
+      void refreshSources(ctx).catch(() => {});
       break;
     case "RecordStateChanged": {
       const active = Boolean(data.outputActive);
@@ -170,11 +244,17 @@ function onEvent(ctx: Context, type: string, data: Record<string, unknown>): voi
     }
     case "StudioModeStateChanged":
       ctx.vars.set({ "obs.studio_mode": Boolean(data.studioModeEnabled) });
+      if (!data.studioModeEnabled) ctx.vars.set({ "obs.preview_scene": "" });
+      // Turning studio mode on puts a scene in preview without announcing it.
+      else
+        void request<{ currentPreviewSceneName: string }>("GetCurrentPreviewScene")
+          .then((preview) => ctx.vars.set({ "obs.preview_scene": preview.currentPreviewSceneName }))
+          .catch(() => {});
       break;
     case "InputMuteStateChanged": {
       const name = String(data.inputName);
       const muted = Boolean(data.inputMuted);
-      ctx.vars.set({ [`obs.input.${slug(name)}.muted`]: muted });
+      ctx.vars.set({ [`obs.input.${slug(name)}.muted`]: muted, [mutedVariable(name)]: muted });
       ctx.emit("input_mute_changed", { input: name, muted: String(muted) });
       break;
     }
@@ -189,6 +269,7 @@ function onEvent(ctx: Context, type: string, data: Record<string, unknown>): voi
     case "InputRemoved":
     case "InputNameChanged":
       void refreshInputs(ctx).catch(() => {});
+      void refreshSources(ctx).catch(() => {});
       break;
     case "ConnectionClosed":
       disconnected(ctx, "OBS closed the connection");
@@ -278,6 +359,9 @@ export function reset(): void {
   state.reason = "not started";
   state.scenes = [];
   state.inputs = new Map();
+  state.items = new Map();
+  state.inputVars = {};
+  state.sourceVars = {};
 }
 
 function input(name: string): string {
@@ -351,6 +435,8 @@ export default definePlugin({
     "obs.streaming": { kind: "bool", description: "Whether OBS is streaming" },
     "obs.stream_time": { kind: "text", description: "How long it has been live (HH:MM:SS)" },
     "obs.studio_mode": { kind: "bool", description: "Whether studio mode is on" },
+    "obs.preview_scene": { kind: "text", description: "The scene in preview (studio mode); blank outside it" },
+    "obs.virtualcam": { kind: "bool", description: "Whether the virtual camera is on" },
   },
 
   events: {
@@ -438,6 +524,7 @@ export default definePlugin({
           suggest: () => sceneChoices(),
         },
       },
+      active: { variable: "obs.preview_scene", equals: "scene" },
       check: ({ scene }) => unknownScene(scene),
       run: async ({ scene }) => {
         await request("SetCurrentPreviewScene", { sceneName: scene });
@@ -451,6 +538,7 @@ export default definePlugin({
     },
     toggle_studio_mode: {
       description: "Turn studio mode on or off",
+      active: { variable: "obs.studio_mode" },
       run: async () => {
         const { studioModeEnabled } = await request<{ studioModeEnabled: boolean }>("GetStudioModeEnabled");
         await request("SetStudioModeEnabled", { studioModeEnabled: !studioModeEnabled });
@@ -458,25 +546,28 @@ export default definePlugin({
     },
     start_recording: { description: "Start recording", run: async () => void (await request("StartRecord")) },
     stop_recording: { description: "Stop recording", run: async () => void (await request("StopRecord")) },
-    toggle_recording: { description: "Start or stop recording", run: async () => void (await request("ToggleRecord")) },
+    toggle_recording: { description: "Start or stop recording", active: { variable: "obs.recording" }, run: async () => void (await request("ToggleRecord")) },
     toggle_recording_pause: {
       description: "Pause or resume the recording",
+      active: { variable: "obs.record_paused" },
       run: async () => void (await request("ToggleRecordPause")),
     },
     start_streaming: { description: "Go live", run: async () => void (await request("StartStream")) },
     stop_streaming: { description: "End the stream", run: async () => void (await request("StopStream")) },
-    toggle_streaming: { description: "Go live, or end the stream", run: async () => void (await request("ToggleStream")) },
+    toggle_streaming: { description: "Go live, or end the stream", active: { variable: "obs.streaming" }, run: async () => void (await request("ToggleStream")) },
     save_replay: {
       description: "Save the replay buffer",
       run: async () => void (await request("SaveReplayBuffer")),
     },
     toggle_virtual_camera: {
       description: "Start or stop the virtual camera",
+      active: { variable: "obs.virtualcam" },
       run: async () => void (await request("ToggleVirtualCam")),
     },
     toggle_mute: {
       description: "Toggle an input's mute",
       arguments: { input: { kind: "text", description: "The input's name in OBS", example: "Mic/Aux", suggest: () => inputChoices() } },
+      active: { variable: "obs.input.{{input}}.muted" },
       run: async ({ input: name }) => void (await request("ToggleInputMute", { inputName: input(name) })),
     },
     set_mute: {
@@ -485,6 +576,7 @@ export default definePlugin({
         input: { kind: "text", description: "The input's name in OBS", example: "Mic/Aux", suggest: () => inputChoices() },
         muted: { kind: "choice", description: "Muted or not", example: "true", choices: ["true", "false"] },
       },
+      active: { variable: "obs.input.{{input}}.muted", equals: "muted" },
       run: async ({ input: name, muted }) =>
         void (await request("SetInputMute", { inputName: input(name), inputMuted: muted === "true" })),
     },
@@ -494,9 +586,11 @@ export default definePlugin({
         input: { kind: "text", description: "The input's name in OBS", example: "Mic/Aux", suggest: () => inputChoices() },
         percent: { kind: "number", description: "0 to 100", example: "80" },
       },
-      // The muted variable is keyed by a slug of the name, which a template
-      // cannot make, so the tile mutes but does not show it.
-      slider: { argument: "percent", feedback: "obs.input.{{input}}.volume", mute: { action: "toggle_mute" } },
+      slider: {
+        argument: "percent",
+        feedback: "obs.input.{{input}}.volume",
+        mute: { action: "toggle_mute", feedback: "obs.input.{{input}}.muted" },
+      },
       check: ({ percent }) => {
         const value = Number(percent);
         return Number.isFinite(value) && value >= 0 && value <= 100 ? undefined : "the volume must be 0 to 100";
@@ -515,14 +609,16 @@ export default definePlugin({
           suggest: ({ scene }) => sourceChoices(scene),
         },
       },
+      active: { variable: "obs.source.{{scene}}.{{source}}.visible" },
       check: ({ scene }) => unknownScene(scene),
-      run: async ({ scene, source }) => {
+      run: async ({ scene, source }, ctx) => {
         const id = await sceneItem(scene, source);
         const { sceneItemEnabled } = await request<{ sceneItemEnabled: boolean }>("GetSceneItemEnabled", {
           sceneName: scene,
           sceneItemId: id,
         });
         await request("SetSceneItemEnabled", { sceneName: scene, sceneItemId: id, sceneItemEnabled: !sceneItemEnabled });
+        if (state.items.get(scene)?.has(id)) ctx.vars.set({ [visibleVariable(scene, source)]: !sceneItemEnabled });
       },
     },
   },

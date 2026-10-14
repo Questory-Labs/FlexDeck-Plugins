@@ -242,8 +242,14 @@ function applyVoice(ctx: Context, data: Record<string, unknown>): void {
   if (typeof mode.type === "string") values["discord.voice.mode"] = state.voice.mode = mode.type;
   if (typeof input.volume === "number") values["discord.voice.input_volume"] = Math.round(input.volume);
   if (typeof output.volume === "number") values["discord.voice.output_volume"] = Math.round(output.volume);
-  if (input.device_id !== undefined) values["discord.voice.input_device"] = deviceName(state.inputDevices, input.device_id);
-  if (output.device_id !== undefined) values["discord.voice.output_device"] = deviceName(state.outputDevices, output.device_id);
+  if (input.device_id !== undefined) {
+    values["discord.voice.input_device"] = deviceName(state.inputDevices, input.device_id);
+    values["discord.voice.input_device_id"] = String(input.device_id);
+  }
+  if (output.device_id !== undefined) {
+    values["discord.voice.output_device"] = deviceName(state.outputDevices, output.device_id);
+    values["discord.voice.output_device_id"] = String(output.device_id);
+  }
   ctx.vars.set(values);
 }
 
@@ -251,6 +257,21 @@ const memberName = (data: Record<string, unknown>): string => {
   const user = (data.user as Record<string, unknown>) ?? {};
   return String(data.nick || user.global_name || user.username || user.id || "someone");
 };
+
+/**
+ * Your own camera and screen share, when Discord says. Its documented voice
+ * state leaves them out, so they are read only if present: a key that cannot
+ * be told stays unlit rather than guessing from its own presses.
+ */
+function applyOwnVideo(ctx: Context, data: Record<string, unknown>): void {
+  const user = (data.user as Record<string, unknown>) ?? {};
+  if (!state.ipc?.user?.id || String(user.id ?? "") !== state.ipc.user.id) return;
+  const voice = (data.voice_state as Record<string, unknown>) ?? {};
+  const values: Record<string, boolean> = {};
+  if (typeof voice.self_video === "boolean") values["discord.voice.video"] = voice.self_video;
+  if (typeof voice.self_stream === "boolean") values["discord.voice.streaming"] = voice.self_stream;
+  ctx.vars.set(values);
+}
 
 function readMember(data: Record<string, unknown>): Member {
   const user = (data.user as Record<string, unknown>) ?? {};
@@ -290,7 +311,13 @@ async function applyChannel(ctx: Context, channel: Record<string, unknown> | nul
   state.members.clear();
   if (!channel?.id) {
     state.channel = null;
-    ctx.vars.set({ "discord.voice.channel": "", "discord.voice.channel_id": "", "discord.voice.guild": "" });
+    ctx.vars.set({
+      "discord.voice.channel": "",
+      "discord.voice.channel_id": "",
+      "discord.voice.guild": "",
+      "discord.voice.video": false,
+      "discord.voice.streaming": false,
+    });
     publishMembers(ctx);
     return;
   }
@@ -298,6 +325,7 @@ async function applyChannel(ctx: Context, channel: Record<string, unknown> | nul
   for (const voiceState of (channel.voice_states as Record<string, unknown>[]) ?? []) {
     const member = readMember(voiceState);
     if (member.id) state.members.set(member.id, member);
+    applyOwnVideo(ctx, voiceState);
   }
   let guild = "";
   if (state.channel.guildId) {
@@ -356,6 +384,7 @@ function onEvent(ctx: Context, event: string, data: Record<string, unknown>): vo
     case "VOICE_STATE_UPDATE": {
       const member = readMember(data);
       if (!member.id) break;
+      applyOwnVideo(ctx, data);
       const joined = !state.members.has(member.id);
       state.members.set(member.id, member);
       publishMembers(ctx);
@@ -544,7 +573,7 @@ const MUTED = { kind: "choice" as const, description: "On or off", example: "tru
 const plugin = definePlugin({
   id: ID,
   name: "Discord",
-  version: "0.1.0",
+  version: "0.1.1",
   description:
     "Mute, deafen, push-to-talk, voice channels, volumes, the soundboard and more in the Discord app — and who is talking, on the deck.",
   author: "flexdeck",
@@ -599,12 +628,16 @@ const plugin = definePlugin({
     "discord.voice.output_volume": { kind: "number", unit: "%", description: "Discord's output volume" },
     "discord.voice.input_device": { kind: "text", description: "The microphone Discord uses" },
     "discord.voice.output_device": { kind: "text", description: "The speakers Discord uses" },
+    "discord.voice.input_device_id": { kind: "text", description: "The microphone's id, as the editor picks it" },
+    "discord.voice.output_device_id": { kind: "text", description: "The speakers' id, as the editor picks them" },
     "discord.voice.channel": { kind: "text", description: "The voice channel you are in" },
     "discord.voice.channel_id": { kind: "text", description: "Its id" },
     "discord.voice.guild": { kind: "text", description: "The server it is on" },
     "discord.voice.users": { kind: "number", description: "How many are in the call" },
     "discord.voice.connection": { kind: "text", description: "The voice connection's state" },
     "discord.speaking": { kind: "bool", description: "Whether you are speaking" },
+    "discord.voice.video": { kind: "bool", description: "Whether your camera is on in the call (when Discord says)" },
+    "discord.voice.streaming": { kind: "bool", description: "Whether you are sharing your screen (when Discord says)" },
     "discord.notifications.count": { kind: "number", description: "Notifications since they were last cleared" },
     "discord.notifications.last_title": { kind: "text", description: "The latest notification's title" },
     "discord.notifications.last_body": { kind: "text", description: "The latest notification's text" },
@@ -628,6 +661,7 @@ const plugin = definePlugin({
   actions: {
     toggle_mute: {
       description: "Mute or unmute your microphone",
+      active: { variable: "discord.voice.mute" },
       run: async (_, ctx) => {
         await ensure(ctx);
         const mute = !state.voice.mute;
@@ -638,6 +672,7 @@ const plugin = definePlugin({
     set_mute: {
       description: "Set your microphone muted or not",
       arguments: { muted: MUTED },
+      active: { variable: "discord.voice.mute", equals: "muted" },
       run: async ({ muted }, ctx) => {
         await ensure(ctx);
         await command("SET_VOICE_SETTINGS", { mute: muted === "true" });
@@ -645,6 +680,7 @@ const plugin = definePlugin({
     },
     toggle_deafen: {
       description: "Deafen or undeafen",
+      active: { variable: "discord.voice.deaf" },
       run: async (_, ctx) => {
         await ensure(ctx);
         const deaf = !state.voice.deaf;
@@ -655,6 +691,7 @@ const plugin = definePlugin({
     set_deafen: {
       description: "Set deafened or not",
       arguments: { deaf: { ...MUTED, description: "Deafened or not" } },
+      active: { variable: "discord.voice.deaf", equals: "deaf" },
       run: async ({ deaf }, ctx) => {
         await ensure(ctx);
         await command("SET_VOICE_SETTINGS", { deaf: deaf === "true" });
@@ -676,6 +713,7 @@ const plugin = definePlugin({
     },
     toggle_voice_mode: {
       description: "Switch between voice activity and push-to-talk",
+      active: { variable: "discord.voice.mode", is: "PUSH_TO_TALK" },
       run: async (_, ctx) => {
         await ensure(ctx);
         const type = state.voice.mode === "PUSH_TO_TALK" ? "VOICE_ACTIVITY" : "PUSH_TO_TALK";
@@ -688,6 +726,7 @@ const plugin = definePlugin({
       arguments: {
         mode: { kind: "choice", description: "The input mode", example: "PUSH_TO_TALK", choices: ["VOICE_ACTIVITY", "PUSH_TO_TALK"] },
       },
+      active: { variable: "discord.voice.mode", equals: "mode" },
       run: async ({ mode }, ctx) => {
         await ensure(ctx);
         await command("SET_VOICE_SETTINGS", { mode: { type: mode } });
@@ -705,6 +744,7 @@ const plugin = definePlugin({
           optional: true,
         },
       },
+      active: { variable: "discord.voice.channel_id", equals: "channel" },
       run: async ({ channel, force }, ctx) => {
         await ensure(ctx);
         await command("SELECT_VOICE_CHANNEL", { channel_id: channel.trim(), force: force === "true" });
@@ -730,6 +770,7 @@ const plugin = definePlugin({
     set_input_device: {
       description: "Choose Discord's microphone",
       arguments: { device: { kind: "text", description: "The microphone", example: "default", suggest: () => deviceChoices("input") } },
+      active: { variable: "discord.voice.input_device_id", equals: "device" },
       run: async ({ device }, ctx) => {
         await ensure(ctx);
         applyVoice(ctx, await command("GET_VOICE_SETTINGS"));
@@ -739,6 +780,7 @@ const plugin = definePlugin({
     set_output_device: {
       description: "Choose Discord's speakers",
       arguments: { device: { kind: "text", description: "The speakers", example: "default", suggest: () => deviceChoices("output") } },
+      active: { variable: "discord.voice.output_device_id", equals: "device" },
       run: async ({ device }, ctx) => {
         await ensure(ctx);
         applyVoice(ctx, await command("GET_VOICE_SETTINGS"));
@@ -791,6 +833,7 @@ const plugin = definePlugin({
     toggle_user_mute: {
       description: "Mute or unmute one person for yourself",
       arguments: { user: { kind: "text", description: "Who", example: "123456789012345678", suggest: () => userChoices() } },
+      active: { variable: "discord.user.{{user}}.muted" },
       run: async ({ user }, ctx) => {
         await ensure(ctx);
         const member = state.members.get(user.trim());
@@ -819,6 +862,7 @@ const plugin = definePlugin({
     },
     toggle_video: {
       description: "Turn your camera on or off in the call",
+      active: { variable: "discord.voice.video" },
       check: () => (state.features.video === false ? "this Discord does not let apps turn the camera on or off" : undefined),
       run: async (_, ctx) => {
         await ensure(ctx);
@@ -827,6 +871,7 @@ const plugin = definePlugin({
     },
     toggle_screenshare: {
       description: "Start or stop sharing your screen",
+      active: { variable: "discord.voice.streaming" },
       check: () => (state.features.screenshare === false ? "this Discord does not let apps start a screen share" : undefined),
       run: async (_, ctx) => {
         await ensure(ctx);

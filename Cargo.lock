@@ -353,8 +353,6 @@ checksum = "aedcfb3409746eddb02b9e19ebda1c3394f759a152e48ee875a0844d1b955484"
 [[package]]
 name = "flexdeck-plugin-abi"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0c36272f57821b7d33a6da4557d445419d0ed9d149ef1eeb6bd66b36a964d94a"
 dependencies = [
  "serde",
  "serde_json",
@@ -364,8 +362,6 @@ dependencies = [
 [[package]]
 name = "flexdeck-plugin-sdk"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "76d71967935b521847c8c0e479d356f22ea6e11a237af460b296804a8f0e32ae"
 dependencies = [
  "base64 0.22.1",
  "flexdeck-plugin-abi",

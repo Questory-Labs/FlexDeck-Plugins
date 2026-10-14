@@ -52,7 +52,7 @@ The plugin adds three keys to the gallery, each with its look and its press alre
 </tr>
 <tr>
 <td><b>Mic mute with a tally</b></td>
-<td><i>Does:</i> <b>Toggle an input's mute</b> on <code>Mic/Aux</code>.<br><i>Light up while:</i> <code>obs.input.mic_aux.muted</code></td>
+<td><i>Does:</i> <b>Toggle an input's mute</b> on <code>Mic/Aux</code>. It lights by itself while that input is muted.</td>
 </tr>
 <tr>
 <td><b>A fader per input</b></td>
@@ -112,7 +112,11 @@ Scene, input and source names are offered from OBS as you pick them, so they're 
 | `obs.record_time` | How long it has recorded, `HH:MM:SS` |
 | `obs.streaming`, `obs.stream_time` | Live, and for how long |
 | `obs.studio_mode` | Studio mode is on |
+| `obs.preview_scene` | The scene in preview, in studio mode; blank outside it |
+| `obs.virtualcam` | The virtual camera is on |
+| `obs.source.<scene>.<source>.visible` | A source shows in a scene, by their exact names |
 | `obs.input.<slug>.muted` | An audio input is muted. `<slug>` is its name in lower case, with anything but letters and digits turned into `_`: `Mic/Aux` → `mic_aux` |
+| `obs.input.<name>.muted` | The same, by its exact name: what a mute key lights by |
 | `obs.input.<name>.volume` | An audio input's volume, 0–100, by its exact name |
 
 The timecodes are read only while something on the deck shows them.

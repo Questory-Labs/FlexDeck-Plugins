@@ -27,6 +27,8 @@ export class FakeObs {
   streaming = false;
   studioMode = false;
   sources = new Map<string, boolean>([["Scene/Webcam", true]]);
+  virtualcam = false;
+  preview = "";
   requests: string[] = [];
   sockets: FakeSocket[] = [];
   offline: boolean;
@@ -59,6 +61,16 @@ export class FakeObs {
     this.sockets = [];
   }
 
+  /** A scene's sources, in the order they were added; an item's id is its place here, from 1. */
+  itemsIn(scene: string): string[] {
+    return [...this.sources.keys()].filter((key) => key.startsWith(`${scene}/`)).map((key) => key.slice(scene.length + 1));
+  }
+
+  itemKey(data: Record<string, unknown>): string {
+    const scene = String(data.sceneName);
+    return `${scene}/${this.itemsIn(scene)[Number(data.sceneItemId) - 1] ?? ""}`;
+  }
+
   handle(type: string, data: Record<string, unknown>): Record<string, unknown> {
     this.requests.push(type);
     const output = (active: boolean, state: string) => ({ outputActive: active, outputState: `OBS_WEBSOCKET_OUTPUT_${state}` });
@@ -82,6 +94,8 @@ export class FakeObs {
         return { studioModeEnabled: this.studioMode };
       case "SetStudioModeEnabled":
         this.studioMode = Boolean(data.studioModeEnabled);
+        // As OBS does: entering studio mode previews the live scene, unannounced.
+        this.preview = this.studioMode ? this.scene : "";
         this.event("StudioModeStateChanged", { studioModeEnabled: this.studioMode });
         return {};
       case "ToggleRecord":
@@ -129,18 +143,39 @@ export class FakeObs {
         const scene = String(data.sceneName);
         if (!this.scenes.includes(scene)) throw new Error(`No source was found by the name of \`${scene}\`.`);
         // Bottom-up, as OBS answers.
-        const items = [...this.sources.keys()]
-          .filter((key) => key.startsWith(`${scene}/`))
-          .map((key, index) => ({ sourceName: key.slice(scene.length + 1), sceneItemId: index + 1 }));
+        const items = this.itemsIn(scene).map((sourceName, index) => ({
+          sourceName,
+          sceneItemId: index + 1,
+          sceneItemEnabled: this.sources.get(`${scene}/${sourceName}`),
+        }));
         return { sceneItems: items.reverse() };
       }
-      case "GetSceneItemId":
-        if (!this.sources.has(`${String(data.sceneName)}/${String(data.sourceName)}`)) throw new Error("No scene items were found.");
-        return { sceneItemId: 7 };
+      case "GetSceneItemId": {
+        const index = this.itemsIn(String(data.sceneName)).indexOf(String(data.sourceName));
+        if (index < 0) throw new Error("No scene items were found.");
+        return { sceneItemId: index + 1 };
+      }
       case "GetSceneItemEnabled":
-        return { sceneItemEnabled: this.sources.get("Scene/Webcam") };
-      case "SetSceneItemEnabled":
-        this.sources.set("Scene/Webcam", Boolean(data.sceneItemEnabled));
+        return { sceneItemEnabled: this.sources.get(this.itemKey(data)) };
+      case "SetSceneItemEnabled": {
+        const enabled = Boolean(data.sceneItemEnabled);
+        this.sources.set(this.itemKey(data), enabled);
+        this.event("SceneItemEnableStateChanged", { sceneName: data.sceneName, sceneItemId: data.sceneItemId, sceneItemEnabled: enabled });
+        return {};
+      }
+      case "GetVirtualCamStatus":
+        return { outputActive: this.virtualcam };
+      case "ToggleVirtualCam":
+        this.virtualcam = !this.virtualcam;
+        this.event("VirtualcamStateChanged", output(this.virtualcam, this.virtualcam ? "STARTED" : "STOPPED"));
+        return {};
+      case "GetCurrentPreviewScene":
+        if (!this.studioMode) throw new Error("Studio mode is not active.");
+        return { currentPreviewSceneName: this.preview };
+      case "SetCurrentPreviewScene":
+        if (!this.studioMode) throw new Error("Studio mode is not active.");
+        this.preview = String(data.sceneName);
+        this.event("CurrentPreviewSceneChanged", { sceneName: this.preview });
         return {};
       default:
         throw new Error(`the fake OBS does not know ${type}`);

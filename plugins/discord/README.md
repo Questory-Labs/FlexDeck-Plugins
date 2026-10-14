@@ -84,7 +84,7 @@ That's it. You won't be asked again: the plugin keeps its sign-in fresh by itsel
 <tr><th>Key</th><th>How</th></tr>
 <tr>
 <td><b>Mute, with a light</b></td>
-<td><i>Does:</i> <b>Mute or unmute your microphone</b>.<br><i>Light up while:</i> <code>discord.voice.mute</code></td>
+<td><i>Does:</i> <b>Mute or unmute your microphone</b>. It lights by itself while you're muted, whether you muted from the deck or in Discord.</td>
 </tr>
 <tr>
 <td><b>Push-to-talk</b></td>
@@ -96,7 +96,7 @@ That's it. You won't be asked again: the plugin keeps its sign-in fresh by itsel
 </tr>
 <tr>
 <td><b>A friend's key</b></td>
-<td><i>Does:</i> <b>Mute or unmute one person for yourself</b>, picking them from the list.<br><i>Light up while:</i> <code>discord.user.&lt;id&gt;.speaking</code>, so it glows when they talk.</td>
+<td><i>Does:</i> <b>Mute or unmute one person for yourself</b>, picking them from the list. It lights by itself while you have them muted.<br>To glow when they talk instead, set <i>Light up while</i> to <code>discord.user.&lt;id&gt;.speaking</code>.</td>
 </tr>
 <tr>
 <td><b>Faders</b></td>
@@ -163,6 +163,8 @@ Channels, people, devices and sounds are offered as a list while you edit the ke
 | `discord.voice.mode` | `VOICE_ACTIVITY` or `PUSH_TO_TALK` |
 | `discord.voice.input_volume`, `discord.voice.output_volume` | Discord's mic and output volume, % |
 | `discord.voice.input_device`, `discord.voice.output_device` | The mic and speakers Discord uses |
+| `discord.voice.input_device_id`, `discord.voice.output_device_id` | Their ids: what a device key lights by |
+| `discord.voice.video`, `discord.voice.streaming` | Your camera is on, you're sharing your screen. Only when Discord says: its published API leaves these out, so on some Discords they never fill in and those keys stay unlit |
 | `discord.voice.channel`, `discord.voice.channel_id` | The voice channel you're in |
 | `discord.voice.guild` | The server it's on |
 | `discord.voice.users` | How many are in the call |

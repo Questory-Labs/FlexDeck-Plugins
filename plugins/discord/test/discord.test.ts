@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { afterEach, test } from "node:test";
 
 import { checkDefinition, harness, type Host } from "@flexdeck/plugin-sdk/testing";
@@ -242,4 +243,18 @@ test("a Discord that refuses the handshake is the answer, not a reason to try ot
   // The fake refuses an empty Client ID the way the real Discord refuses an
   // unknown one: close code 4000 on the handshake.
   await assert.rejects(new DiscordIpc({ clientId: "", path: fakeDiscord.pipe }).open(), /does not know that Client ID/);
+});
+
+test("a key that mutes, deafens or switches voice mode lights while that is in effect", async () => {
+  // As the agent asks: in the ABI the package names, offering what it offers.
+  const { abi } = JSON.parse(readFileSync(new URL("../plugin.json", import.meta.url), "utf8")) as { abi: number };
+  const { manifest } = (await plugin.handle("initialize", { abi, hostCapabilities: ["series", "presets", "feeds", "toggles"] })) as {
+    manifest: ReturnType<typeof plugin.manifest>;
+  };
+  const active = Object.fromEntries(manifest.actions.map((action) => [action.action, action.active]));
+  assert.deepEqual(active.toggle_mute, { variable: "discord.voice.mute" });
+  assert.deepEqual(active.set_mute, { variable: "discord.voice.mute", equals: "muted" });
+  assert.deepEqual(active.toggle_deafen, { variable: "discord.voice.deaf" });
+  assert.deepEqual(active.toggle_voice_mode, { variable: "discord.voice.mode", is: "PUSH_TO_TALK" });
+  assert.deepEqual(active.toggle_user_mute, { variable: "discord.user.{{user}}.muted" });
 });

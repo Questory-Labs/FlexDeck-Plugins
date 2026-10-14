@@ -101,23 +101,28 @@ function reference(wanted: string): { id?: string; name?: string } {
   return GUID.test(wanted.trim()) ? { id: wanted.trim() } : { name: wanted.trim() };
 }
 
-const enabledVariable = (action: SbAction) => `streamerbot.action.${slug(action.name)}.enabled`;
+/**
+ * An action's `.enabled` variables: by slug, as before, and by the id the
+ * editor picks and the name a person types — what a key's light fills in.
+ */
+const enabledVariables = (action: SbAction) => [
+  ...new Set([action.name, slug(action.name), action.id].filter(Boolean).map((key) => `streamerbot.action.${key}.enabled`)),
+];
 
-/** Declare one `.enabled` variable per action and publish them all. */
+/** Declare the `.enabled` variables of every action and publish them all. */
 function publishActions(ctx: Context): void {
   const declared: Record<string, VariableSpec> = {};
   const values: Record<string, boolean> = {};
   for (const action of state.actions) {
-    declared[enabledVariable(action)] = {
-      kind: "bool",
-      description: `Whether "${action.name}" is enabled`,
-    };
-    values[enabledVariable(action)] = action.enabled;
+    for (const variable of enabledVariables(action)) {
+      declared[variable] = { kind: "bool", description: `Whether "${action.name}" is enabled` };
+      values[variable] = action.enabled;
+    }
   }
   // Switches and globals are declared on their own; keep them.
   for (const variable of plugin.variables()) {
     if (variable.name.startsWith("streamerbot.switch.") || variable.name.startsWith("streamerbot.global.")) {
-      declared[variable.name] = { kind: variable.kind, description: variable.description };
+      declared[variable.name] = { kind: variable.kind, description: variable.description, choices: variable.choices };
     }
   }
   ctx.vars.declare(declared, { replace: true });
@@ -281,6 +286,8 @@ function switchesFile(ctx: Context): string | null {
 }
 
 const switches = new Map<string, "a" | "b">();
+/** Each switch's name as typed, by its slug: what a key's light fills in. */
+const switchNames = new Map<string, string>();
 let switchesLoaded = false;
 
 function loadSwitches(ctx: Context): void {
@@ -289,9 +296,13 @@ function loadSwitches(ctx: Context): void {
   const file = switchesFile(ctx);
   if (!file) return;
   try {
-    const saved = JSON.parse(readFileSync(file, "utf8")) as Record<string, string>;
-    for (const [key, side] of Object.entries(saved)) {
-      if (side === "a" || side === "b") switches.set(key, side);
+    // Older files hold only the side; newer ones the name as typed too.
+    const saved = JSON.parse(readFileSync(file, "utf8")) as Record<string, string | { side: string; key: string }>;
+    for (const [name, entry] of Object.entries(saved)) {
+      const side = typeof entry === "string" ? entry : entry.side;
+      if (side !== "a" && side !== "b") continue;
+      switches.set(name, side);
+      if (typeof entry === "object" && entry.key) switchNames.set(name, entry.key);
     }
   } catch {
     // First run, or a file someone broke by hand: start every switch fresh.
@@ -301,16 +312,28 @@ function loadSwitches(ctx: Context): void {
 function saveSwitches(ctx: Context): void {
   const file = switchesFile(ctx);
   if (!file) return;
+  const saved = Object.fromEntries([...switches].map(([name, side]) => [name, { side, key: switchNames.get(name) ?? name }]));
   try {
-    writeFileSync(file, JSON.stringify(Object.fromEntries(switches)));
+    writeFileSync(file, JSON.stringify(saved));
   } catch (error) {
     ctx.log.warn(`could not remember the switches: ${String(error)}`);
   }
 }
 
+/** Publish a switch's side as `streamerbot.switch.<slug>`, and by its name as typed. */
+function publishSwitch(ctx: Context, name: string): void {
+  const side = switches.get(name);
+  if (!side) return;
+  const key = switchNames.get(name) ?? name;
+  const variables = [...new Set([`streamerbot.switch.${name}`, `streamerbot.switch.${key}`])];
+  ctx.vars.declare(Object.fromEntries(variables.map((variable) => [variable, { kind: "choice", choices: ["a", "b"], description: `Which side "${key}" is on` }])));
+  ctx.vars.set(Object.fromEntries(variables.map((variable) => [variable, side])));
+}
+
 /** For the tests. */
 export function forgetSwitches(): void {
   switches.clear();
+  switchNames.clear();
   switchesLoaded = false;
 }
 
@@ -354,7 +377,7 @@ async function setActionState(ctx: Context, wanted: string, mode: "enable" | "di
   await sb(() => client().doAction({ id: known.id }, { actionId: target.id, actionName: target.name, enabled }));
   // Shown at once; Streamer.bot's own "action updated" event confirms it.
   target.enabled = enabled;
-  ctx.vars.set({ [enabledVariable(target)]: enabled });
+  ctx.vars.set(Object.fromEntries(enabledVariables(target).map((variable) => [variable, enabled])));
   refreshSoon(ctx);
   return { state: enabled ? "enabled" : "disabled" };
 }
@@ -441,6 +464,8 @@ const plugin = definePlugin({
         action_a: { ...ACTION, description: "The first action", example: "Lights on" },
         action_b: { ...ACTION, description: "The second action", example: "Lights off" },
       },
+      // Lit after the first action ran: "lights on", until the second turns them off.
+      active: { variable: "streamerbot.switch.{{key}}", is: "a" },
       check: ({ action_a, action_b }) => unknownAction(action_a) ?? unknownAction(action_b),
       run: async ({ key, action_a, action_b }, ctx) => {
         loadSwitches(ctx);
@@ -448,10 +473,9 @@ const plugin = definePlugin({
         const next = switches.get(name) === "a" ? "b" : "a";
         await sb(() => client().doAction(reference(next === "a" ? action_a : action_b)));
         switches.set(name, next);
+        switchNames.set(name, key.trim());
         saveSwitches(ctx);
-        const variable = `streamerbot.switch.${name}`;
-        ctx.vars.declare({ [variable]: { kind: "choice", choices: ["a", "b"], description: `Which side "${key}" is on` } });
-        ctx.vars.set({ [variable]: next });
+        publishSwitch(ctx, name);
         return { state: next };
       },
     },
@@ -459,16 +483,19 @@ const plugin = definePlugin({
     enable_action: {
       description: "Switch an action on (needs the helper action)",
       arguments: { action: ACTION },
+      active: { variable: "streamerbot.action.{{action}}.enabled" },
       run: ({ action }, ctx) => setActionState(ctx, action, "enable"),
     },
     disable_action: {
       description: "Switch an action off (needs the helper action)",
       arguments: { action: ACTION },
+      active: { variable: "streamerbot.action.{{action}}.enabled", is: "false" },
       run: ({ action }, ctx) => setActionState(ctx, action, "disable"),
     },
     toggle_action: {
       description: "Switch an action on if it is off, off if it is on (needs the helper action)",
       arguments: { action: ACTION },
+      active: { variable: "streamerbot.action.{{action}}.enabled" },
       run: ({ action }, ctx) => setActionState(ctx, action, "toggle"),
     },
   },
@@ -484,6 +511,8 @@ const plugin = definePlugin({
   start: (ctx) => {
     state.stopping = false;
     ctx.vars.set({ "streamerbot.connected": false });
+    loadSwitches(ctx);
+    for (const name of switches.keys()) publishSwitch(ctx, name);
     void connect(ctx);
   },
 

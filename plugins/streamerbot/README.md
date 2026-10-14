@@ -79,11 +79,11 @@ List the globals you want in the plugin's *globals* setting, separated by commas
 </tr>
 <tr>
 <td><b>Lights on / lights off</b></td>
-<td><i>Does:</i> <b>Flip between two actions</b>, with a <i>key</i> name like <code>lights</code>.<br><i>Light up while:</i> <code>streamerbot.switch.lights == "a"</code></td>
+<td><i>Does:</i> <b>Flip between two actions</b>, with a <i>key</i> name like <code>lights</code>.<br>It lights by itself after the first action ran, until the second does.</td>
 </tr>
 <tr>
 <td><b>Pause the alerts</b></td>
-<td><i>Does:</i> <b>Switch an action on if it is off, off if it is on</b> (needs the helper).<br><i>Light up while:</i> <code>streamerbot.action.alerts.enabled</code></td>
+<td><i>Does:</i> <b>Switch an action on if it is off, off if it is on</b> (needs the helper). It lights by itself while the action is on.</td>
 </tr>
 <tr>
 <td><b>Follower count</b></td>
@@ -122,8 +122,8 @@ List the globals you want in the plugin's *globals* setting, separated by commas
 | --- | --- |
 | `streamerbot.connected` | Streamer.bot is connected |
 | `streamerbot.version` | Streamer.bot's version |
-| `streamerbot.action.<name>.enabled` | One per action: it's enabled. `<name>` in lower case, with anything but letters and digits as `_` |
-| `streamerbot.switch.<key>` | Which side a switch is on, `a` or `b` |
+| `streamerbot.action.<name>.enabled` | One per action: it's enabled. `<name>` in lower case, with anything but letters and digits as `_`; also under its exact name and its id |
+| `streamerbot.switch.<key>` | Which side a switch is on, `a` or `b`, by its key as you typed it and in lower case |
 | `streamerbot.global.<name>` | A global variable, for each name in *globals* |
 
 </details>

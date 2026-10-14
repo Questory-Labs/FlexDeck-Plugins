@@ -61,7 +61,7 @@ The plugin finds the cable by itself, and notices if you plug one in later. Now 
 <tr><th>Key</th><th>How</th></tr>
 <tr>
 <td><b>An airhorn that lights while it plays</b></td>
-<td><i>Does:</i> <b>Play a clip</b> with <code>C:\Sounds\airhorn.mp3</code>.<br><i>Light up while:</i> that clip's <code>soundboard.clip.….playing</code>, picked from the values list once it has played.</td>
+<td><i>Does:</i> <b>Play a clip</b> with <code>C:\Sounds\airhorn.mp3</code>. It lights by itself while that clip plays.</td>
 </tr>
 <tr>
 <td><b>Music bed on / off</b></td>
@@ -81,7 +81,7 @@ The plugin finds the cable by itself, and notices if you plug one in later. Now 
 </tr>
 <tr>
 <td><b>Mic mix switch</b></td>
-<td><i>Does:</i> <b>Mix your microphone into the cable, or stop</b> with <code>toggle</code>.<br><i>Light up while:</i> <code>soundboard.mic_passthrough</code></td>
+<td><i>Does:</i> <b>Mix your microphone into the cable, or stop</b> with <code>toggle</code>. It lights by itself while your mic is mixed in.</td>
 </tr>
 </table>
 

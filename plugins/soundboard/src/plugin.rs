@@ -94,6 +94,19 @@ fn slider(mut action: abi::ActionDto, argument: &str, max: i64, feedback: &str, 
     action
 }
 
+/// A key running `action` is lit while `variable` is true. ABI 4 and
+/// `toggles`; the SDK leaves it out for an agent that does not offer that.
+fn lit(mut action: abi::ActionDto, variable: &str, abi: u32) -> abi::ActionDto {
+    if abi >= 4 {
+        action.active = Some(abi::ActiveDto {
+            variable: variable.into(),
+            equals: None,
+            is: None,
+        });
+    }
+    action
+}
+
 fn setting(key: &str, description: &str, default: &str) -> abi::SettingDto {
     abi::SettingDto {
         key: key.into(),
@@ -348,20 +361,24 @@ impl Sidecar for Soundboard {
             },
         ];
         manifest.actions = vec![
-            action(
-                "play",
-                "Play a clip",
-                vec![
-                    clip_argument(),
-                    optional(argument("volume", abi::kind::NUMBER, "Its volume, 0 to 100", "100")),
-                    choice(
-                        "mode",
-                        "If it is already playing: start again, play over it, or stop it",
-                        "restart",
-                        &["restart", "overlap", "toggle"],
-                    ),
-                    choice("output", "Where it plays", "both", &["both", "monitor", "cable"]),
-                ],
+            lit(
+                action(
+                    "play",
+                    "Play a clip",
+                    vec![
+                        clip_argument(),
+                        optional(argument("volume", abi::kind::NUMBER, "Its volume, 0 to 100", "100")),
+                        choice(
+                            "mode",
+                            "If it is already playing: start again, play over it, or stop it",
+                            "restart",
+                            &["restart", "overlap", "toggle"],
+                        ),
+                        choice("output", "Where it plays", "both", &["both", "monitor", "cable"]),
+                    ],
+                ),
+                "soundboard.clip.{{clip}}.playing",
+                abi,
             ),
             action("stop", "Stop a clip", vec![clip_argument()]),
             action("stop_all", "Stop every clip", vec![]),
@@ -387,10 +404,14 @@ impl Sidecar for Soundboard {
                 "soundboard.clip.{{clip}}.volume",
                 abi,
             ),
-            action(
-                "set_mic_passthrough",
-                "Mix your microphone into the cable, or stop",
-                vec![choice("enabled", "On, off, or the other way", "toggle", &["true", "false", "toggle"])],
+            lit(
+                action(
+                    "set_mic_passthrough",
+                    "Mix your microphone into the cable, or stop",
+                    vec![choice("enabled", "On, off, or the other way", "toggle", &["true", "false", "toggle"])],
+                ),
+                "soundboard.mic_passthrough",
+                abi,
             ),
             slider(
                 action(
@@ -404,6 +425,9 @@ impl Sidecar for Soundboard {
                 abi,
             ),
         ];
+        if abi >= 4 {
+            manifest.uses.push(abi::capability::TOGGLES.into());
+        }
         manifest
     }
 
@@ -679,6 +703,17 @@ mod tests {
         board.manifest(2).validate().expect("valid at 2");
         assert!(board.manifest(3).actions.iter().any(|a| a.slider.is_some()));
         assert!(board.manifest(2).actions.iter().all(|a| a.slider.is_none()));
+    }
+
+    #[test]
+    fn at_abi_4_a_clip_key_and_the_passthrough_key_light_while_on() {
+        let board = board(&["Speakers"]);
+        let manifest = board.manifest(4);
+        manifest.validate().expect("valid at 4");
+        let active = |name: &str| manifest.actions.iter().find(|a| a.action == name).and_then(|a| a.active.clone());
+        assert_eq!(active("play").map(|a| a.variable).as_deref(), Some("soundboard.clip.{{clip}}.playing"));
+        assert_eq!(active("set_mic_passthrough").map(|a| a.variable).as_deref(), Some("soundboard.mic_passthrough"));
+        assert!(board.manifest(3).actions.iter().all(|a| a.active.is_none()), "nothing ABI 4 added under 3");
     }
 
     #[test]

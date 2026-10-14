@@ -251,12 +251,16 @@ async function poll(ctx: Context, wantLiked: boolean): Promise<void> {
   const item = (player?.item as Record<string, unknown> | undefined) ?? null;
   const device = (player?.device as Record<string, unknown> | undefined) ?? null;
   const artists = ((item?.artists as { name: string }[]) ?? []).map((artist) => artist.name).join(", ");
+  const context = (player?.context as { type?: string; uri?: string } | undefined) ?? null;
+  const playlist = context?.type === "playlist" ? (context.uri ?? "").split(":").at(-1) ?? "" : "";
   ctx.vars.set({
     "spotify.connected": true,
     "spotify.playing": Boolean(player?.is_playing),
     "spotify.track": String(item?.name ?? ""),
     "spotify.artist": artists,
     "spotify.device": String(device?.name ?? ""),
+    "spotify.device_id": String(device?.id ?? ""),
+    "spotify.playlist": playlist,
     "spotify.volume": Number(device?.volume_percent ?? 0),
   });
   if (wantLiked && item?.id) ctx.vars.set({ "spotify.liked": await isLiked(ctx, String(item.id)) });
@@ -341,6 +345,8 @@ const plugin = definePlugin({
     "spotify.artist": { kind: "text", description: "Its artists" },
     "spotify.liked": { kind: "bool", description: "Whether you have liked it" },
     "spotify.device": { kind: "text", description: "The device playing" },
+    "spotify.device_id": { kind: "text", description: "Its id, as the editor picks it" },
+    "spotify.playlist": { kind: "text", description: "The playlist playing, by id; blank when it is not a playlist" },
     "spotify.volume": { kind: "number", unit: "%", description: "Spotify's volume on that device" },
     "spotify.art": { kind: "text", description: "The album art, for a widget's icon" },
   },
@@ -372,6 +378,7 @@ const plugin = definePlugin({
     },
     toggle_like: {
       description: "Like the song that is playing, or unlike it",
+      active: { variable: "spotify.liked" },
       run: async (_, ctx) => {
         const track = await current(ctx);
         const liked = await isLiked(ctx, track.id);
@@ -409,6 +416,7 @@ const plugin = definePlugin({
       arguments: {
         playlist: { kind: "text", description: "The playlist", example: "37i9dQZF1DXcBWIGoYBM5M", suggest: () => playlistChoices(ctxOf()) },
       },
+      active: { variable: "spotify.playlist", equals: "playlist" },
       run: async ({ playlist }, ctx) => {
         await call(ctx, "PUT", "/v1/me/player/play", { context_uri: `spotify:playlist:${playlist.trim()}` });
       },
@@ -427,6 +435,7 @@ const plugin = definePlugin({
     transfer_playback: {
       description: "Move playback to another device",
       arguments: { device: { kind: "text", description: "The device", example: "living-room", suggest: () => deviceChoices(ctxOf()) } },
+      active: { variable: "spotify.device_id", equals: "device" },
       run: async ({ device }, ctx) => {
         await call(ctx, "PUT", "/v1/me/player", { device_ids: [device.trim()], play: true });
       },

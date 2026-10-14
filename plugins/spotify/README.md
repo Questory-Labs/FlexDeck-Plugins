@@ -77,7 +77,7 @@ That's it. The sign-in is kept and renewed by the plugin, so you won't do this a
 </tr>
 <tr>
 <td><b>A heart that knows</b></td>
-<td><i>Does:</i> <b>Like the song that is playing, or unlike it</b>.<br><i>Light up while:</i> <code>spotify.liked</code></td>
+<td><i>Does:</i> <b>Like the song that is playing, or unlike it</b>. It lights by itself while the song is liked.</td>
 </tr>
 <tr>
 <td><b>Save to a playlist</b></td>
@@ -136,6 +136,8 @@ On a free account, a Premium-only key says *"that needs Spotify Premium"*. `spot
 | `spotify.artist` | Its artists |
 | `spotify.liked` | You've liked it |
 | `spotify.device` | The device playing |
+| `spotify.device_id` | Its id: what a *Move playback* key lights by |
+| `spotify.playlist` | The playlist playing, by id; blank when it isn't a playlist |
 | `spotify.volume` | Spotify's volume on that device, % |
 | `spotify.art` | The album art, for a key's icon |
 
