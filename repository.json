@@ -64,7 +64,7 @@
     {
       "id": "home-assistant",
       "name": "Home Assistant",
-      "version": "1.0.0",
+      "version": "1.0.2",
       "description": "Any Home Assistant entity's state, on your network.",
       "author": "flexdeck",
       "abi": 4,
@@ -72,11 +72,11 @@
         "network"
       ],
       "releaseDate": "2026-10-12T17:53:03Z",
-      "latestUpdateDate": "2026-10-12T17:53:03Z",
+      "latestUpdateDate": "2026-10-14T16:03:25Z",
       "package": {
-        "url": "packages/home-assistant-1.0.0.fdpkg",
-        "sha256": "1cbe94556b7ac388b8a2e8dcaacdb3fa594d29a42fb28d5b899fa09388716ee5",
-        "size": 1110
+        "url": "packages/home-assistant-1.0.2.fdpkg",
+        "sha256": "4c372fd2b4c943780dcb7b3a309fde2e868a1763e364b98b3b8ae1ef5542243a",
+        "size": 3447
       }
     },
     {
