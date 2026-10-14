@@ -9,7 +9,7 @@
     {
       "id": "calendar",
       "name": "Calendar",
-      "version": "1.0.0",
+      "version": "1.0.2",
       "description": "Your next event, from your calendar's iCal address.",
       "author": "flexdeck",
       "abi": 4,
@@ -17,11 +17,11 @@
         "network"
       ],
       "releaseDate": "2026-10-12T17:53:03Z",
-      "latestUpdateDate": "2026-10-12T17:53:03Z",
+      "latestUpdateDate": "2026-10-14T16:03:15Z",
       "package": {
-        "url": "packages/calendar-1.0.0.fdpkg",
-        "sha256": "2094ea51e71d83c538142c532d0d246eda15409e0d2692ac6129391e12dc98ff",
-        "size": 1028
+        "url": "packages/calendar-1.0.2.fdpkg",
+        "sha256": "0502087a9e6ea6524e387acb5a317d2adc07de9cc67a84e5fa9e97c9c5326996",
+        "size": 3255
       }
     },
     {
