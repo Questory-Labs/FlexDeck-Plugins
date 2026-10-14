@@ -1,19 +1,18 @@
 name: Publish all
 
-# Builds and releases EVERY plugin version that has no package yet, in one go.
-# Plugins are normally released one at a time with *Release plugin*
-# (release.yml); this is for the first publish of the repository, and for
-# repair: a package whose GitHub release is missing gets one here.
+# Builds and releases EVERY plugin version that has no release yet, in one go,
+# then rebuilds the index. Plugins are normally released one at a time with
+# *Release plugin* (release.yml); this is for the first publish of the
+# repository, and for repair: an index that missed a release is rebuilt here.
 #
-#   1. Each plugin version that has no package yet is built and packed:
-#      node plugins and recipes on Linux, native ones on Windows.
-#   2. The packages are added to packages/ (pre-releases to packages/pre/), and
-#      repository.min.json is rebuilt to list each plugin's newest release.
-#   3. Both are committed back to main.
-#   4. Every package without a GitHub release gets one (see scripts/release.mjs).
+#   1. Each plugin version that has no release yet is built and packed: node
+#      plugins and recipes on Linux, native ones on Windows.
+#   2. Each package gets a GitHub release with it attached (see scripts/release.mjs).
+#   3. repository.min.json is rebuilt from the releases, listing each plugin's
+#      newest one, and committed to main.
 #
-# A package is built once. A version that already has one is left alone, so a
-# published checksum never changes.
+# A package is built once. A version that already has a release is left alone,
+# so a published checksum never changes.
 on:
   workflow_dispatch:
 
@@ -30,11 +29,10 @@ jobs:
     name: Node plugins and recipes
     runs-on: ubuntu-latest
     steps:
-      # main as it is now, not the pushed commit: an earlier queued run may
-      # have committed packages since.
       - uses: actions/checkout@v4
         with:
-          ref: main
+          # The release tags say which versions are already published.
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -49,23 +47,22 @@ jobs:
         run: pnpm -r --if-present --filter "!flexdeck-plugins" --filter "!@flexdeck/plugin-soundboard" test
 
       - name: Pack what is new
-        run: node scripts/build.mjs --runtime node,recipe --no-index
+        run: node scripts/build.mjs --runtime node,recipe
 
       - uses: actions/upload-artifact@v4
         with:
           name: packages-node
-          path: packages/
+          path: dist/*.fdpkg
           if-no-files-found: ignore
 
   native:
     name: Native plugins (Windows)
     runs-on: windows-latest
     steps:
-      # main as it is now, not the pushed commit: an earlier queued run may
-      # have committed packages since.
       - uses: actions/checkout@v4
         with:
-          ref: main
+          # The release tags say which versions are already published.
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -84,87 +81,24 @@ jobs:
         run: cargo test -p flexdeck-plugin-soundboard
 
       - name: Build and pack what is new
-        run: node scripts/build.mjs --runtime native --no-index
+        run: node scripts/build.mjs --runtime native
 
       - uses: actions/upload-artifact@v4
         with:
           name: packages-native
-          path: packages/
+          path: dist/*.fdpkg
           if-no-files-found: ignore
 
-  index:
-    name: Index and commit
+  release:
+    name: Release and index
     needs: [node, native]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      # main as it is now, not the pushed commit: an earlier queued run may
-      # have committed packages since.
       - uses: actions/checkout@v4
         with:
-          ref: main
-
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      # Both jobs upload every package in their checkout, old ones included.
-      # One already in packages/ is published, and stays exactly as it is.
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: packages-*
-          path: incoming
-          merge-multiple: true
-
-      - name: Add the new packages
-        run: |
-          shopt -s nullglob globstar
-          for file in incoming/**/*.fdpkg; do
-            path="packages/${file#incoming/}"
-            if [ -e "$path" ]; then
-              cmp -s "$file" "$path" || echo "::notice::$path is already published; keeping that one"
-            else
-              mkdir -p "$(dirname "$path")"
-              cp "$file" "$path"
-              echo "new: $path"
-            fi
-          done
-
-      - name: Rebuild the index
-        run: node scripts/build.mjs --index-only
-
-      - name: Commit
-        run: |
-          git add packages repository.json repository.min.json
-          if git diff --cached --quiet; then
-            echo "Nothing new to publish."
-            exit 0
-          fi
-          added=$(git diff --cached --name-only --diff-filter=A -- packages | sed 's#.*/##; s#\.fdpkg$##' | paste -sd ', ')
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore(repo): publish ${added:-the index} [skip ci]"
-          git push
-
-  release:
-    name: GitHub releases
-    needs: index
-    # Also after an index run with nothing new, so a missing release is made.
-    if: ${{ !cancelled() && needs.index.result == 'success' }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-          # The notes read each plugin's history.
+          # The notes read each plugin's history, and the index the release tags.
           fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
@@ -176,7 +110,37 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: packages-*
+          path: dist
+          merge-multiple: true
+
+      # The packages were built from this run's commit, so they are released on it.
       - name: Release what has no release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: node scripts/release.mjs
+        run: node scripts/release.mjs --target "${{ github.sha }}"
+
+      - name: Rebuild the index, commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch -q --tags origin main
+            git checkout -q -B main origin/main
+            node scripts/index.mjs
+            git add repository.json repository.min.json
+            if git diff --cached --quiet; then
+              echo "The index is up to date."
+              exit 0
+            fi
+            git commit -qm "chore(repo): rebuild the index [skip ci]"
+            if git push -q origin main; then
+              exit 0
+            fi
+            echo "main moved; trying again ($attempt)"
+            sleep $((attempt * 5))
+          done
+          echo "::error::could not push to main"
+          exit 1

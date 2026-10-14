@@ -11,14 +11,14 @@ importers:
   .:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
 
   examples/weather-node:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.2
@@ -30,8 +30,8 @@ importers:
   plugins/discord:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.2
@@ -43,8 +43,8 @@ importers:
   plugins/obs:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.2
@@ -56,14 +56,14 @@ importers:
   plugins/soundboard:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
 
   plugins/spotify:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.2
@@ -75,8 +75,8 @@ importers:
   plugins/streamerbot:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.2
@@ -243,8 +243,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@flexdeck/plugin-sdk@0.1.0':
-    resolution: {integrity: sha512-GC6P/V3iXfMfiXufLqgEOoVOAoQaL/UXYIBVtPnyslMdk7L0tl0E15/ZWWAOB2vUjNgwar27ySqdhlRPfR2D4A==}
+  '@flexdeck/plugin-sdk@0.2.0':
+    resolution: {integrity: sha512-0QqwSLYSUzlNLPJ2/SWUStx+CmGULkSxJvBofc9k7ug5p71867RtvXdLxYEeByu+EdPip4xLexQ0KGdZxOX6sQ==}
     engines: {node: '>=22.18'}
     hasBin: true
 
@@ -344,7 +344,7 @@ snapshots:
   '@esbuild/win32-x64@0.28.2':
     optional: true
 
-  '@flexdeck/plugin-sdk@0.1.0':
+  '@flexdeck/plugin-sdk@0.2.0':
     dependencies:
       esbuild: 0.28.2
 

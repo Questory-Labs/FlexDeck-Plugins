@@ -11,7 +11,7 @@ name = "flexdeck-soundboard"
 path = "src/main.rs"
 
 [dependencies]
-flexdeck-plugin-sdk = "0.1"
+flexdeck-plugin-sdk = "0.2"
 serde_json = { workspace = true }
 cpal = "0.15.3"
 symphonia = { version = "0.5.4", default-features = false, features = ["mp3", "wav", "pcm", "flac", "ogg", "vorbis", "aac", "isomp4", "adpcm"] }

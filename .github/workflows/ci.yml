@@ -38,8 +38,11 @@ jobs:
       - name: Script tests
         run: node --test scripts/*.test.mjs
 
+      # Packs what is not released yet, so the preview has its notes to show.
       - name: Release notes preview
-        run: node scripts/release.mjs --dry-run
+        run: |
+          node scripts/build.mjs --runtime node,recipe
+          node scripts/release.mjs --dry-run
 
       - name: Typecheck
         run: pnpm -r --if-present --filter "!flexdeck-plugins" --filter "!@flexdeck/plugin-soundboard" typecheck

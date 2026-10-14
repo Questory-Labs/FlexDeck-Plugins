@@ -3,7 +3,7 @@ dist/
 target/
 *.tsbuildinfo
 
-# A plugin's own build output. Published packages live in packages/ only.
+# A plugin's own build output. Packages are built into dist/ and live on their GitHub release.
 plugins/*/*.fdpkg
 plugins/*/bin/
 examples/*/*.fdpkg

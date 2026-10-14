@@ -9,15 +9,14 @@
 // version first. A published version itself never changes, because a package
 // is never rebuilt, and a release refuses a version that already has one.
 //
-// The list reads git history, so CI checks out with full depth.
+// The list reads the release tags and git history, so CI checks out with full depth.
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { versionOrder } from "@flexdeck/plugin-sdk/repo";
 
-import { ROOT, publishedVersions, sources, versionSites } from "./lib.mjs";
-import { parsePackageName } from "./notes.mjs";
+import { ROOT, publishedVersions, sources, taggedCommit, versionSites } from "./lib.mjs";
 
 /** Changes that do not reach the package, so they are not a reason to release. */
 const UNPACKED = [":(exclude)*/test/**", ":(exclude)*/tsconfig.json", ":(exclude)*/scripts/**"];
@@ -42,19 +41,12 @@ for (const { dir, rel, manifest, packageJson } of sources()) {
   if (seen.has(manifest.id)) problems.push(`'${manifest.id}' is both ${seen.get(manifest.id)} and ${rel}`);
   seen.set(manifest.id, rel);
 
-  const newest = publishedVersions(manifest.id, parsePackageName, versionOrder).at(-1);
+  const newest = publishedVersions(manifest.id, versionOrder).at(-1);
   if (!newest) {
     unreleased.push(`${manifest.id}: never released`);
     continue;
   }
-  let added = "";
-  try {
-    added = git("log", "--diff-filter=A", "--format=%H", "-1", "--", newest.path);
-  } catch {
-    // Not a git checkout.
-  }
-  if (!added) continue; // Built here but not committed yet.
-  const changed = git("diff", "--name-only", added, "--", rel, ...UNPACKED.map((spec) => spec.replace("*", rel)));
+  const changed = git("diff", "--name-only", taggedCommit(newest.tag), "--", rel, ...UNPACKED.map((spec) => spec.replace("*", rel)));
   if (changed) unreleased.push(`${manifest.id}: ${changed.split("\n").length} file(s) changed since ${newest.version}`);
 }
 

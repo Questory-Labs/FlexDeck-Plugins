@@ -352,7 +352,9 @@ checksum = "aedcfb3409746eddb02b9e19ebda1c3394f759a152e48ee875a0844d1b955484"
 
 [[package]]
 name = "flexdeck-plugin-abi"
-version = "0.1.0"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "86307e9ce5a694666c51809dc7be33e3e952c816d56a18925981ff387345fbf7"
 dependencies = [
  "serde",
  "serde_json",
@@ -361,7 +363,9 @@ dependencies = [
 
 [[package]]
 name = "flexdeck-plugin-sdk"
-version = "0.1.0"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ce2804abfef439e9c36d0de5054473b2217da34a7653ebabf280b53b95e5f38d"
 dependencies = [
  "base64 0.22.1",
  "flexdeck-plugin-abi",
@@ -372,7 +376,7 @@ dependencies = [
 
 [[package]]
 name = "flexdeck-plugin-soundboard"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "cpal",
  "flexdeck-plugin-sdk",

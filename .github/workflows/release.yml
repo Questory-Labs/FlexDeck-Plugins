@@ -9,17 +9,18 @@ name: Release plugin
 #                plugin, test it, and commit `release(<id>): v<version>` to main.
 #   2. build     Build and pack that one plugin: on Windows for a native plugin,
 #                on Linux otherwise.
-#   3. publish   Add the package to packages/, rebuild repository.min.json so it
-#                lists this version, commit to main, and cut the GitHub release
-#                `<id>-v<version>` with the package attached and the notes
-#                from the plugin's `feat`/`fix`/`perf`/`sec` lines.
+#   3. publish   Cut the GitHub release `<id>-v<version>` with the package
+#                attached and the notes from the plugin's `feat`/`fix`/`perf`/
+#                `sec` lines, then rebuild repository.min.json so it lists this
+#                version, pointing at that attachment, and commit it to main.
 #
 # FlexDeck re-reads the index within six hours and offers the update. A
 # pre-release (1.2.0-rc.1) is released on GitHub only and stays out of the
 # index, so nobody is updated to it.
 #
 # If a step fails after `prepare` committed the version, run this again with
-# the version left blank: it releases what is in the code.
+# the version left blank: it releases what is in the code. If only the index
+# failed, after the release was made, run Publish all: it rebuilds the index.
 on:
   workflow_dispatch:
     inputs:
@@ -73,6 +74,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+          # The release tags say which versions are already published.
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -119,6 +122,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.prepare.outputs.sha }}
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -140,12 +144,12 @@ jobs:
         run: pnpm --filter "${{ needs.prepare.outputs.package }}" test
 
       - name: Build and pack
-        run: node scripts/build.mjs --only "${{ inputs.plugin }}" --no-index
+        run: node scripts/build.mjs --only "${{ inputs.plugin }}"
 
       - uses: actions/upload-artifact@v4
         with:
           name: package
-          path: packages/**/${{ inputs.plugin }}-${{ needs.prepare.outputs.version }}.fdpkg
+          path: dist/${{ inputs.plugin }}-${{ needs.prepare.outputs.version }}.fdpkg
           if-no-files-found: error
 
   publish:
@@ -154,13 +158,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      FILE: ${{ inputs.plugin }}-${{ needs.prepare.outputs.version }}.fdpkg
-      DEST: ${{ needs.prepare.outputs.prerelease == 'true' && 'packages/pre' || 'packages' }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
+          # The notes read each plugin's history, and the index the release tags.
           fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
@@ -175,30 +177,32 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: package
-          path: incoming
+          path: dist
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/release.mjs --only "${{ inputs.plugin }}" --target "${{ needs.prepare.outputs.sha }}"
 
       # Other plugins may be released at the same time. On a rejected push, start
-      # again from the new main: add this one package, rebuild the index, retry.
-      - name: Add the package, rebuild the index, commit
+      # again from the new main and its tags: rebuild the index, retry.
+      - name: Rebuild the index, commit
+        if: needs.prepare.outputs.prerelease != 'true'
         run: |
-          package=$(find incoming -name "$FILE" | head -1)
-          [ -n "$package" ] || { echo "::error::the build uploaded no $FILE"; exit 1; }
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for attempt in 1 2 3 4 5; do
-            git fetch -q origin main
+            git fetch -q --tags origin main
             git reset -q --hard origin/main
-            if [ -e "$DEST/$FILE" ]; then
-              echo "::error::$DEST/$FILE is already published"
-              exit 1
+            node scripts/index.mjs
+            git add repository.json repository.min.json
+            if git diff --cached --quiet; then
+              echo "the index already lists ${{ needs.prepare.outputs.tag }}"
+              exit 0
             fi
-            mkdir -p "$DEST"
-            cp "$package" "$DEST/$FILE"
-            node scripts/build.mjs --index-only
-            git add packages repository.json repository.min.json
             git commit -qm "chore(repo): publish ${{ needs.prepare.outputs.tag }} [skip ci]"
             if git push -q origin HEAD:main; then
-              echo "published $DEST/$FILE"
+              echo "indexed ${{ needs.prepare.outputs.tag }}"
               exit 0
             fi
             echo "main moved; trying again ($attempt)"
@@ -206,11 +210,6 @@ jobs:
           done
           echo "::error::could not push to main"
           exit 1
-
-      - name: GitHub release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: node scripts/release.mjs --only "${{ inputs.plugin }}"
 
       - name: Summary
         run: |

@@ -1,17 +1,12 @@
-// What this repository publishes, read from the folders.
+// What this repository publishes, read from the folders and the release tags.
+import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const ROOT = fileURLToPath(new URL("..", import.meta.url));
-/** Where built packages are kept. Each `<id>-<version>.fdpkg` is written once and never again. */
-export const PACKAGES = join(ROOT, "packages");
-/**
- * Pre-releases (`1.0.0-rc.1`). Kept apart so the index, which lists the highest
- * version in packages/, never offers one to everybody; they ship only as a
- * GitHub pre-release.
- */
-export const PRERELEASES = join(PACKAGES, "pre");
+/** Where packages are built, before they are released. Not committed: a package lives on its GitHub release. */
+export const DIST = join(ROOT, "dist");
 /** The folders whose plugins are published. `examples/` is tested but never published. */
 export const PUBLISHED = ["plugins", "recipes"];
 
@@ -63,28 +58,51 @@ export function versionSites({ manifest, packageJson }) {
 
 export const isPrerelease = (version) => version.includes("-");
 
-/** The package file `version` of plugin `id` is published as. */
-export function packageFile({ id, version }) {
-  return join(isPrerelease(version) ? PRERELEASES : PACKAGES, `${id}-${version}.fdpkg`);
+/** The package file name of `version` of plugin `id`. */
+export const packageName = ({ id, version }) => `${id}-${version}.fdpkg`;
+
+/** Where `version` of plugin `id` is built. */
+export const packageFile = (plugin) => join(DIST, packageName(plugin));
+
+/** The release tag of `version` of plugin `id`. */
+export const releaseTag = ({ id, version }) => `${id}-v${version}`;
+
+/** Where the index sends FlexDeck for a released package: the file attached to its GitHub release. */
+export const releaseUrl = (plugin) => `${REPO.website}/releases/download/${releaseTag(plugin)}/${packageName(plugin)}`;
+
+/** A release tag, `<id>-v<version>`, read back. */
+export function parseTag(tag) {
+  const match = /^([a-z][a-z0-9_-]*?)-v(\d+\.\d+\.\d+[0-9A-Za-z.+-]*)$/.exec(tag);
+  return match ? { id: match[1], version: match[2], tag } : null;
 }
 
-/** Every package file, pre-releases included: `{ path, file }`, path relative to the root. */
-export function allPackages() {
-  const found = [];
-  for (const [dir, prefix] of [[PACKAGES, "packages/"], [PRERELEASES, "packages/pre/"]]) {
-    if (!existsSync(dir)) continue;
-    for (const file of readdirSync(dir).sort()) if (file.endsWith(".fdpkg")) found.push({ file, path: `${prefix}${file}`, abs: join(dir, file) });
-  }
-  return found;
+/** Every built package in dist/: `{ file, abs }`. */
+export function builtPackages() {
+  if (!existsSync(DIST)) return [];
+  return readdirSync(DIST)
+    .filter((file) => file.endsWith(".fdpkg"))
+    .sort()
+    .map((file) => ({ file, abs: join(DIST, file) }));
 }
 
-/** The published versions of plugin `id`, oldest first. */
-export function publishedVersions(id, parse, order) {
-  return allPackages()
-    .map((entry) => ({ ...entry, ...parse(entry.file) }))
+/**
+ * Every released version, from the release tags. Each release made here tags
+ * its commit, so a checkout needs the tags (CI fetches with full depth).
+ */
+export function releases() {
+  const listed = execFileSync("git", ["tag", "--list", "*-v*"], { cwd: ROOT, encoding: "utf8" });
+  return listed.split("\n").map((tag) => parseTag(tag.trim())).filter(Boolean);
+}
+
+/** The released versions of plugin `id`, oldest first. */
+export function publishedVersions(id, order) {
+  return releases()
     .filter((entry) => entry.id === id)
     .sort((a, b) => order(a.version, b.version));
 }
+
+/** The commit a release tag is on. */
+export const taggedCommit = (tag) => execFileSync("git", ["rev-list", "-n", "1", tag], { cwd: ROOT, encoding: "utf8" }).trim();
 
 const SEMVER = /^(\d+)\.(\d+)\.(\d+)([0-9A-Za-z.+-]*)$/;
 

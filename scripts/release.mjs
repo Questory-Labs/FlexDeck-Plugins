@@ -1,20 +1,20 @@
-// A GitHub release for every published package that does not have one yet.
+// A GitHub release for every package built in dist/ that does not have one yet.
 //
-//   node scripts/release.mjs            create the missing releases (needs gh and GH_TOKEN)
-//   node scripts/release.mjs --only obs only that plugin's (what a release does)
-//   node scripts/release.mjs --dry-run  print what would be released, and the notes
+//   node scripts/release.mjs                    create the missing releases (needs gh and GH_TOKEN)
+//   node scripts/release.mjs --only obs         only that plugin's (what a release does)
+//   node scripts/release.mjs --target <sha>     the commit the packages were built from (default: HEAD)
+//   node scripts/release.mjs --dry-run          print what would be released, and the notes
 //
-// Each package `packages/<id>-<version>.fdpkg` becomes the tag `<id>-v<version>`,
-// on the commit that added the package, with the package attached. The notes are
-// the plugin's changes since its previous release: the typed lines (`feat(obs): …`)
-// of the commits that touched its folder in between (see notes.mjs). A release
-// counts from the previous release, skipping pre-releases, so 1.0.0 lists everything
-// since 0.9.0 and not just what changed after 1.0.0-rc.2. Pre-releases (packages/pre/)
-// are marked as such.
+// Each package `dist/<id>-<version>.fdpkg` becomes the tag `<id>-v<version>` on
+// the commit it was built from, with the package attached: that attachment is
+// where the index sends FlexDeck. The notes are the plugin's changes since its
+// previous release: the typed lines (`feat(obs): …`) of the commits that touched
+// its folder in between (see notes.mjs). A release counts from the previous
+// release, skipping pre-releases, so 1.0.0 lists everything since 0.9.0 and not
+// just what changed after 1.0.0-rc.2. Pre-releases are marked as such.
 //
-// Releases are derived from packages/, never the other way round, so this is
-// safe to run any number of times: a package that has a release is skipped, and
-// one whose release failed last time is released on the next run.
+// A version that already has a release is skipped, so this is safe to run any
+// number of times.
 import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync, statSync } from "node:fs";
@@ -22,20 +22,19 @@ import { readFileSync, statSync } from "node:fs";
 import { versionOrder } from "@flexdeck/plugin-sdk/repo";
 
 import { changes, notes, parsePackageName } from "./notes.mjs";
-import { PUBLISHED, ROOT, allPackages, isPrerelease } from "./lib.mjs";
+import { PUBLISHED, ROOT, builtPackages, isPrerelease, publishedVersions, releaseTag, taggedCommit } from "./lib.mjs";
 
 const args = process.argv.slice(2);
+const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const dryRun = args.includes("--dry-run");
-const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : undefined;
+const only = option("--only");
 const git = (...args) => execFileSync("git", args, { cwd: ROOT, encoding: "utf8" }).trim();
+const target = git("rev-parse", "--verify", `${option("--target") ?? "HEAD"}^{commit}`);
 
 function gh(args, input) {
   const result = spawnSync("gh", args, { cwd: ROOT, encoding: "utf8", input, stdio: ["pipe", "pipe", "pipe"] });
   return { ok: result.status === 0, out: (result.stdout ?? "").trim(), err: (result.stderr ?? "").trim() };
 }
-
-/** The commit that added `path`, or "" if it is not committed. */
-const addedIn = (path) => git("log", "--diff-filter=A", "--format=%H", "-1", "--", path);
 
 /** The plugin's folder and manifest as they were at `commit`. */
 function sourceAt(commit, id) {
@@ -55,19 +54,6 @@ function sourceAt(commit, id) {
   return null;
 }
 
-// Every package, grouped by plugin, oldest version first.
-const byId = new Map();
-for (const { file, path, abs } of allPackages()) {
-  const parsed = parsePackageName(file);
-  if (!parsed) {
-    console.warn(`skipping ${file}: not <id>-<version>.fdpkg`);
-    continue;
-  }
-  if (only && parsed.id !== only) continue;
-  if (!byId.has(parsed.id)) byId.set(parsed.id, []);
-  byId.get(parsed.id).push({ ...parsed, file, path, abs });
-}
-
 let existing = null;
 if (!dryRun) {
   const listed = gh(["release", "list", "--limit", "1000", "--json", "tagName", "--jq", ".[].tagName"]);
@@ -80,63 +66,74 @@ if (!dryRun) {
 
 let released = 0;
 let failed = 0;
-for (const [id, versions] of [...byId].sort(([a], [b]) => (a < b ? -1 : 1))) {
-  versions.sort((a, b) => versionOrder(a.version, b.version));
-  versions.forEach(({ version, file, path, abs }, position) => {
-    const tag = `${id}-v${version}`;
-    if (existing?.has(tag)) return;
-    const commit = addedIn(path);
-    if (!commit) {
-      console.log(`${tag}: ${path} is not committed yet, skipped`);
-      return;
-    }
-    const source = sourceAt(commit, id);
-    if (!source) {
-      console.error(`${tag}: no plugins/${id} or recipes/${id} at ${commit.slice(0, 7)}`);
-      failed++;
-      return;
-    }
-    const prerelease = isPrerelease(version);
-    // The changes since the previous release (any earlier version, for a
-    // pre-release); all of them for the first.
-    const earlier = versions.slice(0, position).filter((other) => prerelease || !isPrerelease(other.version));
-    const previous = earlier.length ? addedIn(earlier[earlier.length - 1].path) : "";
-    const range = previous ? [`${previous}..${commit}`] : [commit];
-    const log = git("log", "--format=%B%x00", ...range, "--", source.rel);
-    const messages = log.split("\0").map((message) => message.trim()).filter(Boolean);
+let seen = false;
+for (const { file, abs } of builtPackages()) {
+  const parsed = parsePackageName(file);
+  if (!parsed) {
+    console.warn(`skipping ${file}: not <id>-<version>.fdpkg`);
+    continue;
+  }
+  const { id, version } = parsed;
+  if (only && id !== only) continue;
+  seen = true;
+  const tag = releaseTag(parsed);
+  if (existing?.has(tag)) {
+    console.log(`${tag}: already released, skipped`);
+    continue;
+  }
+  const source = sourceAt(target, id);
+  if (!source) {
+    console.error(`${tag}: no plugins/${id} or recipes/${id} at ${target.slice(0, 7)}`);
+    failed++;
+    continue;
+  }
+  if (source.manifest.version !== version) {
+    console.error(`${tag}: ${source.rel} is at ${source.manifest.version} on ${target.slice(0, 7)}, not ${version}`);
+    failed++;
+    continue;
+  }
+  const prerelease = isPrerelease(version);
+  // The changes since the previous release (any earlier version, for a
+  // pre-release); all of them for the first.
+  const earlier = publishedVersions(id, versionOrder).filter(
+    (other) => versionOrder(other.version, version) < 0 && (prerelease || !isPrerelease(other.version)),
+  );
+  const previous = earlier.length ? taggedCommit(earlier.at(-1).tag) : "";
+  const range = previous ? [`${previous}..${target}`] : [target];
+  const log = git("log", "--format=%B%x00", ...range, "--", source.rel);
+  const messages = log.split("\0").map((message) => message.trim()).filter(Boolean);
 
-    const bytes = readFileSync(abs);
-    const body = notes({
-      manifest: source.manifest,
-      sha256: createHash("sha256").update(bytes).digest("hex"),
-      size: statSync(abs).size,
-      file,
-      grouped: changes(id, messages),
-      first: earlier.length === 0,
-      prerelease,
-    });
-    const title = `${source.manifest.name ?? id} ${version}`;
-
-    if (dryRun) {
-      console.log(`\n=== ${tag} on ${commit.slice(0, 7)}: ${title}${prerelease ? " (pre-release)" : ""}\n\n${body}`);
-      released++;
-      return;
-    }
-    // Never "latest": that is one release for the whole repository, and every
-    // plugin here has its own line of releases.
-    const args = ["release", "create", tag, abs, "--target", commit, "--title", title, "--notes-file", "-", "--latest=false"];
-    if (prerelease) args.push("--prerelease");
-    const result = gh(args, body);
-    if (result.ok) {
-      console.log(`released ${tag}: ${result.out}`);
-      released++;
-    } else {
-      console.error(`${tag}: ${result.err}`);
-      failed++;
-    }
+  const bytes = readFileSync(abs);
+  const body = notes({
+    manifest: source.manifest,
+    sha256: createHash("sha256").update(bytes).digest("hex"),
+    size: statSync(abs).size,
+    file,
+    grouped: changes(id, messages),
+    first: earlier.length === 0,
+    prerelease,
   });
+  const title = `${source.manifest.name ?? id} ${version}`;
+
+  if (dryRun) {
+    console.log(`\n=== ${tag} on ${target.slice(0, 7)}: ${title}${prerelease ? " (pre-release)" : ""}\n\n${body}`);
+    released++;
+    continue;
+  }
+  // Never "latest": that is one release for the whole repository, and every
+  // plugin here has its own line of releases.
+  const create = ["release", "create", tag, abs, "--target", target, "--title", title, "--notes-file", "-", "--latest=false"];
+  if (prerelease) create.push("--prerelease");
+  const result = gh(create, body);
+  if (result.ok) {
+    console.log(`released ${tag}: ${result.out}`);
+    released++;
+  } else {
+    console.error(`${tag}: ${result.err}`);
+    failed++;
+  }
 }
 
-if (only && !byId.has(only)) console.log(`${only} has no package yet`);
+if (only && !seen) console.log(`${only} has no package in dist/`);
 console.log(`\n${released} ${dryRun ? "to release" : "released"}${failed ? `, ${failed} failed` : ""}`);
 if (failed) process.exit(1);

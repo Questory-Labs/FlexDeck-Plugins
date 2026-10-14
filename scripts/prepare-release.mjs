@@ -15,7 +15,6 @@ import { appendFileSync } from "node:fs";
 import { versionOrder } from "@flexdeck/plugin-sdk/repo";
 
 import { isPrerelease, nextVersion, publishedVersions, setVersion, sources } from "./lib.mjs";
-import { parsePackageName } from "./notes.mjs";
 
 function fail(message) {
   console.error(`::error::${message}`);
@@ -35,7 +34,7 @@ try {
   fail(error.message);
 }
 
-const published = publishedVersions(id, parsePackageName, versionOrder);
+const published = publishedVersions(id, versionOrder);
 if (published.some((entry) => entry.version === version)) {
   fail(`${id} ${version} is already published. Pick a newer version (patch, minor, major or an exact one).`);
 }

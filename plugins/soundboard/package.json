@@ -12,6 +12,6 @@
     "verify": "flexdeck-plugin verify"
   },
   "dependencies": {
-    "@flexdeck/plugin-sdk": "^0.1.0"
+    "@flexdeck/plugin-sdk": "^0.2.0"
   }
 }

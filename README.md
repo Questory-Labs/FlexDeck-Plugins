@@ -90,8 +90,7 @@ The [plugin guide](https://github.com/santoshpanna/FlexDeck/blob/main/docs/plugi
 | `recipes/<id>/` | A recipe: `plugin.json` and `recipe.json`, no code |
 | `examples/` | Reference plugins that are tested but not published. `weather-node` is the ABI 4 reference in TypeScript (the published `weather` is the recipe) |
 | `icons/` | `<id>.png` and `<id>-<px>.png`, picked up by the index |
-| `packages/` | Every released `<id>-<version>.fdpkg`, written by CI and never changed. Pre-releases go in `packages/pre/`, which the index doesn't read |
-| `repository.min.json`, `repository.json` | The index the app reads, written by CI |
+| `repository.min.json`, `repository.json` | The index the app reads, written by CI. Each package is the `.fdpkg` attached to its GitHub release |
 | `repositories.min.json` | The community repositories FlexDeck has reviewed (the app's *Community* list) |
 | `.github/assets/` | The README artwork, written by `pnpm art` |
 
@@ -115,12 +114,12 @@ Merging a change doesn't ship it. Each plugin is released on its own, when you c
 
 1. writes the version into `plugin.json`, `package.json` and the code (`src/index.ts`, or `Cargo.toml` for a native plugin), tests the plugin, and commits `release(<id>): v<version>` to `main`;
 2. builds and packs only that plugin, on Windows for a native one and on Linux otherwise;
-3. adds the package to `packages/` and rewrites `repository.min.json` so it lists this version as the plugin's newest, then commits both to `main`. FlexDeck offers the update within six hours;
-4. cuts the GitHub release `<id>-v<version>`, with the `.fdpkg` attached and the notes from the plugin's typed lines since its previous release.
+3. cuts the GitHub release `<id>-v<version>`, with the `.fdpkg` attached and the notes from the plugin's typed lines since its previous release;
+4. rewrites `repository.min.json` so it lists this version as the plugin's newest, pointing at the `.fdpkg` on that release, and commits it to `main`. FlexDeck offers the update within six hours.
 
-A version that is already released, or older than the newest one, is refused. A pre-release (`1.2.0-rc.1`) gets a GitHub pre-release only. It stays out of the index, so nobody is updated to it, and the final `1.2.0` lists everything since the release before the rc. Other plugins in the index never change when you release one. Two releases can run at once: the publish step retries on a moved `main`.
+A version that is already released, or older than the newest one, is refused. A pre-release (`1.2.0-rc.1`) gets a GitHub pre-release only. It stays out of the index, so nobody is updated to it, and the final `1.2.0` lists everything since the release before the rc. Other plugins in the index never change when you release one. Two releases can run at once: the index step retries on a moved `main`.
 
-If a run fails after step 1, run it again with the version blank. To set a version without releasing, use `pnpm bump <id> <patch | minor | major | version>`.
+If a run fails after step 1, run it again with the version blank. If only step 4 failed, run *Publish all*, which rebuilds the index. To set a version without releasing, use `pnpm bump <id> <patch | minor | major | version>`.
 
 ### Working locally
 
@@ -129,7 +128,8 @@ pnpm install
 pnpm test                 # every plugin's tests, and the soundboard's cargo tests
 pnpm typecheck
 pnpm check                # the rules above
-pnpm build                # pack each new version into packages/ and rewrite the index
+pnpm build                # pack each unreleased version into dist/
+pnpm index                # rewrite the index from the GitHub releases
 pnpm bump <id> patch      # a new version, everywhere the plugin writes it
 pnpm art                  # redraw the README artwork in .github/assets/
 ```
@@ -145,7 +145,7 @@ Delete `.cargo/config.toml` and run `pnpm install` to go back to the published S
 To check a package against the FlexDeck on your computer:
 
 ```sh
-flexdeck verify-plugin packages/obs-0.4.0.fdpkg
+flexdeck verify-plugin dist/obs-0.4.1.fdpkg
 ```
 
 To try the whole repository in the app, serve this folder (for example `npx serve -l 8799`) and start the agent with `FLEXDECK_OFFICIAL_REPO=http://127.0.0.1:8799/repository.min.json`.
@@ -156,9 +156,9 @@ To try the whole repository in the app, serve this folder (for example `npx serv
 | --- | --- | --- |
 | `ci.yml` | pull requests, pushes to `main` | `pnpm check`, typecheck and tests (Linux); soundboard tests (Windows); a dry run of the release script |
 | `release.yml` | by hand: *Release plugin* | releases one plugin (above) |
-| `publish.yml` | by hand: *Publish all* | builds every version that has no package yet, rewrites the index, commits, and creates every missing GitHub release. Use it for the repository's first publish, or to repair a release that failed |
+| `publish.yml` | by hand: *Publish all* | builds every version that has no release yet, creates its GitHub release, then rewrites the index and commits it. Use it for the repository's first publish, or to repair a release whose index step failed |
 
-Releases are derived from `packages/`, so a package never gets two releases, and a missing one is made the next time either workflow runs. None is marked *latest*, since each plugin has its own line of releases. To preview the notes locally, run `node scripts/release.mjs --dry-run [--only <id>]`.
+The release tags are the record of what is published: a version that has one is never built again, so its checksum never changes. None is marked *latest*, since each plugin has its own line of releases. To preview the notes locally, run `node scripts/release.mjs --dry-run [--only <id>]`.
 
 Before the first push, the SDKs must be on npm and crates.io (the app repository's *Plugin SDKs* workflow). Then run `pnpm install` and `cargo generate-lockfile` without `link-sdk`, and commit `pnpm-lock.yaml` and `Cargo.lock`: CI installs with `--frozen-lockfile`. Then run *Publish all* once to release every plugin's first version.
 
