@@ -385,7 +385,7 @@ async function setActionState(ctx: Context, wanted: string, mode: "enable" | "di
 const plugin = definePlugin({
   id: ID,
   name: "Streamer.bot",
-  version: "0.1.0",
+  version: "0.1.1",
   description:
     "Run Streamer.bot actions, flip between two, switch them on and off, and show their state and global variables on the deck.",
   author: "flexdeck",
