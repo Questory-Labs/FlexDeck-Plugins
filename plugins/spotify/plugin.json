@@ -2,7 +2,7 @@
   "abi": 4,
   "id": "spotify",
   "name": "Spotify",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Like songs, add them to playlists, start playlists, Spotify's volume and devices — and the album art on the deck.",
   "author": "flexdeck",
   "homepage": "https://developer.spotify.com",
