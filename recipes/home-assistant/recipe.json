@@ -6,7 +6,7 @@
       "everySeconds": 30,
       "lan": true,
       "args": [
-        { "name": "url", "default": "http://homeassistant.local:8123", "description": "Your Home Assistant's address" },
+        { "name": "url", "secret": true, "default": "http://homeassistant.local:8123", "description": "Your Home Assistant's address. Kept with the token, so a shared page never carries it and the token only ever goes here." },
         { "name": "token", "secret": true, "description": "A long-lived access token (Profile → Security). Kept on this computer only." },
         { "name": "entity", "default": "sensor.living_room_temperature", "description": "The entity's id" }
       ],

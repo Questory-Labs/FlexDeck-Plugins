@@ -24,7 +24,7 @@ About a minute. You need your calendar's **secret iCal address**: a private link
 
 1. Get the address from your calendar (below).
 2. Install **Calendar** from the Marketplace, and add the **Next meeting** key (2 × 1) from the key gallery.
-3. Select it, and under **Its own data**, paste the address into *url*.
+3. Select it, and under **Its own data**, paste the address into *url*. It's kept as a secret on this PC and never travels in a shared page.
 
 > [!CAUTION]
 > **Treat the address like a password.** Anyone who has it can read your calendar. If it leaks, your calendar can make a new one and the old one stops working.

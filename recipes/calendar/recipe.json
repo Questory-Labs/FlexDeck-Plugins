@@ -5,7 +5,7 @@
       "name": "Calendar",
       "everySeconds": 300,
       "args": [
-        { "name": "url", "default": "https://", "description": "Your calendar's secret iCal (.ics) address" }
+        { "name": "url", "secret": true, "description": "Your calendar's secret iCal (.ics) address. Kept on this computer only: a shared page never carries it." }
       ],
       "http": { "url": "{{args.url}}" },
       "fields": [

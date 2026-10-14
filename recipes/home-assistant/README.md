@@ -35,7 +35,7 @@ About two minutes, once per Home Assistant.
 
    | | |
    | --- | --- |
-   | *url* | Your Home Assistant's address, as you open it in a browser. Default `http://homeassistant.local:8123` |
+   | *url* | Your Home Assistant's address, as you open it in a browser. Default `http://homeassistant.local:8123`. Kept as a secret on this PC, like the token |
    | *token* | The token from step 1. It's kept as a secret on this PC |
    | *entity* | The entity's id, for example `sensor.living_room_temperature` |
 
@@ -44,7 +44,7 @@ FlexDeck only lets a web source reach your own network when the source allows it
 > [!TIP]
 > **Finding an entity's id:** in Home Assistant, open **Settings → Devices & services → Entities**, click the entity, and open its settings (the gear). The **Entity ID** is there, like `light.desk_lamp` or `binary_sensor.front_door`.
 
-One key per entity: add as many as you like, each with its own *entity*. They can share the same token.
+One key per entity: add as many as you like, each with its own *entity*. New keys use the address and token you gave the first one. A key with a different address needs its own token too: FlexDeck never sends your token to an address it wasn't saved with.
 
 ## What it shows
 
