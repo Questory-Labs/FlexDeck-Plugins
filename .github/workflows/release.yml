@@ -1,7 +1,8 @@
 name: Release plugin
 
 # Release one plugin: Actions → Release plugin → Run workflow, pick the plugin
-# and the version.
+# and the version. Or push a commit to main with a `release(<id>): v<version>`
+# line (release-on-push.yml).
 #
 #   1. prepare   Work out the version (patch, minor, major, an exact one, or
 #                blank for the one already in the code), write it into the
@@ -40,6 +41,14 @@ on:
         description: "patch, minor, major, an exact version (1.2.0, 1.2.0-rc.1), or blank for the version already in the code"
         type: string
         default: patch
+  workflow_call:
+    inputs:
+      plugin:
+        type: string
+        required: true
+      version:
+        type: string
+        default: ""
 
 permissions:
   contents: read

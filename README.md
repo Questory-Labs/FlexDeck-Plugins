@@ -111,7 +111,7 @@ Merging a change doesn't ship it. Each plugin is released on its own, when you c
 
 ### Releasing a plugin
 
-**Actions → Release plugin → Run workflow.** Pick the plugin, and the version: `patch`, `minor`, `major`, an exact one (`1.2.0`, `1.2.0-rc.1`), or blank to release the version already in the code. It then:
+**Actions → Release plugin → Run workflow.** Pick the plugin, and the version: `patch`, `minor`, `major`, an exact one (`1.2.0`, `1.2.0-rc.1`), or blank to release the version already in the code. Or push to `main` with a `release(<id>): v<version>` line in a commit message: each such line releases that plugin at that version. It then:
 
 1. writes the version into `plugin.json`, `package.json` and the code (`src/index.ts`, or `Cargo.toml` for a native plugin), tests the plugin, and commits `release(<id>): v<version>` to `main`;
 2. builds and packs only that plugin, on Windows for a native one and on Linux otherwise;

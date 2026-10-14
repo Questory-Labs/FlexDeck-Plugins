@@ -1,0 +1,58 @@
+name: Release on push
+
+# A push to main whose commits carry `release(<id>): v<version>` lines releases
+# each of those plugins at that version, through the Release plugin workflow.
+# The version must already be in the code, or newer than it.
+#
+# The workflows' own commits are pushed with the GitHub token, which starts no
+# workflow, so their `release(...)` lines never come back here.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    name: Find release lines
+    runs-on: ubuntu-latest
+    outputs:
+      releases: ${{ steps.plan.outputs.releases }}
+      any: ${{ steps.plan.outputs.any }}
+    steps:
+      # Commit messages reach the script as a variable, never pasted into it.
+      - name: Read the pushed commits
+        id: plan
+        env:
+          COMMITS: ${{ toJSON(github.event.commits) }}
+        run: |
+          node --input-type=module -e '
+            import { appendFileSync } from "node:fs";
+            const line = /^release\(([a-z0-9][a-z0-9-]*)\): v?(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)\s*$/gm;
+            const releases = new Map();
+            for (const commit of JSON.parse(process.env.COMMITS || "[]")) {
+              for (const [, plugin, version] of commit.message.matchAll(line)) releases.set(plugin, version);
+            }
+            const list = [...releases].map(([plugin, version]) => ({ plugin, version }));
+            for (const { plugin, version } of list) console.log(`release ${plugin} ${version}`);
+            if (!list.length) console.log("no release lines");
+            appendFileSync(process.env.GITHUB_OUTPUT, `releases=${JSON.stringify(list)}\nany=${list.length > 0}\n`);
+          '
+
+  release:
+    name: Release ${{ matrix.plugin }}
+    needs: plan
+    if: needs.plan.outputs.any == 'true'
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      # One at a time: a prepare step that has to bump the version pushes to main.
+      max-parallel: 1
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.releases) }}
+    uses: ./.github/workflows/release.yml
+    with:
+      plugin: ${{ matrix.plugin }}
+      version: ${{ matrix.version }}
