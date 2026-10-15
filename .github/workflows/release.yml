@@ -146,9 +146,11 @@ jobs:
       - name: Build and pack
         run: node scripts/build.mjs --only "${{ inputs.plugin }}"
 
+      # Unique per plugin: release-on-push runs several of these in one workflow
+      # run, and artifact names must be unique within a run.
       - uses: actions/upload-artifact@v4
         with:
-          name: package
+          name: package-${{ inputs.plugin }}
           path: dist/${{ inputs.plugin }}-${{ needs.prepare.outputs.version }}.fdpkg
           if-no-files-found: error
 
@@ -176,7 +178,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: package
+          name: package-${{ inputs.plugin }}
           path: dist
 
       - name: GitHub release
@@ -194,6 +196,10 @@ jobs:
           for attempt in 1 2 3 4 5; do
             git fetch -q --tags origin main
             git reset -q --hard origin/main
+            if ! git rev-parse -q --verify "refs/tags/${{ needs.prepare.outputs.tag }}" >/dev/null; then
+              echo "::error::no tag ${{ needs.prepare.outputs.tag }}: the release was not made"
+              exit 1
+            fi
             node scripts/index.mjs
             git add repository.json repository.min.json
             if git diff --cached --quiet; then

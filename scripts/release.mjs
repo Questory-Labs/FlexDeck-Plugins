@@ -134,6 +134,9 @@ for (const { file, abs } of builtPackages()) {
   }
 }
 
-if (only && !seen) console.log(`${only} has no package in dist/`);
+if (only && !seen) {
+  console.error(`${only} has no package in dist/`);
+  failed++;
+}
 console.log(`\n${released} ${dryRun ? "to release" : "released"}${failed ? `, ${failed} failed` : ""}`);
 if (failed) process.exit(1);
