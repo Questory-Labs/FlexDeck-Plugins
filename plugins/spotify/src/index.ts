@@ -320,7 +320,7 @@ const ctxOf = () => {
 const plugin = definePlugin({
   id: ID,
   name: "Spotify",
-  version: "0.1.1",
+  version: "0.1.2",
   description: "Like songs, add them to playlists, start playlists, Spotify's volume and devices — and the album art on the deck.",
   author: "flexdeck",
   permissions: ["network"],
