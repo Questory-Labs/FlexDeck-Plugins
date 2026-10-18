@@ -101,20 +101,20 @@
     {
       "id": "soundboard",
       "name": "Soundboard",
-      "version": "0.1.0",
+      "version": "0.1.2",
       "description": "Play sound clips to your headphones and, through a virtual audio cable, into your microphone.",
       "author": "flexdeck",
-      "abi": 3,
+      "abi": 4,
       "permissions": [
         "filesystem",
         "network"
       ],
       "releaseDate": "2026-10-12T17:53:03Z",
-      "latestUpdateDate": "2026-10-18T10:21:24Z",
+      "latestUpdateDate": "2026-10-18T10:26:04Z",
       "package": {
-        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/soundboard-v0.1.0/soundboard-0.1.0.fdpkg",
-        "sha256": "19068623c6b74f70b6041d18693863cb9d85fad4c9e0c9f2d5c1047da7fbc203",
-        "size": 2338783
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/soundboard-v0.1.2/soundboard-0.1.2.fdpkg",
+        "sha256": "0831b60754f808785f5e22a9c8b8843fe1de0a7ba64bbf8b23992727314134f8",
+        "size": 2342836
       }
     },
     {
