@@ -139,20 +139,20 @@
     {
       "id": "streamerbot",
       "name": "Streamer.bot",
-      "version": "0.1.0",
+      "version": "0.1.2",
       "description": "Run Streamer.bot actions, flip between two, switch them on and off, and show their state and global variables on the deck.",
       "author": "flexdeck",
       "homepage": "https://streamer.bot",
-      "abi": 3,
+      "abi": 4,
       "permissions": [
         "network"
       ],
       "releaseDate": "2026-10-12T17:53:03Z",
-      "latestUpdateDate": "2026-10-18T10:21:24Z",
+      "latestUpdateDate": "2026-10-18T10:22:06Z",
       "package": {
-        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/streamerbot-v0.1.0/streamerbot-0.1.0.fdpkg",
-        "sha256": "451044e94e3b6210e757d9dece9d90fcc93c252f5e833d76573f57b05935e2ff",
-        "size": 12515
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/streamerbot-v0.1.2/streamerbot-0.1.2.fdpkg",
+        "sha256": "373f9194619f0f826e9424bd35b178b4e94028e4bac6cdb9fadb5459987db588",
+        "size": 14813
       }
     },
     {
