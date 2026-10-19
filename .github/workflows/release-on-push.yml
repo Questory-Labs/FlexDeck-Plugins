@@ -2,6 +2,8 @@ name: Release on push
 
 # A push to main whose commits carry `release(<id>): v<version>` lines releases
 # each of those plugins at that version, through the Release plugin workflow.
+# `release(icon-packs): v<version>` releases the icon packs instead, through the
+# Release icon packs workflow.
 # The version must already be in the code, or newer than it.
 #
 # The workflows' own commits are pushed with the GitHub token, which starts no
@@ -20,6 +22,7 @@ jobs:
     outputs:
       releases: ${{ steps.plan.outputs.releases }}
       any: ${{ steps.plan.outputs.any }}
+      icons: ${{ steps.plan.outputs.icons }}
     steps:
       # Commit messages reach the script as a variable, never pasted into it.
       - name: Read the pushed commits
@@ -34,10 +37,13 @@ jobs:
             for (const commit of JSON.parse(process.env.COMMITS || "[]")) {
               for (const [, plugin, version] of commit.message.matchAll(line)) releases.set(plugin, version);
             }
+            const icons = releases.get("icon-packs") ?? "";
+            releases.delete("icon-packs");
             const list = [...releases].map(([plugin, version]) => ({ plugin, version }));
             for (const { plugin, version } of list) console.log(`release ${plugin} ${version}`);
-            if (!list.length) console.log("no release lines");
-            appendFileSync(process.env.GITHUB_OUTPUT, `releases=${JSON.stringify(list)}\nany=${list.length > 0}\n`);
+            if (icons) console.log(`release icon-packs ${icons}`);
+            if (!list.length && !icons) console.log("no release lines");
+            appendFileSync(process.env.GITHUB_OUTPUT, `releases=${JSON.stringify(list)}\nany=${list.length > 0}\nicons=${icons}\n`);
           '
 
   release:
@@ -56,3 +62,13 @@ jobs:
     with:
       plugin: ${{ matrix.plugin }}
       version: ${{ matrix.version }}
+
+  icons:
+    name: Release icon packs
+    needs: [plan, release]
+    if: ${{ !cancelled() && needs.plan.outputs.icons != '' }}
+    permissions:
+      contents: write
+    uses: ./.github/workflows/release-icons.yml
+    with:
+      version: ${{ needs.plan.outputs.icons }}

@@ -31,4 +31,5 @@ test("a release tag reads back as its plugin and version", () => {
   assert.deepEqual(parseTag("obs-v1.0.0-rc.1"), { id: "obs", version: "1.0.0-rc.1", tag: "obs-v1.0.0-rc.1" });
   assert.equal(parseTag("v0.1.0"), null);
   assert.equal(parseTag("obs-1.0.0"), null);
+  assert.equal(parseTag("icon-packs/v2.0.0"), null);
 });

@@ -1,5 +1,5 @@
 import { createRequire } from "node:module";
-import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { crc32, deflateRawSync } from "node:zlib";
 
@@ -34,6 +34,9 @@ const PACKS = [
 ];
 const OUT = join(ROOT, "icon-packs");
 const DIST = join(ROOT, "dist", "icon-packs");
+const MANIFEST = join(OUT, PACKS[0].dir, "manifest.json");
+const VERSION = process.argv[2] ?? (existsSync(MANIFEST) ? JSON.parse(readFileSync(MANIFEST, "utf8")).Version : undefined);
+if (!/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/.test(VERSION ?? "")) throw new Error(`usage: icon-pack.mjs [version]; '${VERSION}' is not a version`);
 
 const CanvasKit = await createRequire(import.meta.url)("canvaskit-wasm")();
 const { Path, PathOp, StrokeCap, StrokeJoin } = CanvasKit;
@@ -187,7 +190,7 @@ rmSync(OUT, { recursive: true, force: true });
 mkdirSync(DIST, { recursive: true });
 for (const pack of PACKS) {
   const files = [
-    ["manifest.json", `${JSON.stringify({ Name: pack.name, Author: AUTHOR, Version: "2.0.0" }, null, 2)}\n`],
+    ["manifest.json", `${JSON.stringify({ Name: pack.name, Author: AUTHOR, Version: VERSION }, null, 2)}\n`],
     ["icons.json", `${JSON.stringify(icons.map(({ name, tags, category }) => ({ path: `${name}.svg`, name, category, tags })), null, 2)}\n`],
     ["license.txt", `${LICENSE}\n`],
     ...icons.map((icon) => [`icons/${icon.name}.svg`, pack.filled ? filledSvg(filled.get(icon.name)) : outlineSvg(icon)]),

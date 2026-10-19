@@ -122,6 +122,10 @@ A version that is already released, or older than the newest one, is refused. A 
 
 If a run fails after step 1, run it again with the version blank. If only step 4 failed, run *Publish all*, which rebuilds the index. To set a version without releasing, use `pnpm bump <id> <patch | minor | major | version>`.
 
+### Releasing the icon packs
+
+**Actions → Release icon packs → Run workflow**, with the version as for a plugin, or push to `main` with a `release(icon-packs): v<version>` line in a commit message. It redraws both packs at that version, commits `release(icon-packs): v<version>` to `main` if they changed, and cuts the GitHub release `icon-packs/v<version>` with `flexdeck-essentials.zip` and `flexdeck-essentials-filled.zip` attached. The packs are not in the index: people download a zip and add it in the icon picker. Their tags are `icon-packs/v<version>`, never `<id>-v<version>`, so the index never takes them for a plugin. If a run fails after committing the version, run it again with the version blank.
+
 ### Working locally
 
 ```sh
@@ -133,7 +137,7 @@ pnpm build                # pack each unreleased version into dist/
 pnpm index                # rewrite the index from the GitHub releases
 pnpm bump <id> patch      # a new version, everywhere the plugin writes it
 pnpm art                  # redraw the README artwork in .github/assets/
-pnpm icons                # redraw the icon packs, zip them, and write dist/icon-packs/preview.html
+pnpm icons [version]      # redraw the icon packs (at that version), zip them, and write dist/icon-packs/preview.html
 ```
 
 Plugins are built with the published SDKs: [`@flexdeck/plugin-sdk`](https://www.npmjs.com/package/@flexdeck/plugin-sdk) on npm and [`flexdeck-plugin-sdk`](https://crates.io/crates/flexdeck-plugin-sdk) on crates.io. To build against a checkout of the app instead, for example while changing the SDK:
@@ -158,6 +162,7 @@ To try the whole repository in the app, serve this folder (for example `npx serv
 | --- | --- | --- |
 | `ci.yml` | pull requests, pushes to `main` | `pnpm check`, typecheck and tests (Linux); soundboard tests (Windows); a dry run of the release script |
 | `release.yml` | by hand: *Release plugin* | releases one plugin (above) |
+| `release-icons.yml` | by hand: *Release icon packs* | releases the icon packs (above) |
 | `publish.yml` | by hand: *Publish all* | builds every version that has no release yet, creates its GitHub release, then rewrites the index and commits it. Use it for the repository's first publish, or to repair a release whose index step failed |
 
 The release tags are the record of what is published: a version that has one is never built again, so its checksum never changes. None is marked *latest*, since each plugin has its own line of releases. To preview the notes locally, run `node scripts/release.mjs --dry-run [--only <id>]`.
