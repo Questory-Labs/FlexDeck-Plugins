@@ -82,7 +82,7 @@
     {
       "id": "obs",
       "name": "OBS Studio",
-      "version": "0.4.2",
+      "version": "0.5.0",
       "description": "Switch scenes, record, stream, and mute inputs in OBS Studio — and show its state on the deck.",
       "author": "flexdeck",
       "homepage": "https://obsproject.com",
@@ -91,11 +91,11 @@
         "network"
       ],
       "releaseDate": "2026-10-12T17:53:03Z",
-      "latestUpdateDate": "2026-10-18T10:21:24Z",
+      "latestUpdateDate": "2026-10-19T13:45:28Z",
       "package": {
-        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/obs-v0.4.2/obs-0.4.2.fdpkg",
-        "sha256": "a9235854643fbba6d624459abd4fe79396a100e30cf5305893c4334ee7ba6d86",
-        "size": 15153
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/obs-v0.5.0/obs-0.5.0.fdpkg",
+        "sha256": "e6ddcceb69a94a8658d51ccce902ce9ba527f3c8b5965cc24e9cb897776e86ef",
+        "size": 17748
       }
     },
     {
