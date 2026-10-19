@@ -18,9 +18,13 @@
     "index": "node scripts/index.mjs",
     "release": "node scripts/release.mjs",
     "link-sdk": "node scripts/link-sdk.mjs",
-    "art": "node scripts/gen-art.mjs"
+    "art": "node scripts/gen-art.mjs",
+    "icons": "node scripts/icon-pack.mjs"
   },
   "dependencies": {
     "@flexdeck/plugin-sdk": "^0.2.0"
+  },
+  "devDependencies": {
+    "canvaskit-wasm": "0.42.0"
   }
 }

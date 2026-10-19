@@ -98,6 +98,8 @@ test("first sign-in asks Discord, exchanges the code with PKCE, and keeps the to
   assert.equal(host.variable("discord.voice.channel"), "General");
   assert.equal(host.variable("discord.voice.guild"), "Test Server");
   assert.equal(host.variable("discord.voice.users"), 2);
+  assert.equal(host.variable("discord.voice.members"), "Me, Ada");
+  assert.equal(host.variable("discord.voice.speakers"), "");
 });
 
 test("your own application's secret is used, and only when you gave one", async () => {
@@ -198,8 +200,19 @@ test("someone speaking and joining shows up, and notifications are counted", asy
   await inCall(fakeDiscord);
   fakeDiscord.dispatch("SPEAKING_START", { user_id: "2", channel_id: "200" });
   await until(() => host.variable("discord.user.2.speaking") === true, "Ada speaking");
+  assert.equal(host.variable("discord.voice.speakers"), "Ada");
+  assert.equal(host.variable("discord.voice.speaking_count"), 1);
+  fakeDiscord.dispatch("SPEAKING_START", { user_id: "1", channel_id: "200" });
+  await until(() => host.variable("discord.voice.speaking_count") === 2, "you speaking too");
+  assert.equal(host.variable("discord.voice.speakers"), "Me, Ada");
+  fakeDiscord.dispatch("VOICE_STATE_UPDATE", { user: { id: "2", username: "ada", global_name: "Ada" }, nick: "", volume: 50, mute: false });
+  await until(() => host.variable("discord.user.2.volume") === 50, "Ada's volume");
+  assert.equal(host.variable("discord.voice.speakers"), "Me, Ada", "an update does not forget who is speaking");
+  fakeDiscord.dispatch("SPEAKING_STOP", { user_id: "2", channel_id: "200" });
+  await until(() => host.variable("discord.voice.speakers") === "Me", "Ada stopping");
   fakeDiscord.dispatch("VOICE_STATE_CREATE", { user: { id: "3", username: "grace" }, nick: "Grace", volume: 100, mute: false });
   await until(() => host.variable("discord.voice.users") === 3, "Grace joining");
+  assert.equal(host.variable("discord.voice.members"), "Me, Ada, Grace");
   assert.ok(host.events().some((event) => event.event === "user_joined" && event.payload.name === "Grace"));
   fakeDiscord.dispatch("NOTIFICATION_CREATE", { channel_id: "300", title: "Ada", body: "hi" });
   await until(() => host.variable("discord.notifications.count") === 1, "the notification");

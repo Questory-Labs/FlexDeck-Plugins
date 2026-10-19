@@ -376,7 +376,7 @@ dependencies = [
 
 [[package]]
 name = "flexdeck-plugin-soundboard"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "cpal",
  "flexdeck-plugin-sdk",

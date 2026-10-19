@@ -1,0 +1,5576 @@
+[
+  {
+    "path": "scene.svg",
+    "name": "scene",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "layers",
+      "stack"
+    ]
+  },
+  {
+    "path": "layer-add.svg",
+    "name": "layer-add",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "add source",
+      "new scene"
+    ]
+  },
+  {
+    "path": "broadcast.svg",
+    "name": "broadcast",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "stream",
+      "go live",
+      "on air"
+    ]
+  },
+  {
+    "path": "broadcast-off.svg",
+    "name": "broadcast-off",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "stream",
+      "end stream",
+      "off air"
+    ]
+  },
+  {
+    "path": "live.svg",
+    "name": "live",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "stream",
+      "on air",
+      "badge"
+    ]
+  },
+  {
+    "path": "record.svg",
+    "name": "record",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "rec",
+      "start recording"
+    ]
+  },
+  {
+    "path": "record-pause.svg",
+    "name": "record-pause",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "rec",
+      "pause recording"
+    ]
+  },
+  {
+    "path": "record-stop.svg",
+    "name": "record-stop",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "rec",
+      "stop recording"
+    ]
+  },
+  {
+    "path": "studio-mode.svg",
+    "name": "studio-mode",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "preview",
+      "program"
+    ]
+  },
+  {
+    "path": "transition.svg",
+    "name": "transition",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "cut",
+      "fade",
+      "swap"
+    ]
+  },
+  {
+    "path": "replay.svg",
+    "name": "replay",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "replay buffer",
+      "instant replay"
+    ]
+  },
+  {
+    "path": "video.svg",
+    "name": "video",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "camera",
+      "webcam",
+      "source"
+    ]
+  },
+  {
+    "path": "video-off.svg",
+    "name": "video-off",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "camera",
+      "webcam",
+      "hide"
+    ]
+  },
+  {
+    "path": "vertical-video.svg",
+    "name": "vertical-video",
+    "category": "Streaming",
+    "tags": [
+      "shorts",
+      "reels",
+      "portrait",
+      "tiktok"
+    ]
+  },
+  {
+    "path": "media.svg",
+    "name": "media",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "media source",
+      "play",
+      "video file"
+    ]
+  },
+  {
+    "path": "webcam.svg",
+    "name": "webcam",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "virtual camera",
+      "camera"
+    ]
+  },
+  {
+    "path": "display-capture.svg",
+    "name": "display-capture",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "screen",
+      "monitor capture"
+    ]
+  },
+  {
+    "path": "green-screen.svg",
+    "name": "green-screen",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "chroma key",
+      "background"
+    ]
+  },
+  {
+    "path": "eye.svg",
+    "name": "eye",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "show",
+      "visible",
+      "source"
+    ]
+  },
+  {
+    "path": "eye-off.svg",
+    "name": "eye-off",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "hide",
+      "hidden",
+      "source"
+    ]
+  },
+  {
+    "path": "text.svg",
+    "name": "text",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "text source",
+      "title",
+      "type"
+    ]
+  },
+  {
+    "path": "lower-third.svg",
+    "name": "lower-third",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "name tag",
+      "caption",
+      "overlay"
+    ]
+  },
+  {
+    "path": "filter.svg",
+    "name": "filter",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "filters",
+      "funnel"
+    ]
+  },
+  {
+    "path": "mixer.svg",
+    "name": "mixer",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "audio",
+      "sliders",
+      "faders"
+    ]
+  },
+  {
+    "path": "gauge.svg",
+    "name": "gauge",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "stats",
+      "cpu",
+      "performance"
+    ]
+  },
+  {
+    "path": "pulse.svg",
+    "name": "pulse",
+    "category": "Streaming",
+    "tags": [
+      "stream health",
+      "heartbeat",
+      "activity"
+    ]
+  },
+  {
+    "path": "chart.svg",
+    "name": "chart",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "stats",
+      "bitrate",
+      "graph"
+    ]
+  },
+  {
+    "path": "level.svg",
+    "name": "level",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "audio",
+      "meter",
+      "db",
+      "signal"
+    ]
+  },
+  {
+    "path": "waveform.svg",
+    "name": "waveform",
+    "category": "Streaming",
+    "tags": [
+      "audio",
+      "sound",
+      "voice",
+      "speaking"
+    ]
+  },
+  {
+    "path": "screenshot.svg",
+    "name": "screenshot",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "capture",
+      "snapshot"
+    ]
+  },
+  {
+    "path": "bookmark.svg",
+    "name": "bookmark",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "marker",
+      "chapter"
+    ]
+  },
+  {
+    "path": "clip.svg",
+    "name": "clip",
+    "category": "Streaming",
+    "tags": [
+      "clip",
+      "scissors",
+      "cut",
+      "twitch"
+    ]
+  },
+  {
+    "path": "image.svg",
+    "name": "image",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "image source",
+      "picture",
+      "photo"
+    ]
+  },
+  {
+    "path": "window.svg",
+    "name": "window",
+    "category": "Streaming",
+    "tags": [
+      "obs",
+      "browser source",
+      "app",
+      "capture"
+    ]
+  },
+  {
+    "path": "poll.svg",
+    "name": "poll",
+    "category": "Streaming",
+    "tags": [
+      "twitch",
+      "vote",
+      "survey"
+    ]
+  },
+  {
+    "path": "mic.svg",
+    "name": "mic",
+    "category": "Voice & chat",
+    "tags": [
+      "microphone",
+      "unmute",
+      "talk",
+      "discord"
+    ]
+  },
+  {
+    "path": "mic-off.svg",
+    "name": "mic-off",
+    "category": "Voice & chat",
+    "tags": [
+      "microphone",
+      "mute",
+      "silence",
+      "discord"
+    ]
+  },
+  {
+    "path": "headphones.svg",
+    "name": "headphones",
+    "category": "Voice & chat",
+    "tags": [
+      "audio",
+      "listen",
+      "monitor"
+    ]
+  },
+  {
+    "path": "headset.svg",
+    "name": "headset",
+    "category": "Voice & chat",
+    "tags": [
+      "gaming headset",
+      "voice",
+      "call"
+    ]
+  },
+  {
+    "path": "deafen.svg",
+    "name": "deafen",
+    "category": "Voice & chat",
+    "tags": [
+      "headphones off",
+      "discord",
+      "deaf"
+    ]
+  },
+  {
+    "path": "speaker.svg",
+    "name": "speaker",
+    "category": "Voice & chat",
+    "tags": [
+      "volume",
+      "sound",
+      "audio",
+      "loud"
+    ]
+  },
+  {
+    "path": "speaker-off.svg",
+    "name": "speaker-off",
+    "category": "Voice & chat",
+    "tags": [
+      "mute",
+      "volume",
+      "silent"
+    ]
+  },
+  {
+    "path": "volume-low.svg",
+    "name": "volume-low",
+    "category": "Voice & chat",
+    "tags": [
+      "quiet",
+      "sound",
+      "speaker"
+    ]
+  },
+  {
+    "path": "volume-plus.svg",
+    "name": "volume-plus",
+    "category": "Voice & chat",
+    "tags": [
+      "louder",
+      "volume up",
+      "increase"
+    ]
+  },
+  {
+    "path": "volume-minus.svg",
+    "name": "volume-minus",
+    "category": "Voice & chat",
+    "tags": [
+      "quieter",
+      "volume down",
+      "decrease"
+    ]
+  },
+  {
+    "path": "phone.svg",
+    "name": "phone",
+    "category": "Voice & chat",
+    "tags": [
+      "call",
+      "voice call",
+      "ring"
+    ]
+  },
+  {
+    "path": "hang-up.svg",
+    "name": "hang-up",
+    "category": "Voice & chat",
+    "tags": [
+      "end call",
+      "leave",
+      "disconnect"
+    ]
+  },
+  {
+    "path": "phone-incoming.svg",
+    "name": "phone-incoming",
+    "category": "Voice & chat",
+    "tags": [
+      "call",
+      "receive",
+      "answer"
+    ]
+  },
+  {
+    "path": "phone-outgoing.svg",
+    "name": "phone-outgoing",
+    "category": "Voice & chat",
+    "tags": [
+      "call",
+      "dial",
+      "start call"
+    ]
+  },
+  {
+    "path": "chat.svg",
+    "name": "chat",
+    "category": "Voice & chat",
+    "tags": [
+      "message",
+      "talk",
+      "typing",
+      "comment"
+    ]
+  },
+  {
+    "path": "chat-text.svg",
+    "name": "chat-text",
+    "category": "Voice & chat",
+    "tags": [
+      "message",
+      "comment",
+      "reply"
+    ]
+  },
+  {
+    "path": "chats.svg",
+    "name": "chats",
+    "category": "Voice & chat",
+    "tags": [
+      "conversation",
+      "messages",
+      "dm"
+    ]
+  },
+  {
+    "path": "mention.svg",
+    "name": "mention",
+    "category": "Voice & chat",
+    "tags": [
+      "at",
+      "ping",
+      "tag",
+      "email"
+    ]
+  },
+  {
+    "path": "channel.svg",
+    "name": "channel",
+    "category": "Voice & chat",
+    "tags": [
+      "hash",
+      "hashtag",
+      "text channel",
+      "discord"
+    ]
+  },
+  {
+    "path": "bell.svg",
+    "name": "bell",
+    "category": "Voice & chat",
+    "tags": [
+      "notification",
+      "alert",
+      "notify"
+    ]
+  },
+  {
+    "path": "bell-off.svg",
+    "name": "bell-off",
+    "category": "Voice & chat",
+    "tags": [
+      "notifications off",
+      "mute",
+      "silence"
+    ]
+  },
+  {
+    "path": "bell-ring.svg",
+    "name": "bell-ring",
+    "category": "Voice & chat",
+    "tags": [
+      "notification",
+      "ringing",
+      "alert"
+    ]
+  },
+  {
+    "path": "megaphone.svg",
+    "name": "megaphone",
+    "category": "Voice & chat",
+    "tags": [
+      "announce",
+      "shout",
+      "broadcast"
+    ]
+  },
+  {
+    "path": "soundboard.svg",
+    "name": "soundboard",
+    "category": "Voice & chat",
+    "tags": [
+      "sounds",
+      "pads",
+      "sfx",
+      "discord"
+    ]
+  },
+  {
+    "path": "screen-share.svg",
+    "name": "screen-share",
+    "category": "Voice & chat",
+    "tags": [
+      "share screen",
+      "go live",
+      "present"
+    ]
+  },
+  {
+    "path": "stop-share.svg",
+    "name": "stop-share",
+    "category": "Voice & chat",
+    "tags": [
+      "stop sharing",
+      "end screen share"
+    ]
+  },
+  {
+    "path": "speaking.svg",
+    "name": "speaking",
+    "category": "Voice & chat",
+    "tags": [
+      "talking",
+      "voice",
+      "user speaking"
+    ]
+  },
+  {
+    "path": "push-to-talk.svg",
+    "name": "push-to-talk",
+    "category": "Voice & chat",
+    "tags": [
+      "ptt",
+      "hold to talk",
+      "button"
+    ]
+  },
+  {
+    "path": "voice-chat.svg",
+    "name": "voice-chat",
+    "category": "Voice & chat",
+    "tags": [
+      "voice message",
+      "voice note",
+      "audio message"
+    ]
+  },
+  {
+    "path": "server.svg",
+    "name": "server",
+    "category": "Voice & chat",
+    "tags": [
+      "guild",
+      "community",
+      "host"
+    ]
+  },
+  {
+    "path": "noise-off.svg",
+    "name": "noise-off",
+    "category": "Voice & chat",
+    "tags": [
+      "noise suppression",
+      "filter noise"
+    ]
+  },
+  {
+    "path": "captions.svg",
+    "name": "captions",
+    "category": "Voice & chat",
+    "tags": [
+      "subtitles",
+      "cc",
+      "closed captions"
+    ]
+  },
+  {
+    "path": "walkie-talkie.svg",
+    "name": "walkie-talkie",
+    "category": "Voice & chat",
+    "tags": [
+      "radio",
+      "intercom",
+      "team"
+    ]
+  },
+  {
+    "path": "reply.svg",
+    "name": "reply",
+    "category": "Voice & chat",
+    "tags": [
+      "respond",
+      "answer",
+      "back"
+    ]
+  },
+  {
+    "path": "do-not-disturb.svg",
+    "name": "do-not-disturb",
+    "category": "Voice & chat",
+    "tags": [
+      "dnd",
+      "busy",
+      "status"
+    ]
+  },
+  {
+    "path": "play.svg",
+    "name": "play",
+    "category": "Music & audio",
+    "tags": [
+      "start",
+      "resume",
+      "media"
+    ]
+  },
+  {
+    "path": "pause.svg",
+    "name": "pause",
+    "category": "Music & audio",
+    "tags": [
+      "hold",
+      "media",
+      "break"
+    ]
+  },
+  {
+    "path": "stop.svg",
+    "name": "stop",
+    "category": "Music & audio",
+    "tags": [
+      "end",
+      "media",
+      "halt"
+    ]
+  },
+  {
+    "path": "next.svg",
+    "name": "next",
+    "category": "Music & audio",
+    "tags": [
+      "skip",
+      "next track",
+      "forward"
+    ]
+  },
+  {
+    "path": "previous.svg",
+    "name": "previous",
+    "category": "Music & audio",
+    "tags": [
+      "back",
+      "previous track",
+      "restart"
+    ]
+  },
+  {
+    "path": "fast-forward.svg",
+    "name": "fast-forward",
+    "category": "Music & audio",
+    "tags": [
+      "seek",
+      "skip ahead",
+      "faster"
+    ]
+  },
+  {
+    "path": "rewind.svg",
+    "name": "rewind",
+    "category": "Music & audio",
+    "tags": [
+      "seek back",
+      "skip back",
+      "slower"
+    ]
+  },
+  {
+    "path": "shuffle.svg",
+    "name": "shuffle",
+    "category": "Music & audio",
+    "tags": [
+      "random",
+      "mix",
+      "playlist"
+    ]
+  },
+  {
+    "path": "repeat.svg",
+    "name": "repeat",
+    "category": "Music & audio",
+    "tags": [
+      "loop",
+      "replay",
+      "again"
+    ]
+  },
+  {
+    "path": "repeat-one.svg",
+    "name": "repeat-one",
+    "category": "Music & audio",
+    "tags": [
+      "loop one",
+      "repeat track"
+    ]
+  },
+  {
+    "path": "playlist.svg",
+    "name": "playlist",
+    "category": "Music & audio",
+    "tags": [
+      "queue",
+      "list",
+      "songs"
+    ]
+  },
+  {
+    "path": "playlist-add.svg",
+    "name": "playlist-add",
+    "category": "Music & audio",
+    "tags": [
+      "add to queue",
+      "add song"
+    ]
+  },
+  {
+    "path": "music-note.svg",
+    "name": "music-note",
+    "category": "Music & audio",
+    "tags": [
+      "song",
+      "track",
+      "music"
+    ]
+  },
+  {
+    "path": "music-notes.svg",
+    "name": "music-notes",
+    "category": "Music & audio",
+    "tags": [
+      "song",
+      "melody",
+      "music"
+    ]
+  },
+  {
+    "path": "album.svg",
+    "name": "album",
+    "category": "Music & audio",
+    "tags": [
+      "cd",
+      "disc",
+      "record"
+    ]
+  },
+  {
+    "path": "vinyl.svg",
+    "name": "vinyl",
+    "category": "Music & audio",
+    "tags": [
+      "record",
+      "lp",
+      "turntable"
+    ]
+  },
+  {
+    "path": "radio.svg",
+    "name": "radio",
+    "category": "Music & audio",
+    "tags": [
+      "fm",
+      "station",
+      "broadcast"
+    ]
+  },
+  {
+    "path": "cassette.svg",
+    "name": "cassette",
+    "category": "Music & audio",
+    "tags": [
+      "tape",
+      "mixtape",
+      "retro"
+    ]
+  },
+  {
+    "path": "guitar.svg",
+    "name": "guitar",
+    "category": "Music & audio",
+    "tags": [
+      "instrument",
+      "acoustic",
+      "strings"
+    ]
+  },
+  {
+    "path": "piano.svg",
+    "name": "piano",
+    "category": "Music & audio",
+    "tags": [
+      "keys",
+      "keyboard",
+      "instrument"
+    ]
+  },
+  {
+    "path": "drum.svg",
+    "name": "drum",
+    "category": "Music & audio",
+    "tags": [
+      "percussion",
+      "beat",
+      "instrument"
+    ]
+  },
+  {
+    "path": "equalizer.svg",
+    "name": "equalizer",
+    "category": "Music & audio",
+    "tags": [
+      "eq",
+      "bars",
+      "spectrum"
+    ]
+  },
+  {
+    "path": "metronome.svg",
+    "name": "metronome",
+    "category": "Music & audio",
+    "tags": [
+      "tempo",
+      "bpm",
+      "beat"
+    ]
+  },
+  {
+    "path": "speaker-box.svg",
+    "name": "speaker-box",
+    "category": "Music & audio",
+    "tags": [
+      "loudspeaker",
+      "monitor speaker",
+      "sound"
+    ]
+  },
+  {
+    "path": "podcast.svg",
+    "name": "podcast",
+    "category": "Music & audio",
+    "tags": [
+      "show",
+      "episode",
+      "on air"
+    ]
+  },
+  {
+    "path": "queue.svg",
+    "name": "queue",
+    "category": "Music & audio",
+    "tags": [
+      "up next",
+      "list",
+      "play next"
+    ]
+  },
+  {
+    "path": "audio-file.svg",
+    "name": "audio-file",
+    "category": "Music & audio",
+    "tags": [
+      "mp3",
+      "wav",
+      "sound file"
+    ]
+  },
+  {
+    "path": "knob.svg",
+    "name": "knob",
+    "category": "Music & audio",
+    "tags": [
+      "dial",
+      "volume",
+      "gain"
+    ]
+  },
+  {
+    "path": "karaoke.svg",
+    "name": "karaoke",
+    "category": "Music & audio",
+    "tags": [
+      "handheld mic",
+      "sing",
+      "vocals"
+    ]
+  },
+  {
+    "path": "crossfade.svg",
+    "name": "crossfade",
+    "category": "Music & audio",
+    "tags": [
+      "mix",
+      "blend",
+      "dj"
+    ]
+  },
+  {
+    "path": "turntable.svg",
+    "name": "turntable",
+    "category": "Music & audio",
+    "tags": [
+      "dj",
+      "deck",
+      "record player"
+    ]
+  },
+  {
+    "path": "video-app.svg",
+    "name": "video-app",
+    "category": "Apps",
+    "tags": [
+      "video platform",
+      "watch",
+      "channel"
+    ]
+  },
+  {
+    "path": "live-app.svg",
+    "name": "live-app",
+    "category": "Apps",
+    "tags": [
+      "live platform",
+      "stream",
+      "go live"
+    ]
+  },
+  {
+    "path": "music-app.svg",
+    "name": "music-app",
+    "category": "Apps",
+    "tags": [
+      "music player",
+      "songs",
+      "listen"
+    ]
+  },
+  {
+    "path": "voice-app.svg",
+    "name": "voice-app",
+    "category": "Apps",
+    "tags": [
+      "voice chat",
+      "party",
+      "server"
+    ]
+  },
+  {
+    "path": "social-app.svg",
+    "name": "social-app",
+    "category": "Apps",
+    "tags": [
+      "feed",
+      "likes",
+      "followers"
+    ]
+  },
+  {
+    "path": "photo-app.svg",
+    "name": "photo-app",
+    "category": "Apps",
+    "tags": [
+      "photos",
+      "gallery",
+      "pictures"
+    ]
+  },
+  {
+    "path": "shorts-app.svg",
+    "name": "shorts-app",
+    "category": "Apps",
+    "tags": [
+      "short video",
+      "vertical",
+      "clips"
+    ]
+  },
+  {
+    "path": "forum-app.svg",
+    "name": "forum-app",
+    "category": "Apps",
+    "tags": [
+      "community",
+      "threads",
+      "posts"
+    ]
+  },
+  {
+    "path": "community-app.svg",
+    "name": "community-app",
+    "category": "Apps",
+    "tags": [
+      "group",
+      "friends",
+      "members"
+    ]
+  },
+  {
+    "path": "chat-app.svg",
+    "name": "chat-app",
+    "category": "Apps",
+    "tags": [
+      "messenger",
+      "messages",
+      "dm"
+    ]
+  },
+  {
+    "path": "meeting-app.svg",
+    "name": "meeting-app",
+    "category": "Apps",
+    "tags": [
+      "video call",
+      "conference",
+      "meet"
+    ]
+  },
+  {
+    "path": "movie-app.svg",
+    "name": "movie-app",
+    "category": "Apps",
+    "tags": [
+      "films",
+      "series",
+      "cinema"
+    ]
+  },
+  {
+    "path": "workspace-app.svg",
+    "name": "workspace-app",
+    "category": "Apps",
+    "tags": [
+      "team chat",
+      "channels",
+      "work"
+    ]
+  },
+  {
+    "path": "design-app.svg",
+    "name": "design-app",
+    "category": "Apps",
+    "tags": [
+      "design",
+      "shapes",
+      "prototype"
+    ]
+  },
+  {
+    "path": "video-editor.svg",
+    "name": "video-editor",
+    "category": "Apps",
+    "tags": [
+      "edit video",
+      "timeline",
+      "cut"
+    ]
+  },
+  {
+    "path": "audio-editor.svg",
+    "name": "audio-editor",
+    "category": "Apps",
+    "tags": [
+      "edit audio",
+      "recording",
+      "daw"
+    ]
+  },
+  {
+    "path": "game-launcher.svg",
+    "name": "game-launcher",
+    "category": "Apps",
+    "tags": [
+      "game library",
+      "launcher",
+      "pc games"
+    ]
+  },
+  {
+    "path": "store-app.svg",
+    "name": "store-app",
+    "category": "Apps",
+    "tags": [
+      "shop",
+      "app store",
+      "buy"
+    ]
+  },
+  {
+    "path": "notes-app.svg",
+    "name": "notes-app",
+    "category": "Apps",
+    "tags": [
+      "notes",
+      "notebook",
+      "docs"
+    ]
+  },
+  {
+    "path": "maps-app.svg",
+    "name": "maps-app",
+    "category": "Apps",
+    "tags": [
+      "maps",
+      "navigation",
+      "places"
+    ]
+  },
+  {
+    "path": "weather-app.svg",
+    "name": "weather-app",
+    "category": "Apps",
+    "tags": [
+      "forecast",
+      "weather",
+      "sun"
+    ]
+  },
+  {
+    "path": "calendar-app.svg",
+    "name": "calendar-app",
+    "category": "Apps",
+    "tags": [
+      "calendar",
+      "events",
+      "schedule"
+    ]
+  },
+  {
+    "path": "settings-app.svg",
+    "name": "settings-app",
+    "category": "Apps",
+    "tags": [
+      "settings",
+      "system",
+      "preferences"
+    ]
+  },
+  {
+    "path": "payments-app.svg",
+    "name": "payments-app",
+    "category": "Apps",
+    "tags": [
+      "pay",
+      "wallet",
+      "checkout"
+    ]
+  },
+  {
+    "path": "mail-app.svg",
+    "name": "mail-app",
+    "category": "Apps",
+    "tags": [
+      "email",
+      "inbox",
+      "messages"
+    ]
+  },
+  {
+    "path": "browser.svg",
+    "name": "browser",
+    "category": "Apps",
+    "tags": [
+      "web",
+      "internet",
+      "window"
+    ]
+  },
+  {
+    "path": "terminal.svg",
+    "name": "terminal",
+    "category": "Apps",
+    "tags": [
+      "console",
+      "shell",
+      "command line"
+    ]
+  },
+  {
+    "path": "code.svg",
+    "name": "code",
+    "category": "Apps",
+    "tags": [
+      "developer",
+      "brackets",
+      "html"
+    ]
+  },
+  {
+    "path": "folder.svg",
+    "name": "folder",
+    "category": "Apps",
+    "tags": [
+      "directory",
+      "files"
+    ]
+  },
+  {
+    "path": "folder-plus.svg",
+    "name": "folder-plus",
+    "category": "Apps",
+    "tags": [
+      "new folder",
+      "add folder"
+    ]
+  },
+  {
+    "path": "file.svg",
+    "name": "file",
+    "category": "Apps",
+    "tags": [
+      "page",
+      "blank"
+    ]
+  },
+  {
+    "path": "document.svg",
+    "name": "document",
+    "category": "Apps",
+    "tags": [
+      "text file",
+      "doc",
+      "report"
+    ]
+  },
+  {
+    "path": "spreadsheet.svg",
+    "name": "spreadsheet",
+    "category": "Apps",
+    "tags": [
+      "table",
+      "sheet",
+      "cells"
+    ]
+  },
+  {
+    "path": "presentation.svg",
+    "name": "presentation",
+    "category": "Apps",
+    "tags": [
+      "slides",
+      "board",
+      "talk"
+    ]
+  },
+  {
+    "path": "database.svg",
+    "name": "database",
+    "category": "Apps",
+    "tags": [
+      "data",
+      "storage",
+      "sql"
+    ]
+  },
+  {
+    "path": "git-branch.svg",
+    "name": "git-branch",
+    "category": "Apps",
+    "tags": [
+      "git",
+      "branch",
+      "version control"
+    ]
+  },
+  {
+    "path": "calculator.svg",
+    "name": "calculator",
+    "category": "Apps",
+    "tags": [
+      "math",
+      "numbers",
+      "sum"
+    ]
+  },
+  {
+    "path": "mail.svg",
+    "name": "mail",
+    "category": "Apps",
+    "tags": [
+      "email",
+      "envelope",
+      "letter"
+    ]
+  },
+  {
+    "path": "home.svg",
+    "name": "home",
+    "category": "Interface",
+    "tags": [
+      "house",
+      "start",
+      "main"
+    ]
+  },
+  {
+    "path": "settings.svg",
+    "name": "settings",
+    "category": "Interface",
+    "tags": [
+      "gear",
+      "cog",
+      "preferences",
+      "options"
+    ]
+  },
+  {
+    "path": "sliders.svg",
+    "name": "sliders",
+    "category": "Interface",
+    "tags": [
+      "adjust",
+      "controls",
+      "tune"
+    ]
+  },
+  {
+    "path": "toggle-on.svg",
+    "name": "toggle-on",
+    "category": "Interface",
+    "tags": [
+      "switch",
+      "enabled",
+      "on"
+    ]
+  },
+  {
+    "path": "toggle-off.svg",
+    "name": "toggle-off",
+    "category": "Interface",
+    "tags": [
+      "switch",
+      "disabled",
+      "off"
+    ]
+  },
+  {
+    "path": "check.svg",
+    "name": "check",
+    "category": "Interface",
+    "tags": [
+      "done",
+      "ok",
+      "confirm",
+      "tick"
+    ]
+  },
+  {
+    "path": "close.svg",
+    "name": "close",
+    "category": "Interface",
+    "tags": [
+      "x",
+      "cancel",
+      "dismiss"
+    ]
+  },
+  {
+    "path": "plus.svg",
+    "name": "plus",
+    "category": "Interface",
+    "tags": [
+      "add",
+      "new",
+      "create"
+    ]
+  },
+  {
+    "path": "minus.svg",
+    "name": "minus",
+    "category": "Interface",
+    "tags": [
+      "remove",
+      "subtract",
+      "less"
+    ]
+  },
+  {
+    "path": "search.svg",
+    "name": "search",
+    "category": "Interface",
+    "tags": [
+      "find",
+      "magnifier",
+      "look up"
+    ]
+  },
+  {
+    "path": "zoom-in.svg",
+    "name": "zoom-in",
+    "category": "Interface",
+    "tags": [
+      "magnify",
+      "enlarge",
+      "bigger"
+    ]
+  },
+  {
+    "path": "zoom-out.svg",
+    "name": "zoom-out",
+    "category": "Interface",
+    "tags": [
+      "shrink",
+      "smaller",
+      "reduce"
+    ]
+  },
+  {
+    "path": "menu.svg",
+    "name": "menu",
+    "category": "Interface",
+    "tags": [
+      "hamburger",
+      "navigation",
+      "lines"
+    ]
+  },
+  {
+    "path": "dots-horizontal.svg",
+    "name": "dots-horizontal",
+    "category": "Interface",
+    "tags": [
+      "more",
+      "options",
+      "ellipsis"
+    ]
+  },
+  {
+    "path": "dots-vertical.svg",
+    "name": "dots-vertical",
+    "category": "Interface",
+    "tags": [
+      "more",
+      "options",
+      "kebab"
+    ]
+  },
+  {
+    "path": "grid.svg",
+    "name": "grid",
+    "category": "Interface",
+    "tags": [
+      "tiles",
+      "apps",
+      "layout"
+    ]
+  },
+  {
+    "path": "list.svg",
+    "name": "list",
+    "category": "Interface",
+    "tags": [
+      "items",
+      "bullets",
+      "rows"
+    ]
+  },
+  {
+    "path": "layout.svg",
+    "name": "layout",
+    "category": "Interface",
+    "tags": [
+      "panels",
+      "dashboard",
+      "template"
+    ]
+  },
+  {
+    "path": "sidebar.svg",
+    "name": "sidebar",
+    "category": "Interface",
+    "tags": [
+      "panel",
+      "drawer",
+      "split"
+    ]
+  },
+  {
+    "path": "maximize.svg",
+    "name": "maximize",
+    "category": "Interface",
+    "tags": [
+      "expand",
+      "enlarge",
+      "grow"
+    ]
+  },
+  {
+    "path": "minimize.svg",
+    "name": "minimize",
+    "category": "Interface",
+    "tags": [
+      "collapse",
+      "shrink"
+    ]
+  },
+  {
+    "path": "fullscreen.svg",
+    "name": "fullscreen",
+    "category": "Interface",
+    "tags": [
+      "full screen",
+      "expand",
+      "corners"
+    ]
+  },
+  {
+    "path": "exit-fullscreen.svg",
+    "name": "exit-fullscreen",
+    "category": "Interface",
+    "tags": [
+      "windowed",
+      "shrink",
+      "corners"
+    ]
+  },
+  {
+    "path": "lock.svg",
+    "name": "lock",
+    "category": "Interface",
+    "tags": [
+      "locked",
+      "secure",
+      "private"
+    ]
+  },
+  {
+    "path": "unlock.svg",
+    "name": "unlock",
+    "category": "Interface",
+    "tags": [
+      "unlocked",
+      "open",
+      "public"
+    ]
+  },
+  {
+    "path": "key.svg",
+    "name": "key",
+    "category": "Interface",
+    "tags": [
+      "password",
+      "access",
+      "secret"
+    ]
+  },
+  {
+    "path": "shield.svg",
+    "name": "shield",
+    "category": "Interface",
+    "tags": [
+      "security",
+      "protect",
+      "guard"
+    ]
+  },
+  {
+    "path": "shield-check.svg",
+    "name": "shield-check",
+    "category": "Interface",
+    "tags": [
+      "secure",
+      "verified",
+      "safe"
+    ]
+  },
+  {
+    "path": "fingerprint.svg",
+    "name": "fingerprint",
+    "category": "Interface",
+    "tags": [
+      "touch id",
+      "identity",
+      "biometric"
+    ]
+  },
+  {
+    "path": "power.svg",
+    "name": "power",
+    "category": "Interface",
+    "tags": [
+      "shutdown",
+      "on off",
+      "turn off"
+    ]
+  },
+  {
+    "path": "trash.svg",
+    "name": "trash",
+    "category": "Interface",
+    "tags": [
+      "delete",
+      "remove",
+      "bin"
+    ]
+  },
+  {
+    "path": "edit.svg",
+    "name": "edit",
+    "category": "Interface",
+    "tags": [
+      "pencil",
+      "write",
+      "rename"
+    ]
+  },
+  {
+    "path": "copy.svg",
+    "name": "copy",
+    "category": "Interface",
+    "tags": [
+      "duplicate",
+      "clone"
+    ]
+  },
+  {
+    "path": "clipboard.svg",
+    "name": "clipboard",
+    "category": "Interface",
+    "tags": [
+      "paste",
+      "notes",
+      "task"
+    ]
+  },
+  {
+    "path": "link.svg",
+    "name": "link",
+    "category": "Interface",
+    "tags": [
+      "url",
+      "chain",
+      "connect"
+    ]
+  },
+  {
+    "path": "unlink.svg",
+    "name": "unlink",
+    "category": "Interface",
+    "tags": [
+      "broken link",
+      "disconnect"
+    ]
+  },
+  {
+    "path": "external-link.svg",
+    "name": "external-link",
+    "category": "Interface",
+    "tags": [
+      "open",
+      "new window",
+      "launch"
+    ]
+  },
+  {
+    "path": "download.svg",
+    "name": "download",
+    "category": "Interface",
+    "tags": [
+      "save",
+      "get",
+      "import"
+    ]
+  },
+  {
+    "path": "upload.svg",
+    "name": "upload",
+    "category": "Interface",
+    "tags": [
+      "send",
+      "export",
+      "publish"
+    ]
+  },
+  {
+    "path": "share.svg",
+    "name": "share",
+    "category": "Interface",
+    "tags": [
+      "send",
+      "network",
+      "social"
+    ]
+  },
+  {
+    "path": "info.svg",
+    "name": "info",
+    "category": "Interface",
+    "tags": [
+      "about",
+      "details",
+      "information"
+    ]
+  },
+  {
+    "path": "help.svg",
+    "name": "help",
+    "category": "Interface",
+    "tags": [
+      "question",
+      "support",
+      "faq"
+    ]
+  },
+  {
+    "path": "warning.svg",
+    "name": "warning",
+    "category": "Interface",
+    "tags": [
+      "alert",
+      "caution",
+      "danger"
+    ]
+  },
+  {
+    "path": "error.svg",
+    "name": "error",
+    "category": "Interface",
+    "tags": [
+      "stop",
+      "octagon",
+      "problem"
+    ]
+  },
+  {
+    "path": "check-circle.svg",
+    "name": "check-circle",
+    "category": "Interface",
+    "tags": [
+      "success",
+      "done",
+      "complete"
+    ]
+  },
+  {
+    "path": "x-circle.svg",
+    "name": "x-circle",
+    "category": "Interface",
+    "tags": [
+      "cancel",
+      "failed",
+      "close"
+    ]
+  },
+  {
+    "path": "plus-circle.svg",
+    "name": "plus-circle",
+    "category": "Interface",
+    "tags": [
+      "add",
+      "new",
+      "create"
+    ]
+  },
+  {
+    "path": "minus-circle.svg",
+    "name": "minus-circle",
+    "category": "Interface",
+    "tags": [
+      "remove",
+      "subtract"
+    ]
+  },
+  {
+    "path": "star.svg",
+    "name": "star",
+    "category": "Interface",
+    "tags": [
+      "favorite",
+      "rating",
+      "highlight"
+    ]
+  },
+  {
+    "path": "favorite.svg",
+    "name": "favorite",
+    "category": "Interface",
+    "tags": [
+      "like",
+      "love",
+      "heart"
+    ]
+  },
+  {
+    "path": "pin.svg",
+    "name": "pin",
+    "category": "Interface",
+    "tags": [
+      "pushpin",
+      "stick",
+      "keep"
+    ]
+  },
+  {
+    "path": "keyboard.svg",
+    "name": "keyboard",
+    "category": "Interface",
+    "tags": [
+      "typing",
+      "keys",
+      "input"
+    ]
+  },
+  {
+    "path": "mouse.svg",
+    "name": "mouse",
+    "category": "Interface",
+    "tags": [
+      "click",
+      "pointer device"
+    ]
+  },
+  {
+    "path": "cursor.svg",
+    "name": "cursor",
+    "category": "Interface",
+    "tags": [
+      "pointer",
+      "arrow",
+      "select"
+    ]
+  },
+  {
+    "path": "command.svg",
+    "name": "command",
+    "category": "Interface",
+    "tags": [
+      "cmd",
+      "shortcut",
+      "mac"
+    ]
+  },
+  {
+    "path": "hotkey.svg",
+    "name": "hotkey",
+    "category": "Interface",
+    "tags": [
+      "key cap",
+      "shortcut",
+      "keyboard key"
+    ]
+  },
+  {
+    "path": "undo.svg",
+    "name": "undo",
+    "category": "Interface",
+    "tags": [
+      "back",
+      "revert"
+    ]
+  },
+  {
+    "path": "redo.svg",
+    "name": "redo",
+    "category": "Interface",
+    "tags": [
+      "forward",
+      "again"
+    ]
+  },
+  {
+    "path": "refresh.svg",
+    "name": "refresh",
+    "category": "Interface",
+    "tags": [
+      "reload",
+      "sync",
+      "update"
+    ]
+  },
+  {
+    "path": "sort.svg",
+    "name": "sort",
+    "category": "Interface",
+    "tags": [
+      "order",
+      "arrange",
+      "up down"
+    ]
+  },
+  {
+    "path": "save.svg",
+    "name": "save",
+    "category": "Interface",
+    "tags": [
+      "floppy",
+      "disk",
+      "store"
+    ]
+  },
+  {
+    "path": "loader.svg",
+    "name": "loader",
+    "category": "Interface",
+    "tags": [
+      "loading",
+      "spinner",
+      "busy",
+      "wait"
+    ]
+  },
+  {
+    "path": "verified.svg",
+    "name": "verified",
+    "category": "Interface",
+    "tags": [
+      "badge",
+      "check",
+      "official"
+    ]
+  },
+  {
+    "path": "inbox.svg",
+    "name": "inbox",
+    "category": "Interface",
+    "tags": [
+      "tray",
+      "messages",
+      "received"
+    ]
+  },
+  {
+    "path": "send.svg",
+    "name": "send",
+    "category": "Interface",
+    "tags": [
+      "paper plane",
+      "message",
+      "telegram"
+    ]
+  },
+  {
+    "path": "checkbox.svg",
+    "name": "checkbox",
+    "category": "Interface",
+    "tags": [
+      "checked",
+      "task",
+      "todo"
+    ]
+  },
+  {
+    "path": "radio-on.svg",
+    "name": "radio-on",
+    "category": "Interface",
+    "tags": [
+      "option",
+      "selected",
+      "choice"
+    ]
+  },
+  {
+    "path": "arrow-up.svg",
+    "name": "arrow-up",
+    "category": "Arrows",
+    "tags": [
+      "up",
+      "north",
+      "increase"
+    ]
+  },
+  {
+    "path": "arrow-down.svg",
+    "name": "arrow-down",
+    "category": "Arrows",
+    "tags": [
+      "down",
+      "south",
+      "decrease"
+    ]
+  },
+  {
+    "path": "arrow-left.svg",
+    "name": "arrow-left",
+    "category": "Arrows",
+    "tags": [
+      "left",
+      "west",
+      "back"
+    ]
+  },
+  {
+    "path": "arrow-right.svg",
+    "name": "arrow-right",
+    "category": "Arrows",
+    "tags": [
+      "right",
+      "east",
+      "next"
+    ]
+  },
+  {
+    "path": "arrow-up-right.svg",
+    "name": "arrow-up-right",
+    "category": "Arrows",
+    "tags": [
+      "diagonal",
+      "north east",
+      "open"
+    ]
+  },
+  {
+    "path": "arrow-up-left.svg",
+    "name": "arrow-up-left",
+    "category": "Arrows",
+    "tags": [
+      "diagonal",
+      "north west"
+    ]
+  },
+  {
+    "path": "arrow-down-right.svg",
+    "name": "arrow-down-right",
+    "category": "Arrows",
+    "tags": [
+      "diagonal",
+      "south east"
+    ]
+  },
+  {
+    "path": "arrow-down-left.svg",
+    "name": "arrow-down-left",
+    "category": "Arrows",
+    "tags": [
+      "diagonal",
+      "south west"
+    ]
+  },
+  {
+    "path": "chevron-up.svg",
+    "name": "chevron-up",
+    "category": "Arrows",
+    "tags": [
+      "caret",
+      "collapse",
+      "up"
+    ]
+  },
+  {
+    "path": "chevron-down.svg",
+    "name": "chevron-down",
+    "category": "Arrows",
+    "tags": [
+      "caret",
+      "expand",
+      "down"
+    ]
+  },
+  {
+    "path": "chevron-left.svg",
+    "name": "chevron-left",
+    "category": "Arrows",
+    "tags": [
+      "caret",
+      "back",
+      "previous"
+    ]
+  },
+  {
+    "path": "chevron-right.svg",
+    "name": "chevron-right",
+    "category": "Arrows",
+    "tags": [
+      "caret",
+      "forward",
+      "next"
+    ]
+  },
+  {
+    "path": "chevrons-up.svg",
+    "name": "chevrons-up",
+    "category": "Arrows",
+    "tags": [
+      "double",
+      "top",
+      "scroll up"
+    ]
+  },
+  {
+    "path": "chevrons-down.svg",
+    "name": "chevrons-down",
+    "category": "Arrows",
+    "tags": [
+      "double",
+      "bottom",
+      "scroll down"
+    ]
+  },
+  {
+    "path": "chevrons-left.svg",
+    "name": "chevrons-left",
+    "category": "Arrows",
+    "tags": [
+      "double",
+      "first",
+      "rewind"
+    ]
+  },
+  {
+    "path": "chevrons-right.svg",
+    "name": "chevrons-right",
+    "category": "Arrows",
+    "tags": [
+      "double",
+      "last",
+      "skip"
+    ]
+  },
+  {
+    "path": "arrow-circle-up.svg",
+    "name": "arrow-circle-up",
+    "category": "Arrows",
+    "tags": [
+      "up",
+      "upload",
+      "rise"
+    ]
+  },
+  {
+    "path": "arrow-circle-down.svg",
+    "name": "arrow-circle-down",
+    "category": "Arrows",
+    "tags": [
+      "down",
+      "download",
+      "fall"
+    ]
+  },
+  {
+    "path": "arrow-circle-left.svg",
+    "name": "arrow-circle-left",
+    "category": "Arrows",
+    "tags": [
+      "left",
+      "back",
+      "previous"
+    ]
+  },
+  {
+    "path": "arrow-circle-right.svg",
+    "name": "arrow-circle-right",
+    "category": "Arrows",
+    "tags": [
+      "right",
+      "forward",
+      "next"
+    ]
+  },
+  {
+    "path": "caret-up.svg",
+    "name": "caret-up",
+    "category": "Arrows",
+    "tags": [
+      "triangle",
+      "up",
+      "sort"
+    ]
+  },
+  {
+    "path": "caret-down.svg",
+    "name": "caret-down",
+    "category": "Arrows",
+    "tags": [
+      "triangle",
+      "down",
+      "dropdown"
+    ]
+  },
+  {
+    "path": "caret-left.svg",
+    "name": "caret-left",
+    "category": "Arrows",
+    "tags": [
+      "triangle",
+      "left"
+    ]
+  },
+  {
+    "path": "caret-right.svg",
+    "name": "caret-right",
+    "category": "Arrows",
+    "tags": [
+      "triangle",
+      "right"
+    ]
+  },
+  {
+    "path": "arrows-left-right.svg",
+    "name": "arrows-left-right",
+    "category": "Arrows",
+    "tags": [
+      "horizontal",
+      "resize",
+      "width"
+    ]
+  },
+  {
+    "path": "arrows-up-down.svg",
+    "name": "arrows-up-down",
+    "category": "Arrows",
+    "tags": [
+      "vertical",
+      "resize",
+      "height"
+    ]
+  },
+  {
+    "path": "swap.svg",
+    "name": "swap",
+    "category": "Arrows",
+    "tags": [
+      "exchange",
+      "switch",
+      "trade"
+    ]
+  },
+  {
+    "path": "rotate-cw.svg",
+    "name": "rotate-cw",
+    "category": "Arrows",
+    "tags": [
+      "clockwise",
+      "turn right",
+      "redo"
+    ]
+  },
+  {
+    "path": "rotate-ccw.svg",
+    "name": "rotate-ccw",
+    "category": "Arrows",
+    "tags": [
+      "counter clockwise",
+      "turn left",
+      "undo"
+    ]
+  },
+  {
+    "path": "move.svg",
+    "name": "move",
+    "category": "Arrows",
+    "tags": [
+      "drag",
+      "pan",
+      "position"
+    ]
+  },
+  {
+    "path": "corner-down-right.svg",
+    "name": "corner-down-right",
+    "category": "Arrows",
+    "tags": [
+      "indent",
+      "reply",
+      "next"
+    ]
+  },
+  {
+    "path": "corner-down-left.svg",
+    "name": "corner-down-left",
+    "category": "Arrows",
+    "tags": [
+      "return",
+      "enter"
+    ]
+  },
+  {
+    "path": "corner-up-left.svg",
+    "name": "corner-up-left",
+    "category": "Arrows",
+    "tags": [
+      "back",
+      "undo",
+      "reply"
+    ]
+  },
+  {
+    "path": "corner-up-right.svg",
+    "name": "corner-up-right",
+    "category": "Arrows",
+    "tags": [
+      "forward",
+      "redo"
+    ]
+  },
+  {
+    "path": "trending-up.svg",
+    "name": "trending-up",
+    "category": "Arrows",
+    "tags": [
+      "growth",
+      "rise",
+      "stocks"
+    ]
+  },
+  {
+    "path": "trending-down.svg",
+    "name": "trending-down",
+    "category": "Arrows",
+    "tags": [
+      "decline",
+      "fall",
+      "loss"
+    ]
+  },
+  {
+    "path": "login.svg",
+    "name": "login",
+    "category": "Arrows",
+    "tags": [
+      "sign in",
+      "enter",
+      "join"
+    ]
+  },
+  {
+    "path": "logout.svg",
+    "name": "logout",
+    "category": "Arrows",
+    "tags": [
+      "sign out",
+      "leave",
+      "exit"
+    ]
+  },
+  {
+    "path": "arrow-up-from-line.svg",
+    "name": "arrow-up-from-line",
+    "category": "Arrows",
+    "tags": [
+      "top",
+      "upload",
+      "raise"
+    ]
+  },
+  {
+    "path": "arrow-down-to-line.svg",
+    "name": "arrow-down-to-line",
+    "category": "Arrows",
+    "tags": [
+      "bottom",
+      "download",
+      "lower"
+    ]
+  },
+  {
+    "path": "u-turn.svg",
+    "name": "u-turn",
+    "category": "Arrows",
+    "tags": [
+      "back",
+      "return",
+      "reverse"
+    ]
+  },
+  {
+    "path": "split.svg",
+    "name": "split",
+    "category": "Arrows",
+    "tags": [
+      "fork",
+      "branch",
+      "diverge"
+    ]
+  },
+  {
+    "path": "arrow-big-up.svg",
+    "name": "arrow-big-up",
+    "category": "Arrows",
+    "tags": [
+      "up",
+      "shift",
+      "bold arrow"
+    ]
+  },
+  {
+    "path": "arrow-big-down.svg",
+    "name": "arrow-big-down",
+    "category": "Arrows",
+    "tags": [
+      "down",
+      "bold arrow"
+    ]
+  },
+  {
+    "path": "arrow-big-left.svg",
+    "name": "arrow-big-left",
+    "category": "Arrows",
+    "tags": [
+      "left",
+      "bold arrow"
+    ]
+  },
+  {
+    "path": "arrow-big-right.svg",
+    "name": "arrow-big-right",
+    "category": "Arrows",
+    "tags": [
+      "right",
+      "bold arrow"
+    ]
+  },
+  {
+    "path": "navigation.svg",
+    "name": "navigation",
+    "category": "Arrows",
+    "tags": [
+      "direction",
+      "gps",
+      "heading"
+    ]
+  },
+  {
+    "path": "location-arrow.svg",
+    "name": "location-arrow",
+    "category": "Arrows",
+    "tags": [
+      "my location",
+      "gps",
+      "near me"
+    ]
+  },
+  {
+    "path": "user.svg",
+    "name": "user",
+    "category": "People",
+    "tags": [
+      "person",
+      "profile",
+      "account"
+    ]
+  },
+  {
+    "path": "user-plus.svg",
+    "name": "user-plus",
+    "category": "People",
+    "tags": [
+      "add user",
+      "invite",
+      "follow"
+    ]
+  },
+  {
+    "path": "user-minus.svg",
+    "name": "user-minus",
+    "category": "People",
+    "tags": [
+      "remove user",
+      "unfollow"
+    ]
+  },
+  {
+    "path": "user-check.svg",
+    "name": "user-check",
+    "category": "People",
+    "tags": [
+      "verified user",
+      "approved",
+      "member"
+    ]
+  },
+  {
+    "path": "user-x.svg",
+    "name": "user-x",
+    "category": "People",
+    "tags": [
+      "remove",
+      "block",
+      "kick"
+    ]
+  },
+  {
+    "path": "user-circle.svg",
+    "name": "user-circle",
+    "category": "People",
+    "tags": [
+      "avatar",
+      "profile",
+      "account"
+    ]
+  },
+  {
+    "path": "user-square.svg",
+    "name": "user-square",
+    "category": "People",
+    "tags": [
+      "avatar",
+      "portrait",
+      "contact"
+    ]
+  },
+  {
+    "path": "users.svg",
+    "name": "users",
+    "category": "People",
+    "tags": [
+      "people",
+      "group",
+      "friends"
+    ]
+  },
+  {
+    "path": "team.svg",
+    "name": "team",
+    "category": "People",
+    "tags": [
+      "group",
+      "squad",
+      "crew"
+    ]
+  },
+  {
+    "path": "host.svg",
+    "name": "host",
+    "category": "People",
+    "tags": [
+      "owner",
+      "crown",
+      "streamer",
+      "admin"
+    ]
+  },
+  {
+    "path": "moderator.svg",
+    "name": "moderator",
+    "category": "People",
+    "tags": [
+      "mod",
+      "shield",
+      "admin"
+    ]
+  },
+  {
+    "path": "follower.svg",
+    "name": "follower",
+    "category": "People",
+    "tags": [
+      "follow",
+      "fan",
+      "heart"
+    ]
+  },
+  {
+    "path": "subscriber.svg",
+    "name": "subscriber",
+    "category": "People",
+    "tags": [
+      "sub",
+      "member",
+      "star"
+    ]
+  },
+  {
+    "path": "user-search.svg",
+    "name": "user-search",
+    "category": "People",
+    "tags": [
+      "find user",
+      "lookup"
+    ]
+  },
+  {
+    "path": "user-lock.svg",
+    "name": "user-lock",
+    "category": "People",
+    "tags": [
+      "private",
+      "account security"
+    ]
+  },
+  {
+    "path": "user-ban.svg",
+    "name": "user-ban",
+    "category": "People",
+    "tags": [
+      "ban",
+      "banned",
+      "blocked"
+    ]
+  },
+  {
+    "path": "user-cog.svg",
+    "name": "user-cog",
+    "category": "People",
+    "tags": [
+      "account settings",
+      "manage user"
+    ]
+  },
+  {
+    "path": "streamer.svg",
+    "name": "streamer",
+    "category": "People",
+    "tags": [
+      "creator",
+      "gamer",
+      "headset"
+    ]
+  },
+  {
+    "path": "crowd.svg",
+    "name": "crowd",
+    "category": "People",
+    "tags": [
+      "audience",
+      "viewers",
+      "people"
+    ]
+  },
+  {
+    "path": "id-card.svg",
+    "name": "id-card",
+    "category": "People",
+    "tags": [
+      "identity",
+      "badge",
+      "profile card"
+    ]
+  },
+  {
+    "path": "contact-book.svg",
+    "name": "contact-book",
+    "category": "People",
+    "tags": [
+      "contacts",
+      "address book",
+      "phonebook"
+    ]
+  },
+  {
+    "path": "person.svg",
+    "name": "person",
+    "category": "People",
+    "tags": [
+      "human",
+      "stick figure",
+      "standing"
+    ]
+  },
+  {
+    "path": "accessibility.svg",
+    "name": "accessibility",
+    "category": "People",
+    "tags": [
+      "a11y",
+      "universal access"
+    ]
+  },
+  {
+    "path": "clock.svg",
+    "name": "clock",
+    "category": "Time",
+    "tags": [
+      "time",
+      "hour",
+      "watch"
+    ]
+  },
+  {
+    "path": "clock-off.svg",
+    "name": "clock-off",
+    "category": "Time",
+    "tags": [
+      "no time",
+      "paused",
+      "stopped"
+    ]
+  },
+  {
+    "path": "alarm.svg",
+    "name": "alarm",
+    "category": "Time",
+    "tags": [
+      "wake",
+      "alarm clock",
+      "reminder"
+    ]
+  },
+  {
+    "path": "stopwatch.svg",
+    "name": "stopwatch",
+    "category": "Time",
+    "tags": [
+      "lap",
+      "timer",
+      "speedrun"
+    ]
+  },
+  {
+    "path": "timer.svg",
+    "name": "timer",
+    "category": "Time",
+    "tags": [
+      "countdown",
+      "duration"
+    ]
+  },
+  {
+    "path": "hourglass.svg",
+    "name": "hourglass",
+    "category": "Time",
+    "tags": [
+      "wait",
+      "sand",
+      "loading"
+    ]
+  },
+  {
+    "path": "calendar.svg",
+    "name": "calendar",
+    "category": "Time",
+    "tags": [
+      "date",
+      "day",
+      "month"
+    ]
+  },
+  {
+    "path": "calendar-check.svg",
+    "name": "calendar-check",
+    "category": "Time",
+    "tags": [
+      "scheduled",
+      "booked",
+      "done"
+    ]
+  },
+  {
+    "path": "calendar-plus.svg",
+    "name": "calendar-plus",
+    "category": "Time",
+    "tags": [
+      "add event",
+      "schedule"
+    ]
+  },
+  {
+    "path": "calendar-x.svg",
+    "name": "calendar-x",
+    "category": "Time",
+    "tags": [
+      "cancel event",
+      "unavailable"
+    ]
+  },
+  {
+    "path": "calendar-days.svg",
+    "name": "calendar-days",
+    "category": "Time",
+    "tags": [
+      "week",
+      "month view",
+      "agenda"
+    ]
+  },
+  {
+    "path": "calendar-star.svg",
+    "name": "calendar-star",
+    "category": "Time",
+    "tags": [
+      "event",
+      "special day",
+      "highlight"
+    ]
+  },
+  {
+    "path": "history.svg",
+    "name": "history",
+    "category": "Time",
+    "tags": [
+      "recent",
+      "past",
+      "log"
+    ]
+  },
+  {
+    "path": "watch.svg",
+    "name": "watch",
+    "category": "Time",
+    "tags": [
+      "wristwatch",
+      "smartwatch",
+      "time"
+    ]
+  },
+  {
+    "path": "snooze.svg",
+    "name": "snooze",
+    "category": "Time",
+    "tags": [
+      "sleep",
+      "later",
+      "remind"
+    ]
+  },
+  {
+    "path": "timeline.svg",
+    "name": "timeline",
+    "category": "Time",
+    "tags": [
+      "steps",
+      "progress",
+      "history"
+    ]
+  },
+  {
+    "path": "pomodoro.svg",
+    "name": "pomodoro",
+    "category": "Time",
+    "tags": [
+      "focus",
+      "tomato",
+      "work timer"
+    ]
+  },
+  {
+    "path": "clock-fast.svg",
+    "name": "clock-fast",
+    "category": "Time",
+    "tags": [
+      "quick",
+      "speed",
+      "rush"
+    ]
+  },
+  {
+    "path": "point.svg",
+    "name": "point",
+    "category": "Touch & gestures",
+    "tags": [
+      "finger",
+      "touch",
+      "select"
+    ]
+  },
+  {
+    "path": "tap.svg",
+    "name": "tap",
+    "category": "Touch & gestures",
+    "tags": [
+      "touch",
+      "press",
+      "click"
+    ]
+  },
+  {
+    "path": "double-tap.svg",
+    "name": "double-tap",
+    "category": "Touch & gestures",
+    "tags": [
+      "touch twice",
+      "double click"
+    ]
+  },
+  {
+    "path": "long-press.svg",
+    "name": "long-press",
+    "category": "Touch & gestures",
+    "tags": [
+      "hold",
+      "press and hold"
+    ]
+  },
+  {
+    "path": "swipe-left.svg",
+    "name": "swipe-left",
+    "category": "Touch & gestures",
+    "tags": [
+      "slide",
+      "previous page"
+    ]
+  },
+  {
+    "path": "swipe-right.svg",
+    "name": "swipe-right",
+    "category": "Touch & gestures",
+    "tags": [
+      "slide",
+      "next page"
+    ]
+  },
+  {
+    "path": "swipe-up.svg",
+    "name": "swipe-up",
+    "category": "Touch & gestures",
+    "tags": [
+      "scroll up",
+      "slide up"
+    ]
+  },
+  {
+    "path": "swipe-down.svg",
+    "name": "swipe-down",
+    "category": "Touch & gestures",
+    "tags": [
+      "scroll down",
+      "pull"
+    ]
+  },
+  {
+    "path": "drag.svg",
+    "name": "drag",
+    "category": "Touch & gestures",
+    "tags": [
+      "move",
+      "hold and move"
+    ]
+  },
+  {
+    "path": "rotate-gesture.svg",
+    "name": "rotate-gesture",
+    "category": "Touch & gestures",
+    "tags": [
+      "twist",
+      "turn"
+    ]
+  },
+  {
+    "path": "pinch.svg",
+    "name": "pinch",
+    "category": "Touch & gestures",
+    "tags": [
+      "zoom out",
+      "squeeze"
+    ]
+  },
+  {
+    "path": "spread.svg",
+    "name": "spread",
+    "category": "Touch & gestures",
+    "tags": [
+      "zoom in",
+      "expand"
+    ]
+  },
+  {
+    "path": "hand.svg",
+    "name": "hand",
+    "category": "Touch & gestures",
+    "tags": [
+      "palm",
+      "stop",
+      "high five",
+      "raise hand"
+    ]
+  },
+  {
+    "path": "wave.svg",
+    "name": "wave",
+    "category": "Touch & gestures",
+    "tags": [
+      "hello",
+      "hi",
+      "greeting"
+    ]
+  },
+  {
+    "path": "grab.svg",
+    "name": "grab",
+    "category": "Touch & gestures",
+    "tags": [
+      "fist",
+      "hold",
+      "grip"
+    ]
+  },
+  {
+    "path": "thumbs-up.svg",
+    "name": "thumbs-up",
+    "category": "Touch & gestures",
+    "tags": [
+      "like",
+      "approve",
+      "good"
+    ]
+  },
+  {
+    "path": "thumbs-down.svg",
+    "name": "thumbs-down",
+    "category": "Touch & gestures",
+    "tags": [
+      "dislike",
+      "reject",
+      "bad"
+    ]
+  },
+  {
+    "path": "click.svg",
+    "name": "click",
+    "category": "Touch & gestures",
+    "tags": [
+      "mouse click",
+      "press",
+      "select"
+    ]
+  },
+  {
+    "path": "scroll.svg",
+    "name": "scroll",
+    "category": "Touch & gestures",
+    "tags": [
+      "mouse wheel",
+      "scroll down"
+    ]
+  },
+  {
+    "path": "smile.svg",
+    "name": "smile",
+    "category": "Faces & reactions",
+    "tags": [
+      "happy",
+      "emoji",
+      "good"
+    ]
+  },
+  {
+    "path": "grin.svg",
+    "name": "grin",
+    "category": "Faces & reactions",
+    "tags": [
+      "happy",
+      "big smile",
+      "joy"
+    ]
+  },
+  {
+    "path": "laugh.svg",
+    "name": "laugh",
+    "category": "Faces & reactions",
+    "tags": [
+      "lol",
+      "haha",
+      "funny"
+    ]
+  },
+  {
+    "path": "wink.svg",
+    "name": "wink",
+    "category": "Faces & reactions",
+    "tags": [
+      "flirt",
+      "joke",
+      "playful"
+    ]
+  },
+  {
+    "path": "sad.svg",
+    "name": "sad",
+    "category": "Faces & reactions",
+    "tags": [
+      "unhappy",
+      "down",
+      "bad"
+    ]
+  },
+  {
+    "path": "neutral.svg",
+    "name": "neutral",
+    "category": "Faces & reactions",
+    "tags": [
+      "meh",
+      "okay",
+      "blank"
+    ]
+  },
+  {
+    "path": "surprised.svg",
+    "name": "surprised",
+    "category": "Faces & reactions",
+    "tags": [
+      "wow",
+      "shock",
+      "omg"
+    ]
+  },
+  {
+    "path": "angry.svg",
+    "name": "angry",
+    "category": "Faces & reactions",
+    "tags": [
+      "mad",
+      "rage",
+      "upset"
+    ]
+  },
+  {
+    "path": "cool.svg",
+    "name": "cool",
+    "category": "Faces & reactions",
+    "tags": [
+      "sunglasses",
+      "chill",
+      "awesome"
+    ]
+  },
+  {
+    "path": "love.svg",
+    "name": "love",
+    "category": "Faces & reactions",
+    "tags": [
+      "heart eyes",
+      "adore",
+      "crush"
+    ]
+  },
+  {
+    "path": "tongue.svg",
+    "name": "tongue",
+    "category": "Faces & reactions",
+    "tags": [
+      "silly",
+      "playful",
+      "joke"
+    ]
+  },
+  {
+    "path": "sleepy.svg",
+    "name": "sleepy",
+    "category": "Faces & reactions",
+    "tags": [
+      "tired",
+      "bored",
+      "zzz"
+    ]
+  },
+  {
+    "path": "dizzy.svg",
+    "name": "dizzy",
+    "category": "Faces & reactions",
+    "tags": [
+      "confused",
+      "knocked out",
+      "dead"
+    ]
+  },
+  {
+    "path": "nerd.svg",
+    "name": "nerd",
+    "category": "Faces & reactions",
+    "tags": [
+      "glasses",
+      "smart",
+      "geek"
+    ]
+  },
+  {
+    "path": "mask.svg",
+    "name": "mask",
+    "category": "Faces & reactions",
+    "tags": [
+      "sick",
+      "ill",
+      "covid"
+    ]
+  },
+  {
+    "path": "crying.svg",
+    "name": "crying",
+    "category": "Faces & reactions",
+    "tags": [
+      "tears",
+      "sob",
+      "sad"
+    ]
+  },
+  {
+    "path": "smirk.svg",
+    "name": "smirk",
+    "category": "Faces & reactions",
+    "tags": [
+      "sly",
+      "smug",
+      "sarcastic"
+    ]
+  },
+  {
+    "path": "silent.svg",
+    "name": "silent",
+    "category": "Faces & reactions",
+    "tags": [
+      "zip",
+      "secret",
+      "quiet"
+    ]
+  },
+  {
+    "path": "star-struck.svg",
+    "name": "star-struck",
+    "category": "Faces & reactions",
+    "tags": [
+      "amazed",
+      "starry",
+      "wow"
+    ]
+  },
+  {
+    "path": "angel.svg",
+    "name": "angel",
+    "category": "Faces & reactions",
+    "tags": [
+      "innocent",
+      "halo",
+      "good"
+    ]
+  },
+  {
+    "path": "skull.svg",
+    "name": "skull",
+    "category": "Faces & reactions",
+    "tags": [
+      "dead",
+      "rip",
+      "danger"
+    ]
+  },
+  {
+    "path": "ghost.svg",
+    "name": "ghost",
+    "category": "Faces & reactions",
+    "tags": [
+      "spooky",
+      "boo",
+      "halloween"
+    ]
+  },
+  {
+    "path": "alien.svg",
+    "name": "alien",
+    "category": "Faces & reactions",
+    "tags": [
+      "ufo",
+      "space",
+      "extraterrestrial"
+    ]
+  },
+  {
+    "path": "robot.svg",
+    "name": "robot",
+    "category": "Faces & reactions",
+    "tags": [
+      "bot",
+      "ai",
+      "automation"
+    ]
+  },
+  {
+    "path": "eyes.svg",
+    "name": "eyes",
+    "category": "Faces & reactions",
+    "tags": [
+      "look",
+      "watching",
+      "see"
+    ]
+  },
+  {
+    "path": "heart.svg",
+    "name": "heart",
+    "category": "Faces & reactions",
+    "tags": [
+      "love",
+      "like",
+      "favourite"
+    ]
+  },
+  {
+    "path": "heart-broken.svg",
+    "name": "heart-broken",
+    "category": "Faces & reactions",
+    "tags": [
+      "heartbreak",
+      "sad",
+      "breakup"
+    ]
+  },
+  {
+    "path": "hearts.svg",
+    "name": "hearts",
+    "category": "Faces & reactions",
+    "tags": [
+      "love",
+      "romance",
+      "likes"
+    ]
+  },
+  {
+    "path": "gamepad.svg",
+    "name": "gamepad",
+    "category": "Games",
+    "tags": [
+      "controller",
+      "console",
+      "play"
+    ]
+  },
+  {
+    "path": "gamepad-off.svg",
+    "name": "gamepad-off",
+    "category": "Games",
+    "tags": [
+      "controller",
+      "disconnected"
+    ]
+  },
+  {
+    "path": "joystick.svg",
+    "name": "joystick",
+    "category": "Games",
+    "tags": [
+      "arcade stick",
+      "fight stick"
+    ]
+  },
+  {
+    "path": "arcade.svg",
+    "name": "arcade",
+    "category": "Games",
+    "tags": [
+      "cabinet",
+      "retro",
+      "coin op"
+    ]
+  },
+  {
+    "path": "handheld.svg",
+    "name": "handheld",
+    "category": "Games",
+    "tags": [
+      "portable console",
+      "retro"
+    ]
+  },
+  {
+    "path": "d-pad.svg",
+    "name": "d-pad",
+    "category": "Games",
+    "tags": [
+      "directional pad",
+      "cross",
+      "controls"
+    ]
+  },
+  {
+    "path": "dice.svg",
+    "name": "dice",
+    "category": "Games",
+    "tags": [
+      "random",
+      "roll",
+      "chance",
+      "board game"
+    ]
+  },
+  {
+    "path": "dice-pair.svg",
+    "name": "dice-pair",
+    "category": "Games",
+    "tags": [
+      "dice",
+      "roll",
+      "gamble"
+    ]
+  },
+  {
+    "path": "cards.svg",
+    "name": "cards",
+    "category": "Games",
+    "tags": [
+      "playing cards",
+      "poker",
+      "deck"
+    ]
+  },
+  {
+    "path": "chess-pawn.svg",
+    "name": "chess-pawn",
+    "category": "Games",
+    "tags": [
+      "chess",
+      "strategy",
+      "piece"
+    ]
+  },
+  {
+    "path": "chess-rook.svg",
+    "name": "chess-rook",
+    "category": "Games",
+    "tags": [
+      "chess",
+      "castle",
+      "tower"
+    ]
+  },
+  {
+    "path": "trophy.svg",
+    "name": "trophy",
+    "category": "Games",
+    "tags": [
+      "winner",
+      "cup",
+      "champion"
+    ]
+  },
+  {
+    "path": "medal.svg",
+    "name": "medal",
+    "category": "Games",
+    "tags": [
+      "award",
+      "achievement",
+      "prize"
+    ]
+  },
+  {
+    "path": "crown.svg",
+    "name": "crown",
+    "category": "Games",
+    "tags": [
+      "king",
+      "queen",
+      "winner",
+      "royal"
+    ]
+  },
+  {
+    "path": "sword.svg",
+    "name": "sword",
+    "category": "Games",
+    "tags": [
+      "weapon",
+      "attack",
+      "rpg"
+    ]
+  },
+  {
+    "path": "swords.svg",
+    "name": "swords",
+    "category": "Games",
+    "tags": [
+      "battle",
+      "fight",
+      "pvp",
+      "versus"
+    ]
+  },
+  {
+    "path": "axe.svg",
+    "name": "axe",
+    "category": "Games",
+    "tags": [
+      "weapon",
+      "chop",
+      "viking"
+    ]
+  },
+  {
+    "path": "treasure-map.svg",
+    "name": "treasure-map",
+    "category": "Games",
+    "tags": [
+      "map",
+      "quest",
+      "adventure"
+    ]
+  },
+  {
+    "path": "potion.svg",
+    "name": "potion",
+    "category": "Games",
+    "tags": [
+      "flask",
+      "elixir",
+      "magic",
+      "health"
+    ]
+  },
+  {
+    "path": "treasure.svg",
+    "name": "treasure",
+    "category": "Games",
+    "tags": [
+      "chest",
+      "loot",
+      "reward"
+    ]
+  },
+  {
+    "path": "gem.svg",
+    "name": "gem",
+    "category": "Games",
+    "tags": [
+      "diamond",
+      "jewel",
+      "premium"
+    ]
+  },
+  {
+    "path": "magic-wand.svg",
+    "name": "magic-wand",
+    "category": "Games",
+    "tags": [
+      "magic",
+      "spell",
+      "effects"
+    ]
+  },
+  {
+    "path": "puzzle.svg",
+    "name": "puzzle",
+    "category": "Games",
+    "tags": [
+      "piece",
+      "plugin",
+      "extension",
+      "jigsaw"
+    ]
+  },
+  {
+    "path": "target.svg",
+    "name": "target",
+    "category": "Games",
+    "tags": [
+      "goal",
+      "aim",
+      "bullseye"
+    ]
+  },
+  {
+    "path": "crosshair.svg",
+    "name": "crosshair",
+    "category": "Games",
+    "tags": [
+      "aim",
+      "scope",
+      "fps"
+    ]
+  },
+  {
+    "path": "bomb.svg",
+    "name": "bomb",
+    "category": "Games",
+    "tags": [
+      "explosive",
+      "boom",
+      "danger"
+    ]
+  },
+  {
+    "path": "race-flag.svg",
+    "name": "race-flag",
+    "category": "Games",
+    "tags": [
+      "checkered flag",
+      "finish",
+      "racing"
+    ]
+  },
+  {
+    "path": "steering-wheel.svg",
+    "name": "steering-wheel",
+    "category": "Games",
+    "tags": [
+      "racing",
+      "drive",
+      "car game"
+    ]
+  },
+  {
+    "path": "vr-headset.svg",
+    "name": "vr-headset",
+    "category": "Games",
+    "tags": [
+      "virtual reality",
+      "goggles",
+      "metaverse"
+    ]
+  },
+  {
+    "path": "castle.svg",
+    "name": "castle",
+    "category": "Games",
+    "tags": [
+      "fortress",
+      "kingdom",
+      "base"
+    ]
+  },
+  {
+    "path": "health.svg",
+    "name": "health",
+    "category": "Games",
+    "tags": [
+      "pixel heart",
+      "lives",
+      "hp",
+      "retro"
+    ]
+  },
+  {
+    "path": "level-up.svg",
+    "name": "level-up",
+    "category": "Games",
+    "tags": [
+      "upgrade",
+      "rank up",
+      "xp"
+    ]
+  },
+  {
+    "path": "ufo.svg",
+    "name": "ufo",
+    "category": "Games",
+    "tags": [
+      "alien",
+      "spaceship",
+      "flying saucer"
+    ]
+  },
+  {
+    "path": "mushroom.svg",
+    "name": "mushroom",
+    "category": "Games",
+    "tags": [
+      "power up",
+      "fungus",
+      "retro"
+    ]
+  },
+  {
+    "path": "podium.svg",
+    "name": "podium",
+    "category": "Games",
+    "tags": [
+      "leaderboard",
+      "ranking",
+      "winners"
+    ]
+  },
+  {
+    "path": "camera.svg",
+    "name": "camera",
+    "category": "Camera & video",
+    "tags": [
+      "photo",
+      "snapshot",
+      "picture"
+    ]
+  },
+  {
+    "path": "camera-off.svg",
+    "name": "camera-off",
+    "category": "Camera & video",
+    "tags": [
+      "no camera",
+      "privacy"
+    ]
+  },
+  {
+    "path": "switch-camera.svg",
+    "name": "switch-camera",
+    "category": "Camera & video",
+    "tags": [
+      "flip camera",
+      "front camera",
+      "selfie"
+    ]
+  },
+  {
+    "path": "aperture.svg",
+    "name": "aperture",
+    "category": "Camera & video",
+    "tags": [
+      "lens",
+      "iris",
+      "shutter"
+    ]
+  },
+  {
+    "path": "focus.svg",
+    "name": "focus",
+    "category": "Camera & video",
+    "tags": [
+      "autofocus",
+      "frame",
+      "target"
+    ]
+  },
+  {
+    "path": "flash.svg",
+    "name": "flash",
+    "category": "Camera & video",
+    "tags": [
+      "lightning",
+      "bolt",
+      "power",
+      "energy"
+    ]
+  },
+  {
+    "path": "flash-off.svg",
+    "name": "flash-off",
+    "category": "Camera & video",
+    "tags": [
+      "no flash",
+      "bolt off"
+    ]
+  },
+  {
+    "path": "film.svg",
+    "name": "film",
+    "category": "Camera & video",
+    "tags": [
+      "movie",
+      "strip",
+      "video"
+    ]
+  },
+  {
+    "path": "film-reel.svg",
+    "name": "film-reel",
+    "category": "Camera & video",
+    "tags": [
+      "reel",
+      "cinema",
+      "movie"
+    ]
+  },
+  {
+    "path": "clapperboard.svg",
+    "name": "clapperboard",
+    "category": "Camera & video",
+    "tags": [
+      "action",
+      "scene",
+      "take",
+      "film"
+    ]
+  },
+  {
+    "path": "camcorder.svg",
+    "name": "camcorder",
+    "category": "Camera & video",
+    "tags": [
+      "video camera",
+      "handycam",
+      "record"
+    ]
+  },
+  {
+    "path": "tripod.svg",
+    "name": "tripod",
+    "category": "Camera & video",
+    "tags": [
+      "stand",
+      "mount",
+      "photography"
+    ]
+  },
+  {
+    "path": "ring-light.svg",
+    "name": "ring-light",
+    "category": "Camera & video",
+    "tags": [
+      "lighting",
+      "selfie light",
+      "creator"
+    ]
+  },
+  {
+    "path": "studio-light.svg",
+    "name": "studio-light",
+    "category": "Camera & video",
+    "tags": [
+      "softbox",
+      "lighting",
+      "lamp"
+    ]
+  },
+  {
+    "path": "crop.svg",
+    "name": "crop",
+    "category": "Camera & video",
+    "tags": [
+      "trim",
+      "cut",
+      "resize"
+    ]
+  },
+  {
+    "path": "exposure.svg",
+    "name": "exposure",
+    "category": "Camera & video",
+    "tags": [
+      "brightness",
+      "ev",
+      "plus minus"
+    ]
+  },
+  {
+    "path": "rule-of-thirds.svg",
+    "name": "rule-of-thirds",
+    "category": "Camera & video",
+    "tags": [
+      "grid",
+      "composition",
+      "frame"
+    ]
+  },
+  {
+    "path": "gallery.svg",
+    "name": "gallery",
+    "category": "Camera & video",
+    "tags": [
+      "photos",
+      "album",
+      "images"
+    ]
+  },
+  {
+    "path": "polaroid.svg",
+    "name": "polaroid",
+    "category": "Camera & video",
+    "tags": [
+      "instant photo",
+      "print",
+      "snapshot"
+    ]
+  },
+  {
+    "path": "projector.svg",
+    "name": "projector",
+    "category": "Camera & video",
+    "tags": [
+      "presentation",
+      "beamer",
+      "cinema"
+    ]
+  },
+  {
+    "path": "drone.svg",
+    "name": "drone",
+    "category": "Camera & video",
+    "tags": [
+      "aerial",
+      "quadcopter",
+      "fpv"
+    ]
+  },
+  {
+    "path": "action-cam.svg",
+    "name": "action-cam",
+    "category": "Camera & video",
+    "tags": [
+      "sports camera",
+      "pov",
+      "helmet cam"
+    ]
+  },
+  {
+    "path": "timelapse.svg",
+    "name": "timelapse",
+    "category": "Camera & video",
+    "tags": [
+      "time lapse",
+      "interval",
+      "hyperlapse"
+    ]
+  },
+  {
+    "path": "panorama.svg",
+    "name": "panorama",
+    "category": "Camera & video",
+    "tags": [
+      "wide",
+      "landscape",
+      "360"
+    ]
+  },
+  {
+    "path": "lens.svg",
+    "name": "lens",
+    "category": "Camera & video",
+    "tags": [
+      "glass",
+      "optics",
+      "zoom lens"
+    ]
+  },
+  {
+    "path": "spotlight.svg",
+    "name": "spotlight",
+    "category": "Camera & video",
+    "tags": [
+      "stage light",
+      "highlight",
+      "beam"
+    ]
+  },
+  {
+    "path": "selfie.svg",
+    "name": "selfie",
+    "category": "Camera & video",
+    "tags": [
+      "front camera",
+      "portrait",
+      "phone photo"
+    ]
+  },
+  {
+    "path": "screen-record.svg",
+    "name": "screen-record",
+    "category": "Camera & video",
+    "tags": [
+      "capture screen",
+      "recording",
+      "rec"
+    ]
+  },
+  {
+    "path": "tv.svg",
+    "name": "tv",
+    "category": "Camera & video",
+    "tags": [
+      "television",
+      "screen",
+      "channel"
+    ]
+  },
+  {
+    "path": "sun.svg",
+    "name": "sun",
+    "category": "Weather",
+    "tags": [
+      "sunny",
+      "day",
+      "brightness",
+      "light mode"
+    ]
+  },
+  {
+    "path": "sun-dim.svg",
+    "name": "sun-dim",
+    "category": "Weather",
+    "tags": [
+      "dim",
+      "low brightness"
+    ]
+  },
+  {
+    "path": "moon.svg",
+    "name": "moon",
+    "category": "Weather",
+    "tags": [
+      "night",
+      "dark mode",
+      "sleep"
+    ]
+  },
+  {
+    "path": "moon-stars.svg",
+    "name": "moon-stars",
+    "category": "Weather",
+    "tags": [
+      "night",
+      "clear sky",
+      "sleep"
+    ]
+  },
+  {
+    "path": "cloud.svg",
+    "name": "cloud",
+    "category": "Weather",
+    "tags": [
+      "cloudy",
+      "overcast",
+      "storage"
+    ]
+  },
+  {
+    "path": "clouds.svg",
+    "name": "clouds",
+    "category": "Weather",
+    "tags": [
+      "cloudy",
+      "overcast"
+    ]
+  },
+  {
+    "path": "cloud-sun.svg",
+    "name": "cloud-sun",
+    "category": "Weather",
+    "tags": [
+      "partly cloudy",
+      "mild"
+    ]
+  },
+  {
+    "path": "cloud-moon.svg",
+    "name": "cloud-moon",
+    "category": "Weather",
+    "tags": [
+      "cloudy night"
+    ]
+  },
+  {
+    "path": "rain.svg",
+    "name": "rain",
+    "category": "Weather",
+    "tags": [
+      "rainy",
+      "shower",
+      "wet"
+    ]
+  },
+  {
+    "path": "drizzle.svg",
+    "name": "drizzle",
+    "category": "Weather",
+    "tags": [
+      "light rain",
+      "sprinkle"
+    ]
+  },
+  {
+    "path": "heavy-rain.svg",
+    "name": "heavy-rain",
+    "category": "Weather",
+    "tags": [
+      "downpour",
+      "storm",
+      "monsoon"
+    ]
+  },
+  {
+    "path": "snow.svg",
+    "name": "snow",
+    "category": "Weather",
+    "tags": [
+      "snowy",
+      "winter",
+      "flurries"
+    ]
+  },
+  {
+    "path": "hail.svg",
+    "name": "hail",
+    "category": "Weather",
+    "tags": [
+      "ice",
+      "sleet"
+    ]
+  },
+  {
+    "path": "snowflake.svg",
+    "name": "snowflake",
+    "category": "Weather",
+    "tags": [
+      "cold",
+      "winter",
+      "freeze",
+      "ice"
+    ]
+  },
+  {
+    "path": "storm.svg",
+    "name": "storm",
+    "category": "Weather",
+    "tags": [
+      "thunder",
+      "lightning",
+      "thunderstorm"
+    ]
+  },
+  {
+    "path": "wind.svg",
+    "name": "wind",
+    "category": "Weather",
+    "tags": [
+      "breeze",
+      "windy",
+      "air"
+    ]
+  },
+  {
+    "path": "tornado.svg",
+    "name": "tornado",
+    "category": "Weather",
+    "tags": [
+      "twister",
+      "storm",
+      "cyclone"
+    ]
+  },
+  {
+    "path": "fog.svg",
+    "name": "fog",
+    "category": "Weather",
+    "tags": [
+      "mist",
+      "haze",
+      "foggy"
+    ]
+  },
+  {
+    "path": "rainbow.svg",
+    "name": "rainbow",
+    "category": "Weather",
+    "tags": [
+      "pride",
+      "colors",
+      "after rain"
+    ]
+  },
+  {
+    "path": "umbrella.svg",
+    "name": "umbrella",
+    "category": "Weather",
+    "tags": [
+      "rain",
+      "protection",
+      "insurance"
+    ]
+  },
+  {
+    "path": "thermometer.svg",
+    "name": "thermometer",
+    "category": "Weather",
+    "tags": [
+      "temperature",
+      "degrees",
+      "heat"
+    ]
+  },
+  {
+    "path": "thermometer-hot.svg",
+    "name": "thermometer-hot",
+    "category": "Weather",
+    "tags": [
+      "hot",
+      "heat",
+      "summer"
+    ]
+  },
+  {
+    "path": "thermometer-cold.svg",
+    "name": "thermometer-cold",
+    "category": "Weather",
+    "tags": [
+      "cold",
+      "freezing",
+      "winter"
+    ]
+  },
+  {
+    "path": "sunrise.svg",
+    "name": "sunrise",
+    "category": "Weather",
+    "tags": [
+      "morning",
+      "dawn"
+    ]
+  },
+  {
+    "path": "sunset.svg",
+    "name": "sunset",
+    "category": "Weather",
+    "tags": [
+      "evening",
+      "dusk"
+    ]
+  },
+  {
+    "path": "droplet.svg",
+    "name": "droplet",
+    "category": "Weather",
+    "tags": [
+      "water",
+      "drop",
+      "liquid"
+    ]
+  },
+  {
+    "path": "humidity.svg",
+    "name": "humidity",
+    "category": "Weather",
+    "tags": [
+      "moisture",
+      "percent",
+      "damp"
+    ]
+  },
+  {
+    "path": "cloud-off.svg",
+    "name": "cloud-off",
+    "category": "Weather",
+    "tags": [
+      "offline",
+      "no cloud",
+      "disconnected"
+    ]
+  },
+  {
+    "path": "comet.svg",
+    "name": "comet",
+    "category": "Weather",
+    "tags": [
+      "meteor",
+      "shooting star",
+      "space"
+    ]
+  },
+  {
+    "path": "hurricane.svg",
+    "name": "hurricane",
+    "category": "Weather",
+    "tags": [
+      "cyclone",
+      "typhoon",
+      "storm"
+    ]
+  },
+  {
+    "path": "leaf.svg",
+    "name": "leaf",
+    "category": "Nature & animals",
+    "tags": [
+      "plant",
+      "eco",
+      "green"
+    ]
+  },
+  {
+    "path": "tree.svg",
+    "name": "tree",
+    "category": "Nature & animals",
+    "tags": [
+      "forest",
+      "park",
+      "nature"
+    ]
+  },
+  {
+    "path": "pine.svg",
+    "name": "pine",
+    "category": "Nature & animals",
+    "tags": [
+      "evergreen",
+      "christmas tree",
+      "forest"
+    ]
+  },
+  {
+    "path": "flower.svg",
+    "name": "flower",
+    "category": "Nature & animals",
+    "tags": [
+      "blossom",
+      "spring",
+      "garden"
+    ]
+  },
+  {
+    "path": "tulip.svg",
+    "name": "tulip",
+    "category": "Nature & animals",
+    "tags": [
+      "flower",
+      "spring",
+      "bloom"
+    ]
+  },
+  {
+    "path": "sprout.svg",
+    "name": "sprout",
+    "category": "Nature & animals",
+    "tags": [
+      "seedling",
+      "grow",
+      "new"
+    ]
+  },
+  {
+    "path": "cactus.svg",
+    "name": "cactus",
+    "category": "Nature & animals",
+    "tags": [
+      "desert",
+      "plant",
+      "succulent"
+    ]
+  },
+  {
+    "path": "mountain.svg",
+    "name": "mountain",
+    "category": "Nature & animals",
+    "tags": [
+      "peak",
+      "hike",
+      "landscape"
+    ]
+  },
+  {
+    "path": "volcano.svg",
+    "name": "volcano",
+    "category": "Nature & animals",
+    "tags": [
+      "eruption",
+      "lava",
+      "hot"
+    ]
+  },
+  {
+    "path": "water.svg",
+    "name": "water",
+    "category": "Nature & animals",
+    "tags": [
+      "waves",
+      "ocean",
+      "sea"
+    ]
+  },
+  {
+    "path": "fire.svg",
+    "name": "fire",
+    "category": "Nature & animals",
+    "tags": [
+      "flame",
+      "hot",
+      "lit",
+      "trending"
+    ]
+  },
+  {
+    "path": "planet.svg",
+    "name": "planet",
+    "category": "Nature & animals",
+    "tags": [
+      "saturn",
+      "space",
+      "orbit"
+    ]
+  },
+  {
+    "path": "paw.svg",
+    "name": "paw",
+    "category": "Nature & animals",
+    "tags": [
+      "pet",
+      "animal",
+      "dog",
+      "cat"
+    ]
+  },
+  {
+    "path": "bone.svg",
+    "name": "bone",
+    "category": "Nature & animals",
+    "tags": [
+      "dog",
+      "treat",
+      "skeleton"
+    ]
+  },
+  {
+    "path": "fish.svg",
+    "name": "fish",
+    "category": "Nature & animals",
+    "tags": [
+      "sea",
+      "food",
+      "aquarium"
+    ]
+  },
+  {
+    "path": "bird.svg",
+    "name": "bird",
+    "category": "Nature & animals",
+    "tags": [
+      "tweet",
+      "fly",
+      "animal"
+    ]
+  },
+  {
+    "path": "cat.svg",
+    "name": "cat",
+    "category": "Nature & animals",
+    "tags": [
+      "kitty",
+      "pet",
+      "meow"
+    ]
+  },
+  {
+    "path": "dog.svg",
+    "name": "dog",
+    "category": "Nature & animals",
+    "tags": [
+      "puppy",
+      "pet",
+      "woof"
+    ]
+  },
+  {
+    "path": "bear.svg",
+    "name": "bear",
+    "category": "Nature & animals",
+    "tags": [
+      "teddy",
+      "animal",
+      "cute"
+    ]
+  },
+  {
+    "path": "fox.svg",
+    "name": "fox",
+    "category": "Nature & animals",
+    "tags": [
+      "animal",
+      "wild",
+      "clever"
+    ]
+  },
+  {
+    "path": "rabbit.svg",
+    "name": "rabbit",
+    "category": "Nature & animals",
+    "tags": [
+      "bunny",
+      "easter",
+      "hop"
+    ]
+  },
+  {
+    "path": "owl.svg",
+    "name": "owl",
+    "category": "Nature & animals",
+    "tags": [
+      "night",
+      "wise",
+      "bird"
+    ]
+  },
+  {
+    "path": "turtle.svg",
+    "name": "turtle",
+    "category": "Nature & animals",
+    "tags": [
+      "slow",
+      "tortoise",
+      "shell"
+    ]
+  },
+  {
+    "path": "snail.svg",
+    "name": "snail",
+    "category": "Nature & animals",
+    "tags": [
+      "slow",
+      "shell",
+      "garden"
+    ]
+  },
+  {
+    "path": "ladybug.svg",
+    "name": "ladybug",
+    "category": "Nature & animals",
+    "tags": [
+      "insect",
+      "luck",
+      "beetle"
+    ]
+  },
+  {
+    "path": "bug.svg",
+    "name": "bug",
+    "category": "Nature & animals",
+    "tags": [
+      "insect",
+      "debug",
+      "issue"
+    ]
+  },
+  {
+    "path": "butterfly.svg",
+    "name": "butterfly",
+    "category": "Nature & animals",
+    "tags": [
+      "insect",
+      "spring",
+      "wings"
+    ]
+  },
+  {
+    "path": "feather.svg",
+    "name": "feather",
+    "category": "Nature & animals",
+    "tags": [
+      "light",
+      "quill",
+      "write"
+    ]
+  },
+  {
+    "path": "coin.svg",
+    "name": "coin",
+    "category": "Money & work",
+    "tags": [
+      "money",
+      "currency",
+      "dollar",
+      "bits"
+    ]
+  },
+  {
+    "path": "coins.svg",
+    "name": "coins",
+    "category": "Money & work",
+    "tags": [
+      "money",
+      "savings",
+      "change"
+    ]
+  },
+  {
+    "path": "banknote.svg",
+    "name": "banknote",
+    "category": "Money & work",
+    "tags": [
+      "cash",
+      "money",
+      "bill"
+    ]
+  },
+  {
+    "path": "wallet.svg",
+    "name": "wallet",
+    "category": "Money & work",
+    "tags": [
+      "money",
+      "purse",
+      "balance"
+    ]
+  },
+  {
+    "path": "credit-card.svg",
+    "name": "credit-card",
+    "category": "Money & work",
+    "tags": [
+      "card",
+      "payment",
+      "debit"
+    ]
+  },
+  {
+    "path": "bank.svg",
+    "name": "bank",
+    "category": "Money & work",
+    "tags": [
+      "finance",
+      "institution",
+      "building"
+    ]
+  },
+  {
+    "path": "piggy-bank.svg",
+    "name": "piggy-bank",
+    "category": "Money & work",
+    "tags": [
+      "savings",
+      "save money",
+      "budget"
+    ]
+  },
+  {
+    "path": "receipt.svg",
+    "name": "receipt",
+    "category": "Money & work",
+    "tags": [
+      "invoice",
+      "bill",
+      "purchase"
+    ]
+  },
+  {
+    "path": "pie-chart.svg",
+    "name": "pie-chart",
+    "category": "Money & work",
+    "tags": [
+      "share",
+      "analytics",
+      "breakdown"
+    ]
+  },
+  {
+    "path": "bar-chart.svg",
+    "name": "bar-chart",
+    "category": "Money & work",
+    "tags": [
+      "analytics",
+      "stats",
+      "growth"
+    ]
+  },
+  {
+    "path": "candles.svg",
+    "name": "candles",
+    "category": "Money & work",
+    "tags": [
+      "stocks",
+      "trading",
+      "market"
+    ]
+  },
+  {
+    "path": "briefcase.svg",
+    "name": "briefcase",
+    "category": "Money & work",
+    "tags": [
+      "work",
+      "job",
+      "business"
+    ]
+  },
+  {
+    "path": "building.svg",
+    "name": "building",
+    "category": "Money & work",
+    "tags": [
+      "office",
+      "company",
+      "city"
+    ]
+  },
+  {
+    "path": "store.svg",
+    "name": "store",
+    "category": "Money & work",
+    "tags": [
+      "shop",
+      "market",
+      "retail"
+    ]
+  },
+  {
+    "path": "shopping-cart.svg",
+    "name": "shopping-cart",
+    "category": "Money & work",
+    "tags": [
+      "cart",
+      "buy",
+      "checkout"
+    ]
+  },
+  {
+    "path": "shopping-bag.svg",
+    "name": "shopping-bag",
+    "category": "Money & work",
+    "tags": [
+      "bag",
+      "purchase",
+      "shop"
+    ]
+  },
+  {
+    "path": "tag.svg",
+    "name": "tag",
+    "category": "Money & work",
+    "tags": [
+      "price",
+      "label",
+      "sale"
+    ]
+  },
+  {
+    "path": "percent.svg",
+    "name": "percent",
+    "category": "Money & work",
+    "tags": [
+      "discount",
+      "sale",
+      "rate"
+    ]
+  },
+  {
+    "path": "safe.svg",
+    "name": "safe",
+    "category": "Money & work",
+    "tags": [
+      "vault",
+      "secure",
+      "lockbox"
+    ]
+  },
+  {
+    "path": "donate.svg",
+    "name": "donate",
+    "category": "Money & work",
+    "tags": [
+      "donation",
+      "charity",
+      "support",
+      "tip"
+    ]
+  },
+  {
+    "path": "tip-jar.svg",
+    "name": "tip-jar",
+    "category": "Money & work",
+    "tags": [
+      "tips",
+      "donations",
+      "jar"
+    ]
+  },
+  {
+    "path": "token.svg",
+    "name": "token",
+    "category": "Money & work",
+    "tags": [
+      "crypto",
+      "coin",
+      "web3"
+    ]
+  },
+  {
+    "path": "currency-exchange.svg",
+    "name": "currency-exchange",
+    "category": "Money & work",
+    "tags": [
+      "exchange",
+      "convert",
+      "forex"
+    ]
+  },
+  {
+    "path": "ticket.svg",
+    "name": "ticket",
+    "category": "Money & work",
+    "tags": [
+      "event",
+      "admission",
+      "pass"
+    ]
+  },
+  {
+    "path": "contract.svg",
+    "name": "contract",
+    "category": "Money & work",
+    "tags": [
+      "agreement",
+      "signature",
+      "sign"
+    ]
+  },
+  {
+    "path": "balance.svg",
+    "name": "balance",
+    "category": "Money & work",
+    "tags": [
+      "scale",
+      "law",
+      "justice",
+      "compare"
+    ]
+  },
+  {
+    "path": "barcode.svg",
+    "name": "barcode",
+    "category": "Money & work",
+    "tags": [
+      "scan",
+      "product",
+      "sku"
+    ]
+  },
+  {
+    "path": "qr-code.svg",
+    "name": "qr-code",
+    "category": "Money & work",
+    "tags": [
+      "scan",
+      "code",
+      "link"
+    ]
+  },
+  {
+    "path": "gold.svg",
+    "name": "gold",
+    "category": "Money & work",
+    "tags": [
+      "bars",
+      "bullion",
+      "wealth"
+    ]
+  },
+  {
+    "path": "money-bag.svg",
+    "name": "money-bag",
+    "category": "Money & work",
+    "tags": [
+      "riches",
+      "funds",
+      "loot"
+    ]
+  },
+  {
+    "path": "certificate.svg",
+    "name": "certificate",
+    "category": "Money & work",
+    "tags": [
+      "award",
+      "diploma",
+      "license"
+    ]
+  },
+  {
+    "path": "lightbulb.svg",
+    "name": "lightbulb",
+    "category": "Things",
+    "tags": [
+      "idea",
+      "light",
+      "tip"
+    ]
+  },
+  {
+    "path": "lightbulb-off.svg",
+    "name": "lightbulb-off",
+    "category": "Things",
+    "tags": [
+      "light off",
+      "dark"
+    ]
+  },
+  {
+    "path": "battery.svg",
+    "name": "battery",
+    "category": "Things",
+    "tags": [
+      "power",
+      "charge",
+      "level"
+    ]
+  },
+  {
+    "path": "battery-low.svg",
+    "name": "battery-low",
+    "category": "Things",
+    "tags": [
+      "low power",
+      "empty"
+    ]
+  },
+  {
+    "path": "battery-half.svg",
+    "name": "battery-half",
+    "category": "Things",
+    "tags": [
+      "power",
+      "medium"
+    ]
+  },
+  {
+    "path": "battery-full.svg",
+    "name": "battery-full",
+    "category": "Things",
+    "tags": [
+      "charged",
+      "power",
+      "full"
+    ]
+  },
+  {
+    "path": "battery-charging.svg",
+    "name": "battery-charging",
+    "category": "Things",
+    "tags": [
+      "charging",
+      "power",
+      "plugged"
+    ]
+  },
+  {
+    "path": "plug.svg",
+    "name": "plug",
+    "category": "Things",
+    "tags": [
+      "power",
+      "socket",
+      "connect"
+    ]
+  },
+  {
+    "path": "wifi.svg",
+    "name": "wifi",
+    "category": "Things",
+    "tags": [
+      "wireless",
+      "internet",
+      "network"
+    ]
+  },
+  {
+    "path": "wifi-off.svg",
+    "name": "wifi-off",
+    "category": "Things",
+    "tags": [
+      "no internet",
+      "offline",
+      "disconnected"
+    ]
+  },
+  {
+    "path": "signal.svg",
+    "name": "signal",
+    "category": "Things",
+    "tags": [
+      "cellular",
+      "bars",
+      "reception"
+    ]
+  },
+  {
+    "path": "globe.svg",
+    "name": "globe",
+    "category": "Things",
+    "tags": [
+      "world",
+      "internet",
+      "language",
+      "web"
+    ]
+  },
+  {
+    "path": "rocket.svg",
+    "name": "rocket",
+    "category": "Things",
+    "tags": [
+      "launch",
+      "boost",
+      "ship"
+    ]
+  },
+  {
+    "path": "coffee.svg",
+    "name": "coffee",
+    "category": "Things",
+    "tags": [
+      "cup",
+      "break",
+      "cafe",
+      "brb"
+    ]
+  },
+  {
+    "path": "pizza.svg",
+    "name": "pizza",
+    "category": "Things",
+    "tags": [
+      "food",
+      "slice",
+      "snack"
+    ]
+  },
+  {
+    "path": "burger.svg",
+    "name": "burger",
+    "category": "Things",
+    "tags": [
+      "food",
+      "fast food",
+      "hamburger"
+    ]
+  },
+  {
+    "path": "apple.svg",
+    "name": "apple",
+    "category": "Things",
+    "tags": [
+      "fruit",
+      "food",
+      "healthy"
+    ]
+  },
+  {
+    "path": "cake.svg",
+    "name": "cake",
+    "category": "Things",
+    "tags": [
+      "birthday",
+      "celebration",
+      "anniversary"
+    ]
+  },
+  {
+    "path": "beer.svg",
+    "name": "beer",
+    "category": "Things",
+    "tags": [
+      "drink",
+      "cheers",
+      "pub"
+    ]
+  },
+  {
+    "path": "wine.svg",
+    "name": "wine",
+    "category": "Things",
+    "tags": [
+      "drink",
+      "glass",
+      "cheers"
+    ]
+  },
+  {
+    "path": "gift.svg",
+    "name": "gift",
+    "category": "Things",
+    "tags": [
+      "present",
+      "surprise",
+      "reward"
+    ]
+  },
+  {
+    "path": "party.svg",
+    "name": "party",
+    "category": "Things",
+    "tags": [
+      "celebrate",
+      "confetti",
+      "popper"
+    ]
+  },
+  {
+    "path": "balloon.svg",
+    "name": "balloon",
+    "category": "Things",
+    "tags": [
+      "party",
+      "birthday",
+      "celebrate"
+    ]
+  },
+  {
+    "path": "sparkles.svg",
+    "name": "sparkles",
+    "category": "Things",
+    "tags": [
+      "magic",
+      "new",
+      "ai",
+      "shine"
+    ]
+  },
+  {
+    "path": "flag.svg",
+    "name": "flag",
+    "category": "Things",
+    "tags": [
+      "report",
+      "mark",
+      "milestone"
+    ]
+  },
+  {
+    "path": "map-pin.svg",
+    "name": "map-pin",
+    "category": "Things",
+    "tags": [
+      "location",
+      "place",
+      "marker"
+    ]
+  },
+  {
+    "path": "map.svg",
+    "name": "map",
+    "category": "Things",
+    "tags": [
+      "directions",
+      "navigation",
+      "atlas"
+    ]
+  },
+  {
+    "path": "compass.svg",
+    "name": "compass",
+    "category": "Things",
+    "tags": [
+      "navigate",
+      "direction",
+      "explore"
+    ]
+  },
+  {
+    "path": "car.svg",
+    "name": "car",
+    "category": "Things",
+    "tags": [
+      "drive",
+      "vehicle",
+      "auto"
+    ]
+  },
+  {
+    "path": "plane.svg",
+    "name": "plane",
+    "category": "Things",
+    "tags": [
+      "flight",
+      "travel",
+      "airport"
+    ]
+  },
+  {
+    "path": "book.svg",
+    "name": "book",
+    "category": "Things",
+    "tags": [
+      "read",
+      "guide",
+      "manual",
+      "docs"
+    ]
+  },
+  {
+    "path": "pen.svg",
+    "name": "pen",
+    "category": "Things",
+    "tags": [
+      "write",
+      "edit",
+      "sign"
+    ]
+  },
+  {
+    "path": "paperclip.svg",
+    "name": "paperclip",
+    "category": "Things",
+    "tags": [
+      "attach",
+      "attachment",
+      "file"
+    ]
+  },
+  {
+    "path": "magnet.svg",
+    "name": "magnet",
+    "category": "Things",
+    "tags": [
+      "attract",
+      "snap",
+      "pull"
+    ]
+  },
+  {
+    "path": "flask.svg",
+    "name": "flask",
+    "category": "Things",
+    "tags": [
+      "science",
+      "experiment",
+      "lab",
+      "beta"
+    ]
+  },
+  {
+    "path": "atom.svg",
+    "name": "atom",
+    "category": "Things",
+    "tags": [
+      "science",
+      "physics",
+      "react"
+    ]
+  },
+  {
+    "path": "pill.svg",
+    "name": "pill",
+    "category": "Things",
+    "tags": [
+      "medicine",
+      "health",
+      "drug"
+    ]
+  },
+  {
+    "path": "first-aid.svg",
+    "name": "first-aid",
+    "category": "Things",
+    "tags": [
+      "medical",
+      "health",
+      "kit"
+    ]
+  },
+  {
+    "path": "glasses.svg",
+    "name": "glasses",
+    "category": "Things",
+    "tags": [
+      "read",
+      "view",
+      "nerd"
+    ]
+  },
+  {
+    "path": "shirt.svg",
+    "name": "shirt",
+    "category": "Things",
+    "tags": [
+      "clothes",
+      "merch",
+      "apparel"
+    ]
+  },
+  {
+    "path": "backpack.svg",
+    "name": "backpack",
+    "category": "Things",
+    "tags": [
+      "bag",
+      "school",
+      "travel"
+    ]
+  },
+  {
+    "path": "lamp.svg",
+    "name": "lamp",
+    "category": "Things",
+    "tags": [
+      "desk lamp",
+      "light",
+      "reading"
+    ]
+  },
+  {
+    "path": "laptop.svg",
+    "name": "laptop",
+    "category": "Things",
+    "tags": [
+      "computer",
+      "notebook",
+      "device"
+    ]
+  },
+  {
+    "path": "desktop.svg",
+    "name": "desktop",
+    "category": "Things",
+    "tags": [
+      "monitor",
+      "screen",
+      "pc"
+    ]
+  },
+  {
+    "path": "smartphone.svg",
+    "name": "smartphone",
+    "category": "Things",
+    "tags": [
+      "phone",
+      "mobile",
+      "device"
+    ]
+  },
+  {
+    "path": "tablet.svg",
+    "name": "tablet",
+    "category": "Things",
+    "tags": [
+      "ipad",
+      "device",
+      "touch"
+    ]
+  },
+  {
+    "path": "smartwatch.svg",
+    "name": "smartwatch",
+    "category": "Things",
+    "tags": [
+      "watch",
+      "wearable",
+      "time"
+    ]
+  },
+  {
+    "path": "printer.svg",
+    "name": "printer",
+    "category": "Things",
+    "tags": [
+      "print",
+      "paper",
+      "output"
+    ]
+  },
+  {
+    "path": "cpu.svg",
+    "name": "cpu",
+    "category": "Things",
+    "tags": [
+      "processor",
+      "chip",
+      "hardware"
+    ]
+  },
+  {
+    "path": "hard-drive.svg",
+    "name": "hard-drive",
+    "category": "Things",
+    "tags": [
+      "storage",
+      "disk",
+      "drive"
+    ]
+  },
+  {
+    "path": "usb.svg",
+    "name": "usb",
+    "category": "Things",
+    "tags": [
+      "cable",
+      "connector",
+      "flash drive"
+    ]
+  },
+  {
+    "path": "wrench.svg",
+    "name": "wrench",
+    "category": "Things",
+    "tags": [
+      "tool",
+      "fix",
+      "settings",
+      "repair"
+    ]
+  },
+  {
+    "path": "hammer.svg",
+    "name": "hammer",
+    "category": "Things",
+    "tags": [
+      "tool",
+      "build",
+      "craft"
+    ]
+  },
+  {
+    "path": "toolbox.svg",
+    "name": "toolbox",
+    "category": "Things",
+    "tags": [
+      "tools",
+      "kit",
+      "repair"
+    ]
+  },
+  {
+    "path": "paint-brush.svg",
+    "name": "paint-brush",
+    "category": "Things",
+    "tags": [
+      "paint",
+      "art",
+      "style"
+    ]
+  },
+  {
+    "path": "palette.svg",
+    "name": "palette",
+    "category": "Things",
+    "tags": [
+      "colors",
+      "theme",
+      "design"
+    ]
+  },
+  {
+    "path": "anchor.svg",
+    "name": "anchor",
+    "category": "Things",
+    "tags": [
+      "boat",
+      "dock",
+      "stay"
+    ]
+  },
+  {
+    "path": "fan.svg",
+    "name": "fan",
+    "category": "Things",
+    "tags": [
+      "cooling",
+      "air",
+      "breeze"
+    ]
+  },
+  {
+    "path": "door.svg",
+    "name": "door",
+    "category": "Things",
+    "tags": [
+      "exit",
+      "enter",
+      "room"
+    ]
+  },
+  {
+    "path": "bed.svg",
+    "name": "bed",
+    "category": "Things",
+    "tags": [
+      "sleep",
+      "rest",
+      "hotel"
+    ]
+  },
+  {
+    "path": "recycle.svg",
+    "name": "recycle",
+    "category": "Things",
+    "tags": [
+      "eco",
+      "reuse",
+      "environment"
+    ]
+  },
+  {
+    "path": "umbrella-beach.svg",
+    "name": "umbrella-beach",
+    "category": "Things",
+    "tags": [
+      "vacation",
+      "beach",
+      "holiday"
+    ]
+  },
+  {
+    "path": "headset-mic.svg",
+    "name": "headset-mic",
+    "category": "Things",
+    "tags": [
+      "support",
+      "help desk",
+      "customer service"
+    ]
+  }
+]

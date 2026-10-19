@@ -93,6 +93,7 @@ The [plugin guide](https://github.com/santoshpanna/FlexDeck/blob/main/docs/plugi
 | `repository.min.json`, `repository.json` | The index the app reads, written by CI. Each package is the `.fdpkg` attached to its GitHub release |
 | `repositories.min.json` | The community repositories FlexDeck has reviewed (the app's *Community* list) |
 | `.github/assets/` | The README artwork, written by `pnpm art` |
+| `icon-packs/flexdeck-essentials/`, `icon-packs/flexdeck-essentials-filled/` | The FlexDeck Essentials icon packs, outline and filled, drawn from `scripts/icons/` by `pnpm icons`, which also zips them into `dist/icon-packs/` to add in the icon picker |
 
 The app reads the index from:
 
@@ -132,6 +133,7 @@ pnpm build                # pack each unreleased version into dist/
 pnpm index                # rewrite the index from the GitHub releases
 pnpm bump <id> patch      # a new version, everywhere the plugin writes it
 pnpm art                  # redraw the README artwork in .github/assets/
+pnpm icons                # redraw the icon packs, zip them, and write dist/icon-packs/preview.html
 ```
 
 Plugins are built with the published SDKs: [`@flexdeck/plugin-sdk`](https://www.npmjs.com/package/@flexdeck/plugin-sdk) on npm and [`flexdeck-plugin-sdk`](https://crates.io/crates/flexdeck-plugin-sdk) on crates.io. To build against a checkout of the app instead, for example while changing the SDK:

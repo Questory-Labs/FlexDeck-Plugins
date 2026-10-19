@@ -1,0 +1,40 @@
+import { circle, ellipse, icon, rect } from "./shapes.mjs";
+
+const repeat = ["M4 11V9a3 3 0 0 1 3-3h13", "m17 3 3 3-3 3", "M20 13v2a3 3 0 0 1-3 3H4", "m7 21-3-3 3-3"];
+
+export default {
+  name: "Music & audio",
+  icons: [
+    icon("play", ["start", "resume", "media"], ["M7 4v16l13-8z"]),
+    icon("pause", ["hold", "media", "break"], [rect(6, 4, 4, 16, 1), rect(14, 4, 4, 16, 1)]),
+    icon("stop", ["end", "media", "halt"], [rect(5, 5, 14, 14, 2)]),
+    icon("next", ["skip", "next track", "forward"], ["M5 5v14l10-7z"], ["M19 5v14"]),
+    icon("previous", ["back", "previous track", "restart"], ["M19 5v14L9 12z"], ["M5 5v14"]),
+    icon("fast-forward", ["seek", "skip ahead", "faster"], ["M3 6v12l8.5-6z", "M12.5 6v12l8.5-6z"]),
+    icon("rewind", ["seek back", "skip back", "slower"], ["M21 6v12l-8.5-6z", "M11.5 6v12L3 12z"]),
+    icon("shuffle", ["random", "mix", "playlist"], [], ["M3 7h3.5c2 0 3 1 4.5 3l2 4c1.5 2 2.5 3 4.5 3H21", "M3 17h3.5c1.4 0 2.3-.6 3.2-1.8", "M14.3 8.8c.9-1.2 1.8-1.8 3.2-1.8H21", "m18 4 3 3-3 3", "m18 14 3 3-3 3"]),
+    icon("repeat", ["loop", "replay", "again"], [], repeat),
+    icon("repeat-one", ["loop one", "repeat track"], [], [...repeat, "M11.2 10.3 12.3 9.5v5"]),
+    icon("playlist", ["queue", "list", "songs"], [circle(16, 18, 2.5)], ["M3 6h12", "M3 11h12", "M3 16h7", "M18.5 18V8H21"]),
+    icon("playlist-add", ["add to queue", "add song"], [], ["M3 6h12", "M3 11h12", "M3 16h7", "M18 13v8", "M14 17h8"]),
+    icon("music-note", ["song", "track", "music"], [circle(8, 18, 3)], ["M11 18V4", "M11 4c0 3 6 3 6 7"]),
+    icon("music-notes", ["song", "melody", "music"], [circle(6, 18, 3), circle(18, 16, 3)], ["M9 18V6l12-3v13", "M9 10l12-3"]),
+    icon("album", ["cd", "disc", "record"], [circle(12, 12, 10)], [circle(12, 12, 2.5), "M6.5 12A5.5 5.5 0 0 1 12 6.5"]),
+    icon("vinyl", ["record", "lp", "turntable"], [circle(12, 12, 9.5)], [circle(12, 12, 6), circle(12, 12, 2)]),
+    icon("radio", ["fm", "station", "broadcast"], [rect(2, 8, 20, 13, 2)], ["M7 8l10-5", circle(8, 14.5, 3), "M15 12h3", "M15 15h3", "M15 18h3"]),
+    icon("cassette", ["tape", "mixtape", "retro"], [rect(2, 4, 20, 16, 2)], [circle(8, 10, 2), circle(16, 10, 2), "M10 10h4", "M6 20l2-4h8l2 4"]),
+    icon("guitar", ["instrument", "acoustic", "strings"], [circle(8.5, 15.5, 5), circle(12, 12, 3.5)], ["M12 12l7-7", "M18 3l3 3", circle(9.5, 14.5, 1.5)]),
+    icon("piano", ["keys", "keyboard", "instrument"], [rect(2, 4, 20, 16, 2)], ["M5.5 4v8h3V4", "M10.5 4v8h3V4", "M15.5 4v8h3V4", "M7 12v8", "M12 12v8", "M17 12v8"]),
+    icon("drum", ["percussion", "beat", "instrument"], [ellipse(12, 7, 9, 3)], ["M3 7v10c0 1.7 4 3 9 3s9-1.3 9-3V7", "M12 10v10"]),
+    icon("equalizer", ["eq", "bars", "spectrum"], [], ["M4 20v-5", "M8 20V6", "M12 20v-9", "M16 20V9", "M20 20V8"]),
+    icon("metronome", ["tempo", "bpm", "beat"], ["M8.5 3h7l4 18h-15z"], ["M12 16 17 6", "M5.5 16.5h13"]),
+    icon("speaker-box", ["loudspeaker", "monitor speaker", "sound"], [rect(5, 2, 14, 20, 2)], [circle(12, 15, 3.5), circle(12, 6.5, 1.5)]),
+    icon("podcast", ["show", "episode", "on air"], [circle(12, 10, 2)], ["M6.3 16.3a8.5 8.5 0 1 1 11.4 0", "M9 13.5a4.5 4.5 0 1 1 6 0", "M12 14v7"]),
+    icon("queue", ["up next", "list", "play next"], ["M15 13v8l6-4z"], ["M3 5h18", "M3 10h18", "M3 15h8"]),
+    icon("audio-file", ["mp3", "wav", "sound file"], ["M6 2h8l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"], ["M14 2v5h5", circle(10, 17, 2), "M12 17v-6l3 1"]),
+    icon("knob", ["dial", "volume", "gain"], [circle(12, 12, 6)], ["M12 12V8", "M2.5 12h1", "M20.5 12h1", "M5.3 5.3l.7.7", "M18.7 5.3l-.7.7", "M12 2.5v1"]),
+    icon("karaoke", ["handheld mic", "sing", "vocals"], [circle(15, 9, 6)], ["M10.8 13.2 4 20", "m11.5 7.5 5 5"]),
+    icon("crossfade", ["mix", "blend", "dj"], [], ["M3 6c6 0 12 12 18 12", "M3 18c6 0 12-12 18-12"]),
+    icon("turntable", ["dj", "deck", "record player"], [rect(2, 4, 20, 16, 2)], [circle(10, 12, 5), circle(10, 12, 1), "M18 7v8l-2 2"]),
+  ],
+};

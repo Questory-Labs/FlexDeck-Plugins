@@ -55,6 +55,7 @@ interface Member {
   name: string;
   volume: number;
   muted: boolean;
+  speaking: boolean;
 }
 
 interface Device {
@@ -280,6 +281,7 @@ function readMember(data: Record<string, unknown>): Member {
     name: memberName(data),
     volume: Math.round(Number(data.volume ?? 100)),
     muted: Boolean(data.mute),
+    speaking: state.members.get(String(user.id ?? ""))?.speaking ?? false,
   };
 }
 
@@ -296,7 +298,17 @@ function publishMembers(ctx: Context): void {
     values[userVariable(member.id, "muted")] = member.muted;
   }
   ctx.vars.declare(declared, { replace: true });
-  ctx.vars.set({ ...values, "discord.voice.users": state.members.size });
+  ctx.vars.set({ ...values, ...callSummary(), "discord.voice.users": state.members.size });
+}
+
+function callSummary(): Record<string, string | number> {
+  const members = [...state.members.values()];
+  const speakers = members.filter((member) => member.speaking);
+  return {
+    "discord.voice.members": members.map((member) => member.name).join(", "),
+    "discord.voice.speakers": speakers.map((member) => member.name).join(", "),
+    "discord.voice.speaking_count": speakers.length,
+  };
 }
 
 const CHANNEL_EVENTS = ["VOICE_STATE_CREATE", "VOICE_STATE_UPDATE", "VOICE_STATE_DELETE", "SPEAKING_START", "SPEAKING_STOP"];
@@ -403,8 +415,10 @@ function onEvent(ctx: Context, event: string, data: Record<string, unknown>): vo
     case "SPEAKING_STOP": {
       const id = String(data.user_id ?? "");
       const speaking = event === "SPEAKING_START";
-      if (id && id === state.ipc?.user?.id) ctx.vars.set({ "discord.speaking": speaking });
-      else if (state.members.has(id)) ctx.vars.set({ [userVariable(id, "speaking")]: speaking });
+      const member = state.members.get(id);
+      if (member) member.speaking = speaking;
+      if (id && id === state.ipc?.user?.id) ctx.vars.set({ "discord.speaking": speaking, ...callSummary() });
+      else if (member) ctx.vars.set({ [userVariable(id, "speaking")]: speaking, ...callSummary() });
       ctx.emit(speaking ? "speaking_started" : "speaking_stopped", { user_id: id });
       break;
     }
@@ -573,7 +587,7 @@ const MUTED = { kind: "choice" as const, description: "On or off", example: "tru
 const plugin = definePlugin({
   id: ID,
   name: "Discord",
-  version: "0.1.1",
+  version: "0.2.0",
   description:
     "Mute, deafen, push-to-talk, voice channels, volumes, the soundboard and more in the Discord app — and who is talking, on the deck.",
   author: "flexdeck",
@@ -634,6 +648,9 @@ const plugin = definePlugin({
     "discord.voice.channel_id": { kind: "text", description: "Its id" },
     "discord.voice.guild": { kind: "text", description: "The server it is on" },
     "discord.voice.users": { kind: "number", description: "How many are in the call" },
+    "discord.voice.members": { kind: "text", description: "Who is in the call, by name" },
+    "discord.voice.speakers": { kind: "text", description: "Who is speaking right now, by name" },
+    "discord.voice.speaking_count": { kind: "number", description: "How many are speaking right now" },
     "discord.voice.connection": { kind: "text", description: "The voice connection's state" },
     "discord.speaking": { kind: "bool", description: "Whether you are speaking" },
     "discord.voice.video": { kind: "bool", description: "Whether your camera is on in the call (when Discord says)" },

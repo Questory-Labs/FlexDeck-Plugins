@@ -20,8 +20,8 @@ async function connected(obs: FakeObs, settings: Record<string, string> = {}): P
   return host;
 }
 
-async function until(condition: () => boolean, what = "the condition"): Promise<void> {
-  const deadline = Date.now() + 3000;
+async function until(condition: () => boolean, what = "the condition", ms = 3000): Promise<void> {
+  const deadline = Date.now() + ms;
   while (!condition()) {
     if (Date.now() > deadline) throw new Error(`timed out waiting for ${what}`);
     await new Promise((resolve) => setTimeout(resolve, 5));
@@ -269,4 +269,110 @@ test("with OBS closed the editor is told why there is nothing to pick", async ()
   const answer = await host.choices("set_scene");
   assert.equal(answer.arguments.scene, undefined);
   assert.match(answer.error ?? "", /^OBS is not connected/, "the reason itself, no 'Error:' in front");
+});
+
+test("an input's level streams only while the deck shows it, and stops after", async () => {
+  const obs = new FakeObs({ inputs: { "Mic/Aux": false, "Desktop Audio": false } });
+  const host = await connected(obs);
+  await until(() => host.variable("obs.input.Mic/Aux.volume_db") === 0, "the inputs");
+  assert.equal(obs.sockets[0]?.subscriptions, 0x7ff, "no meters until someone looks");
+
+  await host.sample(["obs.input.Mic/Aux.level"]);
+  await until(() => obs.sockets[0]?.subscriptions === (0x7ff | (1 << 16)), "the meter subscription");
+  obs.meters({ "Mic/Aux": 0.5, "Desktop Audio": 0 });
+  await until(() => host.variable("obs.input.Mic/Aux.level_db") === -6, "the level");
+  assert.equal(host.variable("obs.input.Mic/Aux.level"), 90);
+  assert.equal(host.variable("obs.input.Desktop Audio.level_db"), -60);
+  assert.equal(host.variable("obs.input.Desktop Audio.level"), 0);
+
+  await until(() => obs.sockets[0]?.subscriptions === 0x7ff, "the meters stopping");
+  assert.equal(host.variable("obs.input.Mic/Aux.level"), 0, "a meter nobody reads rests at silence");
+});
+
+test("a renamed input's old level is no longer written", async () => {
+  const obs = new FakeObs({ inputs: { "Mic/Aux": false } });
+  const host = await connected(obs);
+  await until(() => host.variable("obs.input.Mic/Aux.volume_db") === 0, "the inputs");
+  await host.sample(["obs.input.Mic/Aux.level"]);
+  await until(() => obs.sockets[0]?.subscriptions === (0x7ff | (1 << 16)), "the meter subscription");
+  obs.meters({ "Mic/Aux": 0.5 });
+  await until(() => host.variable("obs.input.Mic/Aux.level_db") === -6, "the level");
+
+  const settings = obs.inputs.get("Mic/Aux")!;
+  obs.inputs.delete("Mic/Aux");
+  obs.inputs.set("Mic", settings);
+  obs.event("InputNameChanged", { oldInputName: "Mic/Aux", inputName: "Mic" });
+  await until(() => host.variable("obs.input.Mic.volume_db") === 0, "the new name");
+  await host.sample(["obs.input.Mic.level"]);
+  obs.meters({ Mic: 0.1 });
+  await until(() => host.variable("obs.input.Mic.level_db") === -20, "the new name's level");
+
+  await until(() => obs.sockets[0]?.subscriptions === 0x7ff, "the meters stopping", 5000);
+  assert.equal(host.variable("obs.input.Mic.level_db"), -60);
+  assert.deepEqual(
+    host.logs().filter((line) => line.message.includes("Mic/Aux") && line.message.includes("never declared")),
+    [],
+    "the old name is not written after the rename",
+  );
+});
+
+test("the volume is published in decibels as well as percent", async () => {
+  const obs = new FakeObs();
+  const host = await connected(obs);
+  await host.invoke("set_volume", { input: "Mic/Aux", percent: "50" });
+  await until(() => host.variable("obs.input.Mic/Aux.volume_db") === -6, "the volume in dB");
+  assert.equal(host.variable("obs.input.Mic/Aux.volume"), 50);
+});
+
+test("OBS's performance and the stream's health are read only when asked", async () => {
+  const obs = new FakeObs();
+  const host = await connected(obs);
+  const before = obs.requests.filter((type) => type === "GetStats").length;
+  assert.equal(before, 0);
+
+  const stats = await host.sample(["obs.stats.cpu", "obs.stats.memory", "obs.stats.disk_space", "obs.stats.fps", "obs.stream.congestion", "obs.stream.bitrate"]);
+  assert.equal(stats["obs.stats.cpu"], 4.3);
+  assert.equal(stats["obs.stats.memory"], 512);
+  assert.equal(stats["obs.stats.disk_space"], 10);
+  assert.equal(stats["obs.stats.fps"], 59.9);
+  assert.equal(stats["obs.stream.congestion"], 25);
+  assert.equal(stats["obs.stream.bitrate"], 0, "not streaming");
+
+  obs.streaming = true;
+  await host.sample(["obs.stream.bitrate"]);
+  obs.streamBytes = 1_000_000;
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  const live = await host.sample(["obs.stream.bitrate"]);
+  assert.ok(Number(live["obs.stream.bitrate"]) > 0, "bytes sent since the last look make a bitrate");
+});
+
+test("a text source's words are a variable, and a key can change them", async () => {
+  const obs = new FakeObs();
+  const host = await connected(obs);
+  await until(() => host.variable("obs.input.Title.text") === "Starting soon", "the text");
+  assert.ok(!plugin.variables().some((variable) => variable.name === "obs.input.Title.muted"), "text has no audio");
+
+  await host.invoke("set_text", { input: "Title", text: "Back in 5" });
+  assert.equal(obs.texts.get("Title")?.text, "Back in 5");
+  assert.equal(host.variable("obs.input.Title.text"), "Back in 5");
+
+  obs.handle("SetInputSettings", { inputName: "Title", inputSettings: { text: "Live" } });
+  await until(() => host.variable("obs.input.Title.text") === "Live", "a change made in OBS");
+});
+
+test("any source setting can be changed, keeping the type it already has", async () => {
+  const obs = new FakeObs();
+  const host = await connected(obs);
+
+  const offered = await host.choices("set_input_setting", { input: "Browser Source" });
+  assert.deepEqual(offered.arguments.setting?.map((choice) => choice.value), ["css", "fps", "reroute_audio", "url", "width"]);
+
+  await host.invoke("set_input_setting", { input: "Browser Source", setting: "width", value: "1280" });
+  assert.equal(obs.browser.width, 1280);
+  await host.invoke("set_input_setting", { input: "Browser Source", setting: "reroute_audio", value: "true" });
+  assert.equal(obs.browser.reroute_audio, true);
+  await host.invoke("set_input_setting", { input: "Browser Source", setting: "url", value: "https://flexdeck.app" });
+  assert.equal(obs.browser.url, "https://flexdeck.app");
+  await assert.rejects(host.invoke("set_input_setting", { input: "Browser Source", setting: "width", value: "wide" }), /'wide' is not a number/);
+  await assert.rejects(host.invoke("set_input_setting", { input: "Title", setting: "font", value: "big" }), /not a text, number or switch/);
 });

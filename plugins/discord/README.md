@@ -118,6 +118,7 @@ Channels, people, devices and sounds are offered as a list while you edit the ke
 
 - **Video, screen share and the soundboard** use commands Discord hasn't made public. The plugin tries them rather than assuming they work. If your Discord doesn't offer one, the key says so plainly. Video and screen share may also need extra permissions: put `rpc.video.write rpc.screenshare.write` in *extra scopes* if your application is allowed them.
 - **Server stats** are what local RPC can see: the server's name, its voice channels, and how many people are in them. RPC doesn't report member or online counts. To get the online count, turn on *use guild widget*, which reads it from the server's public widget. The server must have its widget switched on (**Server Settings → Widget**).
+- **Live audio levels** aren't reported. Discord tells apps who is speaking, and the volume settings, but not how loud anyone is.
 - **Notifications** counts what Discord shows on this computer, from when the plugin started or was last cleared.
 
 ## Reference
@@ -168,6 +169,8 @@ Channels, people, devices and sounds are offered as a list while you edit the ke
 | `discord.voice.channel`, `discord.voice.channel_id` | The voice channel you're in |
 | `discord.voice.guild` | The server it's on |
 | `discord.voice.users` | How many are in the call |
+| `discord.voice.members` | Who is in the call, by name |
+| `discord.voice.speakers`, `discord.voice.speaking_count` | Who is speaking right now, and how many |
 | `discord.voice.connection` | The voice connection's state |
 | `discord.speaking` | You are speaking |
 | `discord.user.<id>.volume` | That person's volume, % |

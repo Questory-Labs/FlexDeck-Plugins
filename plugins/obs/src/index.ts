@@ -17,7 +17,7 @@
 
 import { definePlugin, type Context, type VariableSpec } from "@flexdeck/plugin-sdk";
 
-import { type Connect, ObsClient } from "./obs-client.ts";
+import { type Connect, EVENT_SUBSCRIPTIONS, INPUT_VOLUME_METERS, ObsClient } from "./obs-client.ts";
 
 const ID = "obs";
 
@@ -32,11 +32,19 @@ interface State {
   reason: string;
   scenes: string[];
   inputs: Map<string, string>; // slug -> OBS name, audio inputs only
+  texts: Set<string>;
   /** Each scene's items, by id: what `SceneItemEnableStateChanged` names. */
   items: Map<string, Map<number, string>>;
   /** The variables declared at run time, kept so one refresh does not drop the other's. */
   inputVars: Record<string, VariableSpec>;
   sourceVars: Record<string, VariableSpec>;
+  meters: boolean;
+  meterUntil: number;
+  meterTimer: ReturnType<typeof setTimeout> | null;
+  levels: Record<string, number>;
+  levelsPushed: number;
+  levelsTimer: ReturnType<typeof setTimeout> | null;
+  streamBytes: { bytes: number; at: number } | null;
   retry: ReturnType<typeof setTimeout> | null;
   attempt: number;
   stopping: boolean;
@@ -47,9 +55,17 @@ const state: State = {
   reason: "not started",
   scenes: [],
   inputs: new Map(),
+  texts: new Set(),
   items: new Map(),
   inputVars: {},
   sourceVars: {},
+  meters: false,
+  meterUntil: 0,
+  meterTimer: null,
+  levels: {},
+  levelsPushed: 0,
+  levelsTimer: null,
+  streamBytes: null,
   retry: null,
   attempt: 0,
   stopping: false,
@@ -121,6 +137,24 @@ export const volumeVariable = (name: string) => `obs.input.${name}.volume`;
 /** Whether an input is muted, by OBS's own name, for the same reason as its volume. */
 export const mutedVariable = (name: string) => `obs.input.${name}.muted`;
 
+export const levelVariable = (name: string) => `obs.input.${name}.level`;
+
+export const levelDbVariable = (name: string) => `obs.input.${name}.level_db`;
+
+export const volumeDbVariable = (name: string) => `obs.input.${name}.volume_db`;
+
+export const textVariable = (name: string) => `obs.input.${name}.text`;
+
+const METER_LEASE_MS = 3000;
+const LEVEL_PUSH_MS = 100;
+const FLOOR_DB = -60;
+
+export const decibels = (multiplier: number) => (multiplier > 0 ? Math.max(FLOOR_DB, 20 * Math.log10(multiplier)) : FLOOR_DB);
+
+export const meterPercent = (db: number) => Math.round(((Math.max(FLOOR_DB, Math.min(0, db)) - FLOOR_DB) / -FLOOR_DB) * 100);
+
+const dbOf = (multiplier: unknown) => Math.round(decibels(Number(multiplier) || 0) * 10) / 10;
+
 /** Whether a source shows in a scene, by OBS's names: what a `toggle_source` key fills in. */
 export const visibleVariable = (scene: string, source: string) => `obs.source.${scene}.${source}.visible`;
 
@@ -136,10 +170,20 @@ const percentOf = (multiplier: unknown) => Math.round(Math.max(0, Math.min(1, Nu
  * `obs.input.<name>.volume` per audio input, declared as OBS has them.
  */
 async function refreshInputs(ctx: Context): Promise<void> {
-  const { inputs } = await request<{ inputs: { inputName: string }[] }>("GetInputList");
+  const { inputs } = await request<{ inputs: { inputName: string; inputKind?: string }[] }>("GetInputList");
   const audio = new Map<string, string>();
-  const values: Record<string, boolean | number> = {};
+  const texts = new Set<string>();
+  const values: Record<string, boolean | number | string> = {};
   for (const input of inputs) {
+    if (input.inputKind?.startsWith("text_")) {
+      try {
+        const { inputSettings } = await request<{ inputSettings: Record<string, unknown> }>("GetInputSettings", { inputName: input.inputName });
+        texts.add(input.inputName);
+        values[textVariable(input.inputName)] = String(inputSettings.text ?? "");
+      } catch {
+        continue;
+      }
+    }
     try {
       const answer = await request<{ inputMuted: boolean }>("GetInputMute", { inputName: input.inputName });
       audio.set(slug(input.inputName), input.inputName);
@@ -152,16 +196,26 @@ async function refreshInputs(ctx: Context): Promise<void> {
     try {
       const volume = await request<{ inputVolumeMul: number }>("GetInputVolume", { inputName: input.inputName });
       values[volumeVariable(input.inputName)] = percentOf(volume.inputVolumeMul);
+      values[volumeDbVariable(input.inputName)] = dbOf(volume.inputVolumeMul);
     } catch {
       // An older OBS: the slider still works, it just will not follow.
     }
   }
   state.inputs = audio;
+  const names = new Set(audio.values());
+  state.levels = Object.fromEntries(Object.entries(state.levels).filter(([name]) => names.has(name)));
+  state.texts = texts;
   const declared: Record<string, VariableSpec> = {};
   for (const [key, name] of audio) {
     declared[`obs.input.${key}.muted`] = { kind: "bool", description: `Whether "${name}" is muted` };
     declared[mutedVariable(name)] = { kind: "bool", description: `Whether "${name}" is muted` };
     declared[volumeVariable(name)] = { kind: "number", unit: "%", description: `The volume of "${name}"` };
+    declared[volumeDbVariable(name)] = { kind: "number", unit: "dB", description: `The volume of "${name}" in decibels` };
+    declared[levelVariable(name)] = { kind: "number", unit: "%", description: `How loud "${name}" is right now, as its meter shows it` };
+    declared[levelDbVariable(name)] = { kind: "number", unit: "dB", description: `How loud "${name}" is right now, in decibels (${FLOOR_DB} is silence)` };
+  }
+  for (const name of texts) {
+    declared[textVariable(name)] = { kind: "text", description: `What the text source "${name}" says` };
   }
   state.inputVars = declared;
   redeclare(ctx);
@@ -261,8 +315,17 @@ function onEvent(ctx: Context, type: string, data: Record<string, unknown>): voi
     case "InputVolumeChanged": {
       const name = String(data.inputName);
       if ([...state.inputs.values()].includes(name)) {
-        ctx.vars.set({ [volumeVariable(name)]: percentOf(data.inputVolumeMul) });
+        ctx.vars.set({ [volumeVariable(name)]: percentOf(data.inputVolumeMul), [volumeDbVariable(name)]: dbOf(data.inputVolumeMul) });
       }
+      break;
+    }
+    case "InputVolumeMeters":
+      if (state.meters) onMeters(ctx, (data.inputs as { inputName?: string; inputLevelsMul?: number[][] }[]) ?? []);
+      break;
+    case "InputSettingsChanged": {
+      const name = String(data.inputName);
+      const settings = (data.inputSettings as Record<string, unknown>) ?? {};
+      if (state.texts.has(name) && "text" in settings) ctx.vars.set({ [textVariable(name)]: String(settings.text ?? "") });
       break;
     }
     case "InputCreated":
@@ -275,6 +338,102 @@ function onEvent(ctx: Context, type: string, data: Record<string, unknown>): voi
       disconnected(ctx, "OBS closed the connection");
       break;
   }
+}
+
+function onMeters(ctx: Context, inputs: { inputName?: string; inputLevelsMul?: number[][] }[]): void {
+  const audio = new Set(state.inputs.values());
+  for (const input of inputs) {
+    const name = String(input.inputName ?? "");
+    if (!audio.has(name)) continue;
+    const peak = Math.max(0, ...(input.inputLevelsMul ?? []).map((channel) => Number(channel[1]) || 0));
+    state.levels[name] = Math.round(decibels(peak));
+  }
+  if (state.levelsTimer) return;
+  const wait = Math.max(0, state.levelsPushed + LEVEL_PUSH_MS - Date.now());
+  state.levelsTimer = setTimeout(() => {
+    state.levelsTimer = null;
+    state.levelsPushed = Date.now();
+    pushLevels(ctx);
+  }, wait);
+}
+
+function pushLevels(ctx: Context): void {
+  const values: Record<string, number> = {};
+  for (const [name, db] of Object.entries(state.levels)) {
+    values[levelDbVariable(name)] = db;
+    values[levelVariable(name)] = meterPercent(db);
+  }
+  ctx.vars.set(values);
+}
+
+function setMeters(ctx: Context, on: boolean): void {
+  if (state.meters === on) return;
+  state.meters = on;
+  state.client?.subscribe(on ? EVENT_SUBSCRIPTIONS | INPUT_VOLUME_METERS : EVENT_SUBSCRIPTIONS);
+  if (!on) {
+    if (state.levelsTimer) clearTimeout(state.levelsTimer);
+    state.levelsTimer = null;
+    for (const name of Object.keys(state.levels)) state.levels[name] = FLOOR_DB;
+    pushLevels(ctx);
+  }
+}
+
+function watchMeters(ctx: Context): void {
+  state.meterUntil = Date.now() + METER_LEASE_MS;
+  setMeters(ctx, true);
+  if (state.meterTimer) return;
+  const check = () => {
+    const left = state.meterUntil - Date.now();
+    if (left > 0) {
+      state.meterTimer = setTimeout(check, left);
+      return;
+    }
+    state.meterTimer = null;
+    setMeters(ctx, false);
+  };
+  state.meterTimer = setTimeout(check, METER_LEASE_MS);
+}
+
+function stopMeters(): void {
+  if (state.meterTimer) clearTimeout(state.meterTimer);
+  if (state.levelsTimer) clearTimeout(state.levelsTimer);
+  state.meterTimer = null;
+  state.levelsTimer = null;
+  state.meters = false;
+  state.meterUntil = 0;
+}
+
+const isLevel = (name: string) => name.startsWith("obs.input.") && (name.endsWith(".level") || name.endsWith(".level_db"));
+
+async function sampleStats(wanted: string[]): Promise<Record<string, number>> {
+  const values: Record<string, number> = {};
+  if (wanted.some((name) => name.startsWith("obs.stats."))) {
+    const stats = await request<{
+      cpuUsage: number;
+      memoryUsage: number;
+      availableDiskSpace: number;
+      activeFps: number;
+      renderSkippedFrames: number;
+      outputSkippedFrames: number;
+    }>("GetStats");
+    values["obs.stats.cpu"] = Math.round(stats.cpuUsage * 10) / 10;
+    values["obs.stats.memory"] = Math.round(stats.memoryUsage);
+    values["obs.stats.disk_space"] = Math.round(stats.availableDiskSpace / 102.4) / 10;
+    values["obs.stats.fps"] = Math.round(stats.activeFps * 10) / 10;
+    values["obs.stats.render_skipped"] = stats.renderSkippedFrames;
+    values["obs.stats.output_skipped"] = stats.outputSkippedFrames;
+  }
+  if (wanted.some((name) => name.startsWith("obs.stream."))) {
+    const stream = await request<{ outputActive: boolean; outputCongestion: number; outputBytes: number; outputSkippedFrames: number }>("GetStreamStatus");
+    const now = Date.now();
+    const last = state.streamBytes;
+    const bitrate = stream.outputActive && last && now > last.at && stream.outputBytes >= last.bytes ? ((stream.outputBytes - last.bytes) * 8) / (now - last.at) : 0;
+    state.streamBytes = stream.outputActive ? { bytes: stream.outputBytes, at: now } : null;
+    values["obs.stream.bitrate"] = Math.round(bitrate);
+    values["obs.stream.congestion"] = Math.round((stream.outputCongestion || 0) * 100);
+    values["obs.stream.skipped"] = stream.outputSkippedFrames || 0;
+  }
+  return values;
 }
 
 /** Only the settled states: OBS also reports "starting" and "stopping". */
@@ -297,6 +456,7 @@ function disconnected(ctx: Context, reason: string): void {
   // `state.client` is set only once a connection succeeded, so its presence
   // — not `connected`, which the socket has already cleared — says "we were".
   const was = state.client !== null;
+  stopMeters();
   state.client?.close();
   state.client = null;
   state.reason = reason;
@@ -347,6 +507,7 @@ export function disconnect(): void {
   state.stopping = true;
   if (state.retry) clearTimeout(state.retry);
   state.retry = null;
+  stopMeters();
   state.client?.close();
   state.client = null;
 }
@@ -359,9 +520,13 @@ export function reset(): void {
   state.reason = "not started";
   state.scenes = [];
   state.inputs = new Map();
+  state.texts = new Set();
   state.items = new Map();
   state.inputVars = {};
   state.sourceVars = {};
+  state.levels = {};
+  state.levelsPushed = 0;
+  state.streamBytes = null;
 }
 
 function input(name: string): string {
@@ -386,6 +551,43 @@ async function sceneChoices(): Promise<string[]> {
   const { scenes } = await request<{ scenes: { sceneName: string }[] }>("GetSceneList");
   // OBS lists them bottom-up; its panel shows them the other way round.
   return scenes.map((scene) => scene.sceneName).reverse();
+}
+
+async function textChoices(): Promise<string[]> {
+  client();
+  return [...state.texts].sort((a, b) => a.localeCompare(b));
+}
+
+async function allInputChoices(): Promise<string[]> {
+  const { inputs } = await request<{ inputs: { inputName: string }[] }>("GetInputList");
+  return inputs.map((input) => input.inputName).sort((a, b) => a.localeCompare(b));
+}
+
+async function settingChoices(name: string | undefined): Promise<string[] | null> {
+  if (!name?.trim()) return null;
+  return Object.keys(await currentSettings(name)).sort((a, b) => a.localeCompare(b));
+}
+
+async function currentSettings(name: string): Promise<Record<string, unknown>> {
+  const { inputSettings, inputKind } = await request<{ inputSettings: Record<string, unknown>; inputKind: string }>("GetInputSettings", { inputName: name });
+  const { defaultInputSettings } = await request<{ defaultInputSettings: Record<string, unknown> }>("GetInputDefaultSettings", { inputKind }).catch(() => ({
+    defaultInputSettings: {},
+  }));
+  return { ...defaultInputSettings, ...inputSettings };
+}
+
+export function settingValue(current: unknown, typed: string): unknown {
+  if (typeof current === "number") {
+    const number = Number(typed);
+    if (typed.trim() === "" || !Number.isFinite(number)) throw new Error(`'${typed}' is not a number`);
+    return number;
+  }
+  if (typeof current === "boolean") {
+    if (typed !== "true" && typed !== "false") throw new Error(`'${typed}' is not true or false`);
+    return typed === "true";
+  }
+  if (current !== undefined && typeof current !== "string") throw new Error("that setting is not a text, number or switch");
+  return typed;
 }
 
 /** The inputs that have audio — the only ones that can be muted. */
@@ -415,7 +617,7 @@ const unknownScene = (scene: string): string | undefined =>
 export default definePlugin({
   id: ID,
   name: "OBS Studio",
-  version: "0.4.2",
+  version: "0.5.0",
   description: "Switch scenes, record, stream, and mute inputs in OBS Studio — and show its state on the deck.",
   author: "flexdeck",
   permissions: ["network"],
@@ -437,6 +639,15 @@ export default definePlugin({
     "obs.studio_mode": { kind: "bool", description: "Whether studio mode is on" },
     "obs.preview_scene": { kind: "text", description: "The scene in preview (studio mode); blank outside it" },
     "obs.virtualcam": { kind: "bool", description: "Whether the virtual camera is on" },
+    "obs.stats.cpu": { kind: "number", unit: "%", description: "How much CPU OBS uses" },
+    "obs.stats.memory": { kind: "number", unit: "MB", description: "How much memory OBS uses" },
+    "obs.stats.disk_space": { kind: "number", unit: "GB", description: "Free space where OBS records" },
+    "obs.stats.fps": { kind: "number", unit: "fps", description: "The frames per second OBS is rendering" },
+    "obs.stats.render_skipped": { kind: "number", description: "Frames OBS skipped rendering (the computer is too busy)" },
+    "obs.stats.output_skipped": { kind: "number", description: "Frames OBS skipped encoding (the encoder is too slow)" },
+    "obs.stream.bitrate": { kind: "number", unit: "kb/s", description: "How fast the stream is sending" },
+    "obs.stream.congestion": { kind: "number", unit: "%", description: "How congested the stream's connection is" },
+    "obs.stream.skipped": { kind: "number", description: "Frames the stream dropped" },
   },
 
   events: {
@@ -598,6 +809,29 @@ export default definePlugin({
       run: async ({ input: name, percent }) =>
         void (await request("SetInputVolume", { inputName: input(name), inputVolumeMul: Number(percent) / 100 })),
     },
+    set_text: {
+      description: "Change what a text source says",
+      arguments: {
+        input: { kind: "text", description: "The text source's name in OBS", example: "Title", suggest: () => textChoices() },
+        text: { kind: "text", description: "The new text; a live value in double braces works too", example: "Back in 5" },
+      },
+      run: async ({ input: name, text }, ctx) => {
+        await request("SetInputSettings", { inputName: name, inputSettings: { text }, overlay: true });
+        if (state.texts.has(name)) ctx.vars.set({ [textVariable(name)]: text });
+      },
+    },
+    set_input_setting: {
+      description: "Change one setting of a source",
+      arguments: {
+        input: { kind: "text", description: "The source's name in OBS", example: "Webcam", suggest: () => allInputChoices() },
+        setting: { kind: "text", description: "The setting, as OBS names it", example: "url", suggest: ({ input: name }) => settingChoices(name) },
+        value: { kind: "text", description: "Its new value: text, a number, or true/false", example: "https://example.com" },
+      },
+      run: async ({ input: name, setting, value }) => {
+        const current = (await currentSettings(name))[setting];
+        await request("SetInputSettings", { inputName: name, inputSettings: { [setting]: settingValue(current, value) }, overlay: true });
+      },
+    },
     toggle_source: {
       description: "Show or hide a source in a scene",
       arguments: {
@@ -623,10 +857,11 @@ export default definePlugin({
     },
   },
 
-  // Only the timecodes are polled, and only while the deck shows them.
-  sample: async (wanted) => {
+  // Timecodes, stats and stream health are polled only while the deck shows them; a shown level keeps the meters on.
+  sample: async (wanted, ctx) => {
     if (!state.client?.connected) return { "obs.connected": false };
-    const values: Record<string, string | boolean> = {};
+    if (wanted.some(isLevel)) watchMeters(ctx);
+    const values: Record<string, string | boolean | number> = await sampleStats(wanted);
     if (wanted.includes("obs.record_time")) {
       const record = await request<{ outputTimecode: string }>("GetRecordStatus");
       values["obs.record_time"] = timecode(record.outputTimecode);

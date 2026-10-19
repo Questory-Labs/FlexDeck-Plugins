@@ -29,6 +29,9 @@ export class FakeObs {
   sources = new Map<string, boolean>([["Scene/Webcam", true]]);
   virtualcam = false;
   preview = "";
+  texts = new Map<string, Record<string, unknown>>([["Title", { text: "Starting soon", font: { size: 64 } }]]);
+  browser: Record<string, unknown> = { url: "https://example.com", width: 800, reroute_audio: false };
+  streamBytes = 0;
   requests: string[] = [];
   sockets: FakeSocket[] = [];
   offline: boolean;
@@ -52,6 +55,11 @@ export class FakeObs {
   /** Push an event to every identified client, as OBS would. */
   event(eventType: string, eventData: Record<string, unknown>): void {
     for (const socket of this.sockets) socket.deliver({ op: 5, d: { eventType, eventIntent: 0, eventData } });
+  }
+
+  meters(levels: Record<string, number>): void {
+    const inputs = Object.entries(levels).map(([inputName, peak]) => ({ inputName, inputLevelsMul: [[peak / 2, peak, peak], [0, peak / 4, peak / 4]] }));
+    for (const socket of this.sockets) if (socket.subscriptions & (1 << 16)) socket.deliver({ op: 5, d: { eventType: "InputVolumeMeters", eventIntent: 1 << 16, eventData: { inputs } } });
   }
 
   /** Drop every connection, as if OBS quit. */
@@ -89,7 +97,15 @@ export class FakeObs {
       case "GetRecordStatus":
         return { outputActive: this.recording, outputPaused: this.paused, outputTimecode: this.recording ? "00:01:05.250" : "00:00:00.000" };
       case "GetStreamStatus":
-        return { outputActive: this.streaming, outputTimecode: this.streaming ? "01:00:00.000" : "00:00:00.000" };
+        return {
+          outputActive: this.streaming,
+          outputTimecode: this.streaming ? "01:00:00.000" : "00:00:00.000",
+          outputBytes: this.streamBytes,
+          outputCongestion: 0.25,
+          outputSkippedFrames: 3,
+        };
+      case "GetStats":
+        return { cpuUsage: 4.26, memoryUsage: 512.4, availableDiskSpace: 10240, activeFps: 59.94, renderSkippedFrames: 1, outputSkippedFrames: 2 };
       case "GetStudioModeEnabled":
         return { studioModeEnabled: this.studioMode };
       case "SetStudioModeEnabled":
@@ -111,7 +127,30 @@ export class FakeObs {
         return {};
       }
       case "GetInputList":
-        return { inputs: [...this.inputs.keys(), "Browser Source"].map((inputName) => ({ inputName })) };
+        return {
+          inputs: [
+            ...[...this.inputs.keys()].map((inputName) => ({ inputName, inputKind: "wasapi_input_capture" })),
+            { inputName: "Browser Source", inputKind: "browser_source" },
+            ...[...this.texts.keys()].map((inputName) => ({ inputName, inputKind: "text_gdiplus_v3" })),
+          ],
+        };
+      case "GetInputSettings": {
+        const name = String(data.inputName);
+        if (name === "Browser Source") return { inputSettings: this.browser, inputKind: "browser_source" };
+        const text = this.texts.get(name);
+        if (!text) throw new Error(`No source was found by the name of \`${name}\`.`);
+        return { inputSettings: text, inputKind: "text_gdiplus_v3" };
+      }
+      case "GetInputDefaultSettings":
+        return { defaultInputSettings: data.inputKind === "browser_source" ? { fps: 30, css: "" } : { text: "" } };
+      case "SetInputSettings": {
+        const name = String(data.inputName);
+        const settings = name === "Browser Source" ? this.browser : this.texts.get(name);
+        if (!settings) throw new Error(`No source was found by the name of \`${name}\`.`);
+        Object.assign(settings, data.inputSettings as Record<string, unknown>);
+        this.event("InputSettingsChanged", { inputName: name, inputSettings: settings });
+        return {};
+      }
       case "GetInputMute": {
         const input = this.inputs.get(String(data.inputName));
         if (!input) throw new Error("The specified input does not support audio.");
@@ -190,6 +229,7 @@ class FakeSocket implements SocketLike {
   onerror: SocketLike["onerror"] = null;
   private identified = false;
   private closed = false;
+  subscriptions = 0;
   private readonly salt = randomBytes(8).toString("base64");
   private readonly challenge = randomBytes(8).toString("base64");
 
@@ -217,6 +257,12 @@ class FakeSocket implements SocketLike {
         return;
       }
       this.identified = true;
+      this.subscriptions = Number(message.d.eventSubscriptions ?? 0x7ff);
+      this.reply({ op: 2, d: { negotiatedRpcVersion: 1 } });
+      return;
+    }
+    if (message.op === 3) {
+      this.subscriptions = Number(message.d.eventSubscriptions ?? this.subscriptions);
       this.reply({ op: 2, d: { negotiatedRpcVersion: 1 } });
       return;
     }

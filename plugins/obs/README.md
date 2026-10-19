@@ -98,6 +98,8 @@ Scene, input and source names are offered from OBS as you pick them, so they're 
 | Set an input to muted or unmuted | `set_mute` | `input`, `muted` |
 | Set an input's volume | `set_volume` | `input`, `percent` 0–100, slider |
 | Show or hide a source in a scene | `toggle_source` | `scene`, `source` |
+| Change what a text source says | `set_text` | `input`, `text`; a live value in `{{ }}` works |
+| Change one setting of a source | `set_input_setting` | `input`, `setting`, `value`. A number or true/false setting stays one |
 
 </details>
 
@@ -118,8 +120,16 @@ Scene, input and source names are offered from OBS as you pick them, so they're 
 | `obs.input.<slug>.muted` | An audio input is muted. `<slug>` is its name in lower case, with anything but letters and digits turned into `_`: `Mic/Aux` → `mic_aux` |
 | `obs.input.<name>.muted` | The same, by its exact name: what a mute key lights by |
 | `obs.input.<name>.volume` | An audio input's volume, 0–100, by its exact name |
+| `obs.input.<name>.volume_db` | The same volume in dB |
+| `obs.input.<name>.level` | How loud the input is right now, 0–100, as OBS's mixer meter shows it |
+| `obs.input.<name>.level_db` | The same in dB, from −60 (silence) to 0 |
+| `obs.input.<name>.text` | What a text source says |
+| `obs.stats.cpu`, `obs.stats.memory`, `obs.stats.fps` | OBS's CPU %, memory in MB, and frame rate |
+| `obs.stats.disk_space` | Free space where OBS records, in GB |
+| `obs.stats.render_skipped`, `obs.stats.output_skipped` | Frames skipped because the computer or the encoder can't keep up |
+| `obs.stream.bitrate`, `obs.stream.congestion`, `obs.stream.skipped` | The stream's kb/s, how congested its connection is (%), and frames it dropped |
 
-The timecodes are read only while something on the deck shows them.
+The timecodes, stats and stream health are read only while something on the deck shows them. Levels stream from OBS only while a key shows one, up to ten times a second, and stop a few seconds after it goes away.
 
 </details>
 

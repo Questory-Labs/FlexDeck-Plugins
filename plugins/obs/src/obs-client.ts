@@ -28,10 +28,12 @@ export type Connect = (url: string) => SocketLike;
 export const defaultConnect: Connect = (url) =>
   new WebSocket(url, "obswebsocket.json") as unknown as SocketLike;
 
-const Op = { Hello: 0, Identify: 1, Identified: 2, Event: 5, Request: 6, RequestResponse: 7 } as const;
+const Op = { Hello: 0, Identify: 1, Identified: 2, Reidentify: 3, Event: 5, Request: 6, RequestResponse: 7 } as const;
 
 /** Every event category except the high-volume ones (meters, active state). */
-const EVENT_SUBSCRIPTIONS = 0x7ff;
+export const EVENT_SUBSCRIPTIONS = 0x7ff;
+
+export const INPUT_VOLUME_METERS = 1 << 16;
 
 export interface ObsOptions {
   url: string;
@@ -169,6 +171,11 @@ export class ObsClient {
   on(listener: (type: string, data: Record<string, unknown>) => void): () => void {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
+  }
+
+  subscribe(events: number): void {
+    if (!this.socket || !this.identified) return;
+    this.socket.send(JSON.stringify({ op: Op.Reidentify, d: { eventSubscriptions: events } }));
   }
 
   close(): void {
