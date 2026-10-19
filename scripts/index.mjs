@@ -5,7 +5,7 @@
 // Each plugin's highest released version is listed, pre-releases left out, with
 // its package's address on the release. The packages are downloaded from those
 // same addresses to read and checksum them, so a listed address is known to work.
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -24,6 +24,7 @@ const iconPacksVersion = iconPackVersions(versionOrder)
   .filter((version) => !isPrerelease(version))
   .at(-1);
 const iconPacksTag = iconPacksVersion && `${ICON_PACKS_TAG}${iconPacksVersion}`;
+const packIds = iconPacksTag ? iconPacksAt(iconPacksTag) : [];
 const iconPackUrl = (id) => `${REPO.website}/releases/download/${iconPacksTag}/${id}.zip`;
 
 async function download(url, file) {
@@ -37,10 +38,16 @@ try {
   for (const release of newest.values()) await download(releaseUrl(release), join(work, packageName(release)));
   const packs = join(work, "icon-packs");
   mkdirSync(packs);
-  for (const id of iconPacksTag ? iconPacksAt(iconPacksTag) : []) await download(iconPackUrl(id), join(packs, `${id}.zip`));
+  for (const id of packIds) await download(iconPackUrl(id), join(packs, `${id}.zip`));
 
   const icons = join(ROOT, "icons");
+  const outputs = ["repository.json", "repository.min.json"].map((name) => join(ROOT, name));
+  const previous = outputs.map((file) => (existsSync(file) ? readFileSync(file) : null));
   const index = buildRepository(work, { out: ROOT, ...REPO, icons: existsSync(icons) ? icons : undefined, iconPacks: packs });
+  if ((index.iconPacks ?? []).length !== packIds.length) {
+    outputs.forEach((file, at) => (previous[at] ? writeFileSync(file, previous[at]) : rmSync(file, { force: true })));
+    throw new Error(`${iconPacksTag} has ${packIds.length} icon packs but the index lists ${(index.iconPacks ?? []).length}; is @flexdeck/plugin-sdk 0.3.0 or later installed?`);
+  }
   for (const plugin of index.plugins) plugin.package.url = releaseUrl(plugin);
   for (const pack of index.iconPacks ?? []) pack.package.url = iconPackUrl(pack.id);
   writeFileSync(join(ROOT, "repository.min.json"), JSON.stringify(index));

@@ -4,7 +4,7 @@ import { afterEach, test } from "node:test";
 import { checkDefinition, harness, type Host } from "@flexdeck/plugin-sdk/testing";
 
 import plugin, { reset, slug, useConnection } from "../src/index.ts";
-import { authResponse } from "../src/obs-client.ts";
+import { authResponse, ObsClient } from "../src/obs-client.ts";
 import { FakeObs } from "./fake-obs.ts";
 
 afterEach(() => {
@@ -209,6 +209,40 @@ test("with OBS closed, actions say why instead of doing nothing", async () => {
   await until(() => host.logs().some((line) => /is OBS running/.test(line.message)), "the failed connect");
 
   await assert.rejects(host.invoke("toggle_recording"), /OBS is not connected \(could not reach OBS/);
+});
+
+test("a connection closed mid-reidentify stays closed and reports nothing", async () => {
+  const obs = new FakeObs();
+  const client = new ObsClient({ url: "ws://fake", connect: obs.connect });
+  await client.open();
+  const events: string[] = [];
+  client.on((type) => events.push(type));
+  client.subscribe(0x7ff | (1 << 16));
+  client.close();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  assert.equal(client.connected, false);
+  assert.deepEqual(events, []);
+});
+
+test("settings changed while connecting leave one connection open", async () => {
+  const obs = new FakeObs();
+  let open = 0;
+  useConnection((url) => {
+    const socket = obs.connect(url);
+    const close = socket.close.bind(socket);
+    open += 1;
+    socket.close = (code, reason) => {
+      open -= 1;
+      close(code, reason);
+    };
+    return socket;
+  });
+  const host = await harness(plugin, { start: true });
+  await host.changeSettings({});
+  await until(() => host.variable("obs.connected") === true && host.variable("obs.scene") !== undefined);
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  assert.equal(obs.sockets.length, 2);
+  assert.equal(open, 1);
 });
 
 test("when OBS quits, the deck is told, and it reconnects when OBS is back", async () => {

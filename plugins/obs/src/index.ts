@@ -48,6 +48,7 @@ interface State {
   retry: ReturnType<typeof setTimeout> | null;
   attempt: number;
   stopping: boolean;
+  connection: number;
 }
 
 const state: State = {
@@ -69,6 +70,7 @@ const state: State = {
   retry: null,
   attempt: 0,
   stopping: false,
+  connection: 0,
 };
 
 /** Injected by the tests; the real WebSocket otherwise. */
@@ -478,16 +480,22 @@ function schedule(ctx: Context): void {
 
 export async function connect(ctx: Context): Promise<void> {
   if (state.stopping) return;
+  const connection = ++state.connection;
   const host = ctx.settings.host || "127.0.0.1";
   const port = ctx.settings.port || "4455";
   const obs = new ObsClient({ url: `ws://${host}:${port}`, password: ctx.settings.password, connect: connectOverride });
   try {
     await obs.open();
   } catch (error) {
+    if (connection !== state.connection) return;
     state.reason = error instanceof Error ? error.message : String(error);
     ctx.vars.set({ "obs.connected": false });
     ctx.log.warn(state.reason);
     schedule(ctx);
+    return;
+  }
+  if (connection !== state.connection) {
+    obs.close();
     return;
   }
   state.client = obs;
@@ -505,6 +513,7 @@ export async function connect(ctx: Context): Promise<void> {
 
 export function disconnect(): void {
   state.stopping = true;
+  state.connection += 1;
   if (state.retry) clearTimeout(state.retry);
   state.retry = null;
   stopMeters();

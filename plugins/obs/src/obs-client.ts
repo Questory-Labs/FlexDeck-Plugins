@@ -106,6 +106,7 @@ export class ObsClient {
         if (wasIdentified) this.emit("ConnectionClosed", { code: event.code ?? 0, reason: event.reason ?? "" });
       };
       socket.onmessage = (event) => {
+        if (this.socket !== socket) return;
         let message: { op: number; d: Record<string, unknown> };
         try {
           message = JSON.parse(String(event.data));
