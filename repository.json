@@ -82,7 +82,7 @@
     {
       "id": "obs",
       "name": "OBS Studio",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "description": "Switch scenes, record, stream, and mute inputs in OBS Studio — and show its state on the deck.",
       "author": "flexdeck",
       "homepage": "https://obsproject.com",
@@ -91,11 +91,11 @@
         "network"
       ],
       "releaseDate": "2026-10-12T17:53:03Z",
-      "latestUpdateDate": "2026-10-19T13:45:28Z",
+      "latestUpdateDate": "2026-10-19T14:51:48Z",
       "package": {
-        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/obs-v0.5.0/obs-0.5.0.fdpkg",
-        "sha256": "e6ddcceb69a94a8658d51ccce902ce9ba527f3c8b5965cc24e9cb897776e86ef",
-        "size": 17748
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/obs-v0.5.1/obs-0.5.1.fdpkg",
+        "sha256": "0aed88e2a652fab15359cd03d3b2ba80e145570645f8d8b88e6fb853330a8256",
+        "size": 17803
       }
     },
     {
@@ -171,6 +171,34 @@
         "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/weather-v1.0.0/weather-1.0.0.fdpkg",
         "sha256": "f6e25cdd5073ae0f4d0345c330d7f0c69fd93b3ae41a9f4f5da4568bc4d22d61",
         "size": 1232
+      }
+    }
+  ],
+  "iconPacks": [
+    {
+      "id": "flexdeck-essentials-filled",
+      "name": "FlexDeck Essentials Filled",
+      "version": "2.0.1",
+      "description": "",
+      "author": "FlexDeck",
+      "count": 558,
+      "package": {
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/icon-packs/v2.0.1/flexdeck-essentials-filled.zip",
+        "sha256": "629c4574235cc6b93622ec1d42f5cbf37d37f87db5eafb523a044ccfc0c4ace3",
+        "size": 781796
+      }
+    },
+    {
+      "id": "flexdeck-essentials",
+      "name": "FlexDeck Essentials",
+      "version": "2.0.1",
+      "description": "",
+      "author": "FlexDeck",
+      "count": 558,
+      "package": {
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/icon-packs/v2.0.1/flexdeck-essentials.zip",
+        "sha256": "138f968e36aa67654e7f5209dc90ea43c25231a59ae09e7c82f6d0f695fd77a2",
+        "size": 210896
       }
     }
   ]
