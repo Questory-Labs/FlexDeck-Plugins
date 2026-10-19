@@ -124,7 +124,7 @@ If a run fails after step 1, run it again with the version blank. If only step 4
 
 ### Releasing the icon packs
 
-**Actions → Release icon packs → Run workflow**, with the version as for a plugin, or push to `main` with a `release(icon-packs): v<version>` line in a commit message. It redraws both packs at that version, commits `release(icon-packs): v<version>` to `main` if they changed, and cuts the GitHub release `icon-packs/v<version>` with `flexdeck-essentials.zip` and `flexdeck-essentials-filled.zip` attached. The packs are not in the index: people download a zip and add it in the icon picker. Their tags are `icon-packs/v<version>`, never `<id>-v<version>`, so the index never takes them for a plugin. If a run fails after committing the version, run it again with the version blank.
+**Actions → Release icon packs → Run workflow**, with the version as for a plugin, or push to `main` with a `release(icon-packs): v<version>` line in a commit message. It redraws both packs at that version, commits `release(icon-packs): v<version>` to `main` if they changed, and cuts the GitHub release `icon-packs/v<version>` with `flexdeck-essentials.zip` and `flexdeck-essentials-filled.zip` attached. It then rewrites `repository.min.json` so its `iconPacks` list points at those zips, and FlexDeck's icon picker offers them within six hours. A pre-release stays out of the index. Their tags are `icon-packs/v<version>`, never `<id>-v<version>`, so the index never takes them for a plugin. If a run fails after committing the version, run it again with the version blank.
 
 ### Working locally
 

@@ -8,9 +8,10 @@ name: Release icon packs
 #      one already in icon-packs/), redraw the packs with it, and commit
 #      `release(icon-packs): v<version>` to main if anything changed.
 #   2. Cut the GitHub release `icon-packs/v<version>` with both zips attached.
+#   3. Rebuild repository.min.json so it lists these packs, pointing at those
+#      zips, and commit it to main. A pre-release stays out of the index.
 #
-# The packs are added in FlexDeck's icon picker from the zip; they are not in
-# repository.min.json, and their tags never look like a plugin's.
+# Their tags never look like a plugin's.
 on:
   workflow_dispatch:
     inputs:
@@ -87,12 +88,42 @@ jobs:
           flags=(--latest=false)
           if [ "$PRERELEASE" = "true" ]; then flags+=(--prerelease); fi
           gh release create "$TAG" \
-            dist/icon-packs/flexdeck-essentials.zip \
-            dist/icon-packs/flexdeck-essentials-filled.zip \
+            dist/icon-packs/*.zip \
             --target "$SHA" \
             --title "FlexDeck Essentials icon packs $VERSION" \
             --notes "The FlexDeck Essentials icon packs, outline and filled. Download a zip and add it in FlexDeck's icon picker." \
             "${flags[@]}"
+
+      - name: Rebuild the index, commit
+        if: steps.plan.outputs.prerelease != 'true'
+        env:
+          TAG: ${{ steps.plan.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3 4 5; do
+            git fetch -q --tags origin main
+            git reset -q --hard origin/main
+            if ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+              echo "::error::no tag $TAG: the release was not made"
+              exit 1
+            fi
+            node scripts/index.mjs
+            git add repository.json repository.min.json
+            if git diff --cached --quiet; then
+              echo "the index already lists $TAG"
+              exit 0
+            fi
+            git commit -qm "chore(repo): publish $TAG [skip ci]"
+            if git push -q origin HEAD:main; then
+              echo "indexed $TAG"
+              exit 0
+            fi
+            echo "main moved; trying again ($attempt)"
+            sleep $((attempt * 5))
+          done
+          echo "::error::could not push to main"
+          exit 1
 
       - name: Summary
         env:
@@ -101,5 +132,5 @@ jobs:
           {
             echo "### $TAG"
             echo
-            echo "flexdeck-essentials.zip and flexdeck-essentials-filled.zip are attached to the release."
+            echo "Attached: $(cd dist/icon-packs && ls *.zip | paste -sd ' ')"
           } >> "$GITHUB_STEP_SUMMARY"

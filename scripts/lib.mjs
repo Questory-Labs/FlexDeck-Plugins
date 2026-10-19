@@ -101,6 +101,23 @@ export function publishedVersions(id, order) {
     .sort((a, b) => order(a.version, b.version));
 }
 
+export const ICON_PACKS_TAG = "icon-packs/v";
+
+export function iconPackVersions(order) {
+  return execFileSync("git", ["tag", "--list", `${ICON_PACKS_TAG}*`], { cwd: ROOT, encoding: "utf8" })
+    .split("\n")
+    .map((tag) => tag.trim().slice(ICON_PACKS_TAG.length))
+    .filter(Boolean)
+    .sort(order);
+}
+
+export function iconPacksAt(tag) {
+  return execFileSync("git", ["ls-tree", "--name-only", `${tag}:icon-packs`], { cwd: ROOT, encoding: "utf8" })
+    .split("\n")
+    .map((name) => name.trim())
+    .filter(Boolean);
+}
+
 /** The commit a release tag is on. */
 export const taggedCommit = (tag) => execFileSync("git", ["rev-list", "-n", "1", tag], { cwd: ROOT, encoding: "utf8" }).trim();
 
