@@ -626,7 +626,7 @@ const unknownScene = (scene: string): string | undefined =>
 export default definePlugin({
   id: ID,
   name: "OBS Studio",
-  version: "0.5.0",
+  version: "0.5.1",
   description: "Switch scenes, record, stream, and mute inputs in OBS Studio — and show its state on the deck.",
   author: "flexdeck",
   permissions: ["network"],
