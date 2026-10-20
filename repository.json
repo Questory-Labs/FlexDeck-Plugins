@@ -45,7 +45,7 @@
     {
       "id": "discord",
       "name": "Discord",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "description": "Mute, deafen, push-to-talk, voice channels, volumes, the soundboard and more in the Discord app — and who is talking, on the deck.",
       "author": "flexdeck",
       "homepage": "https://discord.com",
@@ -54,11 +54,11 @@
         "network"
       ],
       "releaseDate": "2026-10-12T17:53:03Z",
-      "latestUpdateDate": "2026-10-19T13:46:22Z",
+      "latestUpdateDate": "2026-10-20T19:38:07Z",
       "package": {
-        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/discord-v0.2.0/discord-0.2.0.fdpkg",
-        "sha256": "8c1d3373c896eb655f4a923effdf7d58e89eca9e9775f1afc455f0f9ba950c33",
-        "size": 21776
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/discord-v0.3.0/discord-0.3.0.fdpkg",
+        "sha256": "bf8bea9d79c2e306fa157ffd0f665bece5a52d31cd7dc344c066be1bb4e0af2b",
+        "size": 22518
       }
     },
     {
