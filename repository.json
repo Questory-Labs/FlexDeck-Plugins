@@ -120,7 +120,7 @@
     {
       "id": "spotify",
       "name": "Spotify",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "description": "Like songs, add them to playlists, start playlists, Spotify's volume and devices — and the album art on the deck.",
       "author": "flexdeck",
       "homepage": "https://developer.spotify.com",
@@ -129,11 +129,11 @@
         "network"
       ],
       "releaseDate": "2026-10-12T17:53:03Z",
-      "latestUpdateDate": "2026-10-18T10:21:44Z",
+      "latestUpdateDate": "2026-10-20T19:39:00Z",
       "package": {
-        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/spotify-v0.1.2/spotify-0.1.2.fdpkg",
-        "sha256": "95d167d970707e8f171381a2e776a5ed1420bf5d7636ed7ce2645d85228647e7",
-        "size": 14450
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/spotify-v0.2.0/spotify-0.2.0.fdpkg",
+        "sha256": "f8817bd5b14a5793c9378f98bd9929855329bfe2e6c66eb1c3cbfd5dcdfe1f5b",
+        "size": 15203
       }
     },
     {
