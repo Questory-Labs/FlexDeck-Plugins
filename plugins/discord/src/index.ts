@@ -592,11 +592,13 @@ const plugin = definePlugin({
     "Mute, deafen, push-to-talk, voice channels, volumes, the soundboard and more in the Discord app — and who is talking, on the deck.",
   author: "flexdeck",
   permissions: ["network"],
+  guide: "https://github.com/Questory-Labs/FlexDeck-Plugins/tree/main/plugins/discord#set-up",
 
   settings: {
     client_id: {
       kind: "text",
-      description: "Your Discord application's Client ID (see the README)",
+      description: "Your Discord application's Client ID",
+      help: "Discord Developer Portal → your application → OAuth2. The setup guide walks through creating one.",
       default: "",
     },
     client_secret: { kind: "text", description: "Your Discord application's Client Secret", secret: true },
@@ -621,9 +623,9 @@ const plugin = definePlugin({
       choices: ["false", "true"],
       default: "false",
     },
-    access_token: { kind: "text", description: "Kept by the plugin; clear it to sign out", secret: true },
-    refresh_token: { kind: "text", description: "Kept by the plugin", secret: true },
-    expires_at: { kind: "text", description: "Kept by the plugin", default: "" },
+    access_token: { kind: "text", description: "Discord sign-in", secret: true, internal: true },
+    refresh_token: { kind: "text", description: "Discord sign-in renewal", secret: true, internal: true },
+    expires_at: { kind: "text", description: "When the sign-in expires", default: "", internal: true },
     api_base: { kind: "text", description: "Discord's API (leave as it is)", default: "https://discord.com/api" },
   },
 

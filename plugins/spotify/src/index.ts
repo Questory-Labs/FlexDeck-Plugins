@@ -324,15 +324,21 @@ const plugin = definePlugin({
   description: "Like songs, add them to playlists, start playlists, Spotify's volume and devices — and the album art on the deck.",
   author: "flexdeck",
   permissions: ["network"],
+  guide: "https://github.com/Questory-Labs/FlexDeck-Plugins/tree/main/plugins/spotify#set-up",
 
   settings: {
-    client_id: { kind: "text", description: "Your Spotify app's Client ID (see the README)", default: "" },
+    client_id: {
+      kind: "text",
+      description: "Your Spotify app's Client ID",
+      help: "Spotify Developer Dashboard → your app → Settings. The setup guide walks through creating one.",
+      default: "",
+    },
     redirect_port: {
       kind: "number",
       description: "The port in your app's Redirect URI (http://127.0.0.1:<port>/callback)",
       default: "47823",
     },
-    refresh_token: { kind: "text", description: "Kept by the plugin; clear it to sign out", secret: true },
+    refresh_token: { kind: "text", description: "Spotify sign-in", secret: true, internal: true },
     accounts_base: { kind: "text", description: "Spotify's sign-in service (leave as it is)", default: "https://accounts.spotify.com" },
     api_base: { kind: "text", description: "Spotify's Web API (leave as it is)", default: "https://api.spotify.com" },
   },

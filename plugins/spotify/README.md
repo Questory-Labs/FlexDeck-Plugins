@@ -152,7 +152,7 @@ The player is read at most every three seconds, and only while something on the 
 | --- | --- |
 | *client id* | Your Spotify app's Client ID |
 | *redirect port* | The port in your Redirect URI. Default `47823` |
-| *refresh token* | Kept by the plugin. Clear it to sign out |
+| *refresh token* | Kept by the plugin and not shown. **Sign out** in the plugin's settings clears it |
 | *accounts base*, *api base* | Spotify's services. Leave them as they are |
 
 </details>

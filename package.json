@@ -22,7 +22,7 @@
     "icons": "node scripts/icon-pack.mjs"
   },
   "dependencies": {
-    "@flexdeck/plugin-sdk": "^0.3.0"
+    "@flexdeck/plugin-sdk": "^0.4.0"
   },
   "devDependencies": {
     "canvaskit-wasm": "0.42.0"

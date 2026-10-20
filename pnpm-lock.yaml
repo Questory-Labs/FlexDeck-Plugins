@@ -11,8 +11,8 @@ importers:
   .:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.3.0
-        version: 0.3.0
+        specifier: ^0.4.0
+        version: 0.4.0
     devDependencies:
       canvaskit-wasm:
         specifier: 0.42.0
@@ -34,8 +34,8 @@ importers:
   plugins/discord:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^0.4.0
+        version: 0.4.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.2
@@ -66,8 +66,8 @@ importers:
   plugins/spotify:
     dependencies:
       '@flexdeck/plugin-sdk':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^0.4.0
+        version: 0.4.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.2
@@ -252,8 +252,8 @@ packages:
     engines: {node: '>=22.18'}
     hasBin: true
 
-  '@flexdeck/plugin-sdk@0.3.0':
-    resolution: {integrity: sha512-+S74MGd/D10c+K1YwCUYU8ESw8Fzl5cyZVZw7dOWm8/WkYifBY4Tnuy5bd7/zlUgf+YGVJ2UXEJICBVNMf0flw==}
+  '@flexdeck/plugin-sdk@0.4.0':
+    resolution: {integrity: sha512-97a60nffalLm7HrVmQtjFMvIu2E7mO02GNW7LtU/cmZSvcS61H0TokwzylUddC5XLQ8tf9ijW4iooQ9BwXov/Q==}
     engines: {node: '>=22.18'}
     hasBin: true
 
@@ -363,7 +363,7 @@ snapshots:
     dependencies:
       esbuild: 0.28.2
 
-  '@flexdeck/plugin-sdk@0.3.0':
+  '@flexdeck/plugin-sdk@0.4.0':
     dependencies:
       esbuild: 0.28.2
 

@@ -212,7 +212,7 @@ The `discord.user.<id>.*` values exist for each person in your call, and come an
 | *extra scopes* | More permissions to ask for, space-separated (video, screen share) |
 | *stats guild* | The server the stats describe: its id or name. Blank means the one you're in a call on |
 | *use guild widget* | Read the online count from the server's public widget |
-| *access token*, *refresh token*, *expires at* | Kept by the plugin. Clear the two tokens to sign out |
+| *access token*, *refresh token*, *expires at* | Kept by the plugin and not shown. **Sign out** in the plugin's settings clears them |
 | *api base* | Discord's API. Leave it as it is |
 
 </details>
