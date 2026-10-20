@@ -587,7 +587,7 @@ const MUTED = { kind: "choice" as const, description: "On or off", example: "tru
 const plugin = definePlugin({
   id: ID,
   name: "Discord",
-  version: "0.2.0",
+  version: "0.3.0",
   description:
     "Mute, deafen, push-to-talk, voice channels, volumes, the soundboard and more in the Discord app — and who is talking, on the deck.",
   author: "flexdeck",
