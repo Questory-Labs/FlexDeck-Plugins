@@ -99,6 +99,25 @@
       }
     },
     {
+      "id": "gpu",
+      "name": "NVIDIA GPU",
+      "version": "0.1.0",
+      "description": "Your NVIDIA graphics card on the deck: video memory in use, load, temperature, power, fan and clocks, with a recent history for graphs.",
+      "author": "flexdeck",
+      "homepage": "https://developer.nvidia.com/system-management-interface",
+      "abi": 4,
+      "permissions": [
+        "processes"
+      ],
+      "releaseDate": "2026-10-25T06:21:05Z",
+      "latestUpdateDate": "2026-10-25T06:21:05Z",
+      "package": {
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/gpu-v0.1.0/gpu-0.1.0.fdpkg",
+        "sha256": "cc8acefac069f60b4db45e93e9a132968b35b8a839a913c8c507cfc82d229963",
+        "size": 11365
+      }
+    },
+    {
       "id": "home-assistant",
       "name": "Home Assistant",
       "version": "1.0.2",
