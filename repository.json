@@ -43,6 +43,25 @@
       }
     },
     {
+      "id": "counttogether",
+      "name": "CountTogether",
+      "version": "0.1.0",
+      "description": "Count up and down from the deck and show your CountTogether counters and countdowns, updated the moment anyone you share them with changes them.",
+      "author": "flexdeck",
+      "homepage": "https://counttogether.app",
+      "abi": 4,
+      "permissions": [
+        "network"
+      ],
+      "releaseDate": "2026-10-25T06:20:09Z",
+      "latestUpdateDate": "2026-10-25T06:20:09Z",
+      "package": {
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/counttogether-v0.1.0/counttogether-0.1.0.fdpkg",
+        "sha256": "165ff7a6e0b77e8639b28a3f39818499fe10c483f45077a03c6e8652436fa2c9",
+        "size": 14380
+      }
+    },
+    {
       "id": "crypto",
       "name": "Crypto prices",
       "version": "1.0.0",
