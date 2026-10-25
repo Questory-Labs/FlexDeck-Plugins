@@ -7,6 +7,24 @@
   },
   "plugins": [
     {
+      "id": "batteries",
+      "name": "Device batteries",
+      "version": "0.1.0",
+      "description": "The charge of your Bluetooth headset, mouse, keyboard and controller, and of Android phones over adb, on the deck, with a warning when one runs low.",
+      "author": "flexdeck",
+      "abi": 4,
+      "permissions": [
+        "processes"
+      ],
+      "releaseDate": "2026-10-25T06:19:12Z",
+      "latestUpdateDate": "2026-10-25T06:19:12Z",
+      "package": {
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/batteries-v0.1.0/batteries-0.1.0.fdpkg",
+        "sha256": "1b30296a54a0b0e28c349e6f54fcfb94ceb3d30c3c6ce8b4834877f69b6b8049",
+        "size": 13339
+      }
+    },
+    {
       "id": "calendar",
       "name": "Calendar",
       "version": "1.0.2",
