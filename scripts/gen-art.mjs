@@ -50,6 +50,15 @@ const defs = (t) => `<defs>
     <linearGradient id="art" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="${ORANGE}"/><stop offset="0.55" stop-color="#7c2d12"/><stop offset="1" stop-color="#1e1b4b"/>
     </linearGradient>
+    <linearGradient id="faderfill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d4501c"/><stop offset="1" stop-color="#6e2611"/>
+    </linearGradient>
+    <linearGradient id="faderfillh" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#d4501c"/><stop offset="1" stop-color="#6e2611"/>
+    </linearGradient>
+    <linearGradient id="knob" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2f1ec"/><stop offset="1" stop-color="#c9c7c0"/>
+    </linearGradient>
     <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="${t.bg}" stop-opacity="0.9"/><stop offset="0.5" stop-color="${t.bg}" stop-opacity="0.2"/><stop offset="1" stop-color="${t.bg}" stop-opacity="0"/>
     </linearGradient>
@@ -66,11 +75,14 @@ function spark(x, y, w, h, values, color) {
     <polyline points="${line}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" opacity="0.6"/>`;
 }
 
+const speaker = (x, y) =>
+  `<path d="M${x},${y + 3}h3l4,-3.5v11l-4,-3.5h-3z" fill="${KEY.muted}"/><path d="M${x + 9.5},${y + 1.5}a4.5,4.5 0 0 1 0,6" fill="none" stroke="${KEY.muted}" stroke-width="1.3" stroke-linecap="round"/>`;
+
 /**
  * One key at (x, y). A key is one of:
  *   { top, bottom }              a label and a muted line beneath
  *   { top, value, caption }      the value layout: small, large, small
- *   { fader, label }             a horizontal fader, 0..1
+ *   { fader, label }             a fader, 0..1; upright when the key is taller than wide
  *   { art, bottom }              album art and a line beneath
  * with `lit` (glowing orange), `face` (a rule's colour), `led` ("on" | "off"),
  * `spark` ([values], with `sparkColor`) and `captionColor`.
@@ -87,18 +99,24 @@ function key(x, y, w, h, k) {
   const ink = k.lit ? ORANGE : KEY.ink;
   const muted = k.lit ? "#ffb08f" : KEY.muted;
 
-  if (k.fader !== undefined && h > w) {
-    const t0 = y + 44, t1 = y + h - 22, knob = t1 - (t1 - t0) * k.fader;
-    out.push(text(cx, y + 26, k.label, { size: 12, weight: 700, fill: KEY.muted, anchor: "middle", spacing: 1 }));
-    out.push(`<line x1="${cx}" y1="${t0}" x2="${cx}" y2="${t1}" stroke="#34343a" stroke-width="4" stroke-linecap="round"/>`);
-    out.push(`<line x1="${cx}" y1="${knob}" x2="${cx}" y2="${t1}" stroke="${ORANGE}" stroke-width="4" stroke-linecap="round"/>`);
-    out.push(`<rect x="${cx - 18}" y="${knob - 7}" width="36" height="14" rx="4" fill="${KEY.ink}"/>`);
-  } else if (k.fader !== undefined) {
-    const x0 = x + 18, x1 = x + w - 18, ty = y + h - 30, knob = x0 + (x1 - x0) * k.fader;
-    out.push(text(cx, y + 32, k.label, { size: 12, weight: 700, fill: KEY.muted, anchor: "middle", spacing: 1 }));
-    out.push(`<line x1="${x0}" y1="${ty}" x2="${x1}" y2="${ty}" stroke="#34343a" stroke-width="4" stroke-linecap="round"/>`);
-    out.push(`<line x1="${x0}" y1="${ty}" x2="${knob}" y2="${ty}" stroke="${ORANGE}" stroke-width="4" stroke-linecap="round"/>`);
-    out.push(`<rect x="${knob - 6}" y="${ty - 11}" width="12" height="22" rx="3" fill="${KEY.ink}"/>`);
+  if (k.fader !== undefined) {
+    const vertical = h > w;
+    const wx = x + 8, wy = y + 34, ww = w - 16, wh = h - 42;
+    out.push(speaker(x + 12, y + 17));
+    out.push(text(x + 30, y + 22, k.label, { size: 12, weight: 600, fill: KEY.ink }));
+    out.push(text(x + w - 12, y + 22, String(Math.round(k.fader * 100)), { size: 11, weight: 700, fill: ORANGE, anchor: "end" }));
+    out.push(`<rect x="${wx}" y="${wy}" width="${ww}" height="${wh}" rx="8" fill="#070708" stroke="#26262a"/>`);
+    if (vertical) {
+      const knob = wy + 8 + (wh - 16) * (1 - k.fader);
+      out.push(`<path d="M${wx},${knob}h${ww}v${wy + wh - knob - 8}a8,8 0 0 1 -8,8h${-(ww - 16)}a8,8 0 0 1 -8,-8z" fill="url(#faderfill)"/>`);
+      out.push(`<rect x="${wx + 6}" y="${knob - 5}" width="${ww - 12}" height="12" rx="4" fill="#000000" opacity="0.35"/>`);
+      out.push(`<rect x="${wx + 6}" y="${knob - 7}" width="${ww - 12}" height="12" rx="4" fill="url(#knob)"/>`);
+    } else {
+      const knob = wx + 8 + (ww - 16) * k.fader;
+      out.push(`<path d="M${wx + 8},${wy}H${knob}v${wh}H${wx + 8}a8,8 0 0 1 -8,-8v${-(wh - 16)}a8,8 0 0 1 8,-8z" fill="url(#faderfillh)"/>`);
+      out.push(`<rect x="${knob - 4}" y="${wy + 6}" width="12" height="${wh - 12}" rx="4" fill="#000000" opacity="0.35"/>`);
+      out.push(`<rect x="${knob - 6}" y="${wy + 6}" width="12" height="${wh - 12}" rx="4" fill="url(#knob)"/>`);
+    }
   } else if (k.art) {
     const s = h - 40;
     out.push(`<rect x="${cx - s / 2}" y="${y + 12}" width="${s}" height="${s}" rx="6" fill="url(#art)"/>`);
@@ -276,6 +294,55 @@ const PLUGINS = {
       { top: "MIC MIX", bottom: "ON", led: "on" },
       { top: "STOP", bottom: "ALL CLIPS" },
       { fader: 0.75, label: "MASTER" },
+    ],
+  },
+  sonar: {
+    label: "PLUGIN · NODE · WINDOWS",
+    title: "SteelSeries Sonar",
+    line: "Every Sonar channel on a fader, mic mute, the chat mix and streamer mode.",
+    keys: [
+      { top: "MIC", bottom: "MUTED", lit: true },
+      { top: "CHAT MIX", value: "+20", caption: "GAME", valueSize: 20 },
+      { top: "STREAMER", bottom: "MODE ON", led: "on" },
+      { fader: 0.7, label: "GAME" },
+      { fader: 0.45, label: "CHAT" },
+      { fader: 0.3, label: "MEDIA" },
+    ],
+  },
+  gpu: {
+    label: "PLUGIN · NODE · NVIDIA",
+    title: "NVIDIA GPU",
+    line: "Video memory, load, temperature and power, the last few minutes drawn behind.",
+    keys: [
+      { w: 2, top: "VRAM", value: "11.4 GB", caption: "OF 16 GB", spark: [6, 7, 7, 9, 11, 11, 10, 11, 12, 11], sparkColor: "#4ade80", valueSize: 22 },
+      { w: 2, top: "GPU · 71°C", value: "96%", caption: "LOAD", spark: [20, 35, 60, 88, 95, 97, 96, 94, 96, 96], sparkColor: "#4ade80", valueSize: 22 },
+      { w: 2, top: "POWER", value: "312 W", caption: "OF 360 W", spark: [90, 140, 220, 290, 305, 315, 310, 312, 309, 312], sparkColor: "#4ade80", valueSize: 22 },
+    ],
+  },
+  batteries: {
+    label: "PLUGIN · NODE · WINDOWS",
+    title: "Device batteries",
+    line: "Your headset, mouse and phone's charge, and a warning before one runs flat.",
+    keys: [
+      { top: "HEADSET", value: "70%", caption: "WH-1000XM5", valueSize: 20 },
+      { top: "MOUSE", value: "15%", caption: "LOW", face: "#7f1d1d", valueSize: 20 },
+      { top: "CONTROLLER", value: "55%", caption: "XBOX", valueSize: 20 },
+      { top: "PHONE", value: "42%", caption: "CHARGING", valueSize: 20 },
+      { top: "LOWEST", value: "15%", caption: "MOUSE", valueSize: 20 },
+      { top: "BATTERIES", bottom: "REFRESH" },
+    ],
+  },
+  counttogether: {
+    label: "PLUGIN · NODE",
+    title: "CountTogether",
+    line: "Count up and down, and see your shared counters change as they change.",
+    keys: [
+      { top: "COFFEE", value: "4", caption: "+1 ON PRESS", valueSize: 24 },
+      { top: "PUSH-UPS", value: "120", caption: "TODAY", valueSize: 24 },
+      { top: "COFFEE", bottom: "−1" },
+      { top: "HOLIDAY", value: "12", caption: "DAYS LEFT", valueSize: 24 },
+      { top: "DEADLINE", value: "2", caption: "DAYS OVERDUE", face: "#7f1d1d", valueSize: 24 },
+      { top: "SOBER", value: "214", caption: "DAYS AGO", valueSize: 24 },
     ],
   },
   weather: {

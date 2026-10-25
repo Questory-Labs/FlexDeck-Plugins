@@ -31,7 +31,46 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  plugins/batteries:
+    dependencies:
+      '@flexdeck/plugin-sdk':
+        specifier: ^0.4.0
+        version: 0.4.0
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.5
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  plugins/counttogether:
+    dependencies:
+      '@flexdeck/plugin-sdk':
+        specifier: ^0.4.0
+        version: 0.4.0
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.5
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   plugins/discord:
+    dependencies:
+      '@flexdeck/plugin-sdk':
+        specifier: ^0.4.0
+        version: 0.4.0
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.5
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  plugins/gpu:
     dependencies:
       '@flexdeck/plugin-sdk':
         specifier: ^0.4.0
@@ -49,6 +88,19 @@ importers:
       '@flexdeck/plugin-sdk':
         specifier: ^0.2.0
         version: 0.2.0
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.5
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  plugins/sonar:
+    dependencies:
+      '@flexdeck/plugin-sdk':
+        specifier: ^0.4.0
+        version: 0.4.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.2

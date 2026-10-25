@@ -1,0 +1,15 @@
+{
+  "abi": 4,
+  "id": "sonar",
+  "name": "SteelSeries Sonar",
+  "version": "0.1.0",
+  "description": "Ride Sonar's game, chat, mic, media and aux levels, mute them, set the chat mix and switch streamer mode, with Sonar's levels on the keys.",
+  "author": "flexdeck",
+  "homepage": "https://steelseries.com/gg/sonar",
+  "runtime": "node",
+  "entry": "dist/index.js",
+  "permissions": [
+    "network",
+    "filesystem"
+  ]
+}

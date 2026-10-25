@@ -1,0 +1,13 @@
+{
+  "abi": 4,
+  "id": "batteries",
+  "name": "Device batteries",
+  "version": "0.1.0",
+  "description": "The charge of your Bluetooth headset, mouse, keyboard and controller, and of Android phones over adb, on the deck, with a warning when one runs low.",
+  "author": "flexdeck",
+  "runtime": "node",
+  "entry": "dist/index.js",
+  "permissions": [
+    "processes"
+  ]
+}

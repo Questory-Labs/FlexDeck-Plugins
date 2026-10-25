@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="320" viewBox="0 0 960 320" role="img" aria-label="SteelSeries Sonar: Every Sonar channel on a fader, mic mute, the chat mix and streamer mode.">
+  <defs>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="#ffffff14"/></pattern>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ff5a1f" stop-opacity="0.16"/><stop offset="1" stop-color="#ff5a1f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="keyshine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.06"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="litglow" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0" stop-color="#ff5a1f" stop-opacity="0.24"/><stop offset="1" stop-color="#ff5a1f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="art" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff5a1f"/><stop offset="0.55" stop-color="#7c2d12"/><stop offset="1" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="faderfill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d4501c"/><stop offset="1" stop-color="#6e2611"/>
+    </linearGradient>
+    <linearGradient id="faderfillh" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#d4501c"/><stop offset="1" stop-color="#6e2611"/>
+    </linearGradient>
+    <linearGradient id="knob" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2f1ec"/><stop offset="1" stop-color="#c9c7c0"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0b0b0c" stop-opacity="0.9"/><stop offset="0.5" stop-color="#0b0b0c" stop-opacity="0.2"/><stop offset="1" stop-color="#0b0b0c" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="320" rx="24" fill="#0b0b0c"/>
+  <rect width="960" height="320" rx="24" fill="url(#dots)"/>
+  <ellipse cx="840" cy="60" rx="300" ry="140" fill="url(#halo)"/>
+  <text x="40" y="58" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="13" font-weight="600" letter-spacing="2.5" text-anchor="start" fill="#ff5a1f">// PLUGIN · NODE · WINDOWS</text>
+  <text x="40" y="98" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="32" font-weight="600" letter-spacing="-0.5" text-anchor="start" fill="#ecebe6">SteelSeries Sonar</text>
+  <text x="40" y="128" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="15" font-weight="400" letter-spacing="0" text-anchor="start" fill="#8d8c86">Every Sonar channel on a fader, mic mute, the chat mix and streamer mode.</text>
+  <rect x="40" y="152" width="880" height="128" rx="20" fill="#0e0e10" stroke="#2a2a2e"/>
+    <rect x="41" y="153" width="878" height="126" rx="19" fill="none" stroke="#ffffff" stroke-opacity="0.04"/>
+    <rect x="58" y="170" width="130.66666666666666" height="92" rx="12" fill="#2a160d" stroke="#ff5a1f" stroke-width="1.5"/>
+    <rect x="59" y="171" width="128.66666666666666" height="46" rx="11" fill="url(#keyshine)"/>
+    <rect x="58" y="170" width="130.66666666666666" height="92" rx="12" fill="url(#litglow)"/>
+    <text x="123.33333333333333" y="214" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="14" font-weight="700" letter-spacing="0.5" text-anchor="middle" fill="#ff5a1f">MIC</text>
+    <text x="123.33333333333333" y="233" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="11" font-weight="400" letter-spacing="1" text-anchor="middle" fill="#ffb08f">MUTED</text>
+    <rect x="200.66666666666666" y="170" width="130.66666666666666" height="92" rx="12" fill="#1c1c1f" stroke="#2c2c30" stroke-width="1"/>
+    <rect x="201.66666666666666" y="171" width="128.66666666666666" height="46" rx="11" fill="url(#keyshine)"/>
+    <text x="266" y="194" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="11" font-weight="600" letter-spacing="1" text-anchor="middle" fill="#8d8c86">CHAT MIX</text>
+    <text x="266" y="224" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="20" font-weight="700" letter-spacing="-0.3" text-anchor="middle" fill="#ecebe6">+20</text>
+    <text x="266" y="249" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="11" font-weight="600" letter-spacing="0.5" text-anchor="middle" fill="#8d8c86">GAME</text>
+    <rect x="343.3333333333333" y="170" width="130.66666666666666" height="92" rx="12" fill="#1c1c1f" stroke="#2c2c30" stroke-width="1"/>
+    <rect x="344.3333333333333" y="171" width="128.66666666666666" height="46" rx="11" fill="url(#keyshine)"/>
+    <text x="408.66666666666663" y="214" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="14" font-weight="700" letter-spacing="0.5" text-anchor="middle" fill="#ecebe6">STREAMER</text>
+    <text x="408.66666666666663" y="233" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="11" font-weight="400" letter-spacing="1" text-anchor="middle" fill="#8d8c86">MODE ON</text>
+    <circle cx="461" cy="183" r="3.5" fill="#3ddc84"/>
+    <rect x="486" y="170" width="130.66666666666666" height="92" rx="12" fill="#1c1c1f" stroke="#2c2c30" stroke-width="1"/>
+    <rect x="487" y="171" width="128.66666666666666" height="46" rx="11" fill="url(#keyshine)"/>
+    <path d="M498,190h3l4,-3.5v11l-4,-3.5h-3z" fill="#8d8c86"/><path d="M507.5,188.5a4.5,4.5 0 0 1 0,6" fill="none" stroke="#8d8c86" stroke-width="1.3" stroke-linecap="round"/>
+    <text x="516" y="192" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="12" font-weight="600" letter-spacing="0" text-anchor="start" fill="#ecebe6">GAME</text>
+    <text x="604.6666666666666" y="192" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="11" font-weight="700" letter-spacing="0" text-anchor="end" fill="#ff5a1f">70</text>
+    <rect x="494" y="204" width="114.66666666666666" height="50" rx="8" fill="#070708" stroke="#26262a"/>
+    <path d="M502,204H571.0666666666666v50H502a8,8 0 0 1 -8,-8v-34a8,8 0 0 1 8,-8z" fill="url(#faderfillh)"/>
+    <rect x="567.0666666666666" y="210" width="12" height="38" rx="4" fill="#000000" opacity="0.35"/>
+    <rect x="565.0666666666666" y="210" width="12" height="38" rx="4" fill="url(#knob)"/>
+    <rect x="628.6666666666666" y="170" width="130.66666666666666" height="92" rx="12" fill="#1c1c1f" stroke="#2c2c30" stroke-width="1"/>
+    <rect x="629.6666666666666" y="171" width="128.66666666666666" height="46" rx="11" fill="url(#keyshine)"/>
+    <path d="M640.6666666666666,190h3l4,-3.5v11l-4,-3.5h-3z" fill="#8d8c86"/><path d="M650.1666666666666,188.5a4.5,4.5 0 0 1 0,6" fill="none" stroke="#8d8c86" stroke-width="1.3" stroke-linecap="round"/>
+    <text x="658.6666666666666" y="192" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="12" font-weight="600" letter-spacing="0" text-anchor="start" fill="#ecebe6">CHAT</text>
+    <text x="747.3333333333333" y="192" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="11" font-weight="700" letter-spacing="0" text-anchor="end" fill="#ff5a1f">45</text>
+    <rect x="636.6666666666666" y="204" width="114.66666666666666" height="50" rx="8" fill="#070708" stroke="#26262a"/>
+    <path d="M644.6666666666666,204H689.0666666666666v50H644.6666666666666a8,8 0 0 1 -8,-8v-34a8,8 0 0 1 8,-8z" fill="url(#faderfillh)"/>
+    <rect x="685.0666666666666" y="210" width="12" height="38" rx="4" fill="#000000" opacity="0.35"/>
+    <rect x="683.0666666666666" y="210" width="12" height="38" rx="4" fill="url(#knob)"/>
+    <rect x="771.3333333333333" y="170" width="130.66666666666666" height="92" rx="12" fill="#1c1c1f" stroke="#2c2c30" stroke-width="1"/>
+    <rect x="772.3333333333333" y="171" width="128.66666666666666" height="46" rx="11" fill="url(#keyshine)"/>
+    <path d="M783.3333333333333,190h3l4,-3.5v11l-4,-3.5h-3z" fill="#8d8c86"/><path d="M792.8333333333333,188.5a4.5,4.5 0 0 1 0,6" fill="none" stroke="#8d8c86" stroke-width="1.3" stroke-linecap="round"/>
+    <text x="801.3333333333333" y="192" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="12" font-weight="600" letter-spacing="0" text-anchor="start" fill="#ecebe6">MEDIA</text>
+    <text x="889.9999999999999" y="192" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="11" font-weight="700" letter-spacing="0" text-anchor="end" fill="#ff5a1f">30</text>
+    <rect x="779.3333333333333" y="204" width="114.66666666666666" height="50" rx="8" fill="#070708" stroke="#26262a"/>
+    <path d="M787.3333333333333,204H816.9333333333333v50H787.3333333333333a8,8 0 0 1 -8,-8v-34a8,8 0 0 1 8,-8z" fill="url(#faderfillh)"/>
+    <rect x="812.9333333333333" y="210" width="12" height="38" rx="4" fill="#000000" opacity="0.35"/>
+    <rect x="810.9333333333333" y="210" width="12" height="38" rx="4" fill="url(#knob)"/>
+</svg>

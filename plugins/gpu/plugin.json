@@ -1,0 +1,14 @@
+{
+  "abi": 4,
+  "id": "gpu",
+  "name": "NVIDIA GPU",
+  "version": "0.1.0",
+  "description": "Your NVIDIA graphics card on the deck: video memory in use, load, temperature, power, fan and clocks, with a recent history for graphs.",
+  "author": "flexdeck",
+  "homepage": "https://developer.nvidia.com/system-management-interface",
+  "runtime": "node",
+  "entry": "dist/index.js",
+  "permissions": [
+    "processes"
+  ]
+}

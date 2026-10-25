@@ -1,0 +1,14 @@
+{
+  "abi": 4,
+  "id": "counttogether",
+  "name": "CountTogether",
+  "version": "0.1.0",
+  "description": "Count up and down from the deck and show your CountTogether counters and countdowns, updated the moment anyone you share them with changes them.",
+  "author": "flexdeck",
+  "homepage": "https://counttogether.app",
+  "runtime": "node",
+  "entry": "dist/index.js",
+  "permissions": [
+    "network"
+  ]
+}

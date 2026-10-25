@@ -13,6 +13,15 @@
     <linearGradient id="art" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ff5a1f"/><stop offset="0.55" stop-color="#7c2d12"/><stop offset="1" stop-color="#1e1b4b"/>
     </linearGradient>
+    <linearGradient id="faderfill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d4501c"/><stop offset="1" stop-color="#6e2611"/>
+    </linearGradient>
+    <linearGradient id="faderfillh" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#d4501c"/><stop offset="1" stop-color="#6e2611"/>
+    </linearGradient>
+    <linearGradient id="knob" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2f1ec"/><stop offset="1" stop-color="#c9c7c0"/>
+    </linearGradient>
     <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#f6f5f1" stop-opacity="0.9"/><stop offset="0.5" stop-color="#f6f5f1" stop-opacity="0.2"/><stop offset="1" stop-color="#f6f5f1" stop-opacity="0"/>
     </linearGradient>
@@ -50,8 +59,11 @@
     <circle cx="746.3333333333333" cy="183" r="3.5" fill="#3ddc84"/>
     <rect x="771.3333333333333" y="170" width="130.66666666666666" height="92" rx="12" fill="#1c1c1f" stroke="#2c2c30" stroke-width="1"/>
     <rect x="772.3333333333333" y="171" width="128.66666666666666" height="46" rx="11" fill="url(#keyshine)"/>
-    <text x="836.6666666666666" y="202" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="12" font-weight="700" letter-spacing="1" text-anchor="middle" fill="#8d8c86">OUTPUT</text>
-    <line x1="789.3333333333333" y1="232" x2="883.9999999999999" y2="232" stroke="#34343a" stroke-width="4" stroke-linecap="round"/>
-    <line x1="789.3333333333333" y1="232" x2="836.6666666666665" y2="232" stroke="#ff5a1f" stroke-width="4" stroke-linecap="round"/>
-    <rect x="830.6666666666665" y="221" width="12" height="22" rx="3" fill="#ecebe6"/>
+    <path d="M783.3333333333333,190h3l4,-3.5v11l-4,-3.5h-3z" fill="#8d8c86"/><path d="M792.8333333333333,188.5a4.5,4.5 0 0 1 0,6" fill="none" stroke="#8d8c86" stroke-width="1.3" stroke-linecap="round"/>
+    <text x="801.3333333333333" y="192" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="12" font-weight="600" letter-spacing="0" text-anchor="start" fill="#ecebe6">OUTPUT</text>
+    <text x="889.9999999999999" y="192" font-family="ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace" font-size="11" font-weight="700" letter-spacing="0" text-anchor="end" fill="#ff5a1f">50</text>
+    <rect x="779.3333333333333" y="204" width="114.66666666666666" height="50" rx="8" fill="#070708" stroke="#26262a"/>
+    <path d="M787.3333333333333,204H836.6666666666666v50H787.3333333333333a8,8 0 0 1 -8,-8v-34a8,8 0 0 1 8,-8z" fill="url(#faderfillh)"/>
+    <rect x="832.6666666666666" y="210" width="12" height="38" rx="4" fill="#000000" opacity="0.35"/>
+    <rect x="830.6666666666666" y="210" width="12" height="38" rx="4" fill="url(#knob)"/>
 </svg>

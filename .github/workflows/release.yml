@@ -29,11 +29,15 @@ on:
         type: choice
         # Every id under plugins/ and recipes/; scripts/check.mjs keeps this list honest.
         options:
+          - batteries
           - calendar
+          - counttogether
           - crypto
           - discord
+          - gpu
           - home-assistant
           - obs
+          - sonar
           - soundboard
           - spotify
           - streamerbot

@@ -31,6 +31,10 @@ Open FlexDeck's **Plugins** tab and they're all in the **Marketplace**. Each one
 | **[Spotify](plugins/spotify)** | Like, add to a playlist, start a playlist, move to another speaker, the album art | A free developer app; Premium for playback | 2 min |
 | **[Streamer.bot](plugins/streamerbot)** | Run and flip actions, switch them on and off, show global variables | Streamer.bot with its WebSocket server on | 1 min |
 | **[Soundboard](plugins/soundboard)** | Clips in your headphones and, through a virtual cable, into your mic | Windows; VB-CABLE to play into your mic | 0–5 min |
+| **[SteelSeries Sonar](plugins/sonar)** | A fader per Sonar channel, mic mute, the chat mix, streamer mode | SteelSeries GG with Sonar on | 0 min |
+| **[NVIDIA GPU](plugins/gpu)** | Video memory, load, temperature and power, with a graph behind | An NVIDIA card and its driver | 0 min |
+| **[Device batteries](plugins/batteries)** | The charge of your Bluetooth headset, mouse and controller, and your Android phone | Windows; adb for phones | 0–3 min |
+| **[CountTogether](plugins/counttogether)** | Count up and down, and show counters and countdowns, live as anyone changes them | A CountTogether account and its API token | 1 min |
 
 And four **recipes**: plugins with no code at all, just a description of a web source and the keys that show it. A recipe can only fetch the address it names. It can't run anything.
 
