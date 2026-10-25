@@ -155,6 +155,26 @@
       }
     },
     {
+      "id": "sonar",
+      "name": "SteelSeries Sonar",
+      "version": "0.1.0",
+      "description": "Ride Sonar's game, chat, mic, media and aux levels, mute them, set the chat mix and switch streamer mode, with Sonar's levels on the keys.",
+      "author": "flexdeck",
+      "homepage": "https://steelseries.com/gg/sonar",
+      "abi": 4,
+      "permissions": [
+        "network",
+        "filesystem"
+      ],
+      "releaseDate": "2026-10-25T06:22:10Z",
+      "latestUpdateDate": "2026-10-25T06:22:10Z",
+      "package": {
+        "url": "https://github.com/Questory-Labs/FlexDeck-Plugins/releases/download/sonar-v0.1.0/sonar-0.1.0.fdpkg",
+        "sha256": "1af459d44cd885b0a83c60ad3c152b8f47d46b83748ae938363f2813f26b5179",
+        "size": 13297
+      }
+    },
+    {
       "id": "soundboard",
       "name": "Soundboard",
       "version": "0.1.2",
